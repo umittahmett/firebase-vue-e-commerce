@@ -1,0 +1,2 @@
+# seckin_bilisim
+ 
