@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+/* Track stil */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+/* Handle (kaydırma kolu) stil */
+::-webkit-scrollbar-thumb {
+  background: rgb(2 132 199);
+  border-radius: 10px;
+}
