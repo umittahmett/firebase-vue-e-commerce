@@ -1,7 +1,7 @@
 <template>
   <button
     :type="type"
-    class="flex justify-center gap-x-2 px-4 py-2 text-xs font-medium leading-6 text-white align-middle transition-all duration-200 ease-in-out shadow-sm bg-sky-400 hover:bg-sky-300 md:text-sm focus:ring-1 focus:ring-inset focus:ring-sky-600"
+    class="text-black bg-white hover:bg-blue-600 py-3 px-6 text-md transition-all"
     :class="computedClasses"
     :disabled="disabled"
   >
@@ -17,17 +17,13 @@ export default {
       type: String,
       default: null,
     },
-    type: {
-      type: String,
-      default: "submit",
-    },
     buttonType: {
       type: String,
       default: "",
     },
     roundSize: {
       type: Number,
-      default: 3,
+      default: 0,
     },
     customClass: {
       type: String,
@@ -45,8 +41,7 @@ export default {
         // custom button types
         "!border-none !p-0 bg-transparent focus:!outline-none focus:!ring-0 !text-sky-500 hover:bg-transparent !shadow-none hover:underline ":
           this.buttonType === "link",
-        "!text-gray-600 bg-white hover:bg-gray-100 border border-gray-300 hover:text-gray-500":
-          this.buttonType === "white",
+        " bg-white hover:text-white ": this.buttonType === "white",
 
         // rounded classes
         "rounded-sm": this.roundSize === 1,
