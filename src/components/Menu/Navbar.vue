@@ -28,7 +28,7 @@
       <router-link to="">Contact</router-link>
     </button>
 
-    <button class="w-7 h-7">
+    <button class="w-7 h-7 lg:hidden">
       <img src="/navbar/bars.png" alt="" />
     </button>
   </div>
