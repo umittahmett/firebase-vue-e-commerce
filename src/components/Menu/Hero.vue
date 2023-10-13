@@ -6,6 +6,12 @@
       alt=""
     />
 
+    <a
+      class="text-[10px] absolute bottom-0 left-0 p-2 z-10 text-gray-500"
+      href="http://www.freepik.com"
+      >Designed by macrovector / Freepik</a
+    >
+
     <div
       class="absolute top-0 left-0 w-full sm:pt-28 pt-20 sm:pl-10 pl-4 h-full bg-[rgba(0,0,0,0.4)]"
     >
