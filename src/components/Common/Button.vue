@@ -1,7 +1,7 @@
 <template>
   <button
     :type="type"
-    class="text-black bg-white hover:bg-blue-600 py-3 px-6 text-md transition-all"
+    class="text-black bg-white py-3 px-6 text-md transition-all"
     :class="computedClasses"
     :disabled="disabled"
   >
@@ -41,7 +41,10 @@ export default {
         // custom button types
         "!border-none !p-0 bg-transparent focus:!outline-none focus:!ring-0 !text-sky-500 hover:bg-transparent !shadow-none hover:underline ":
           this.buttonType === "link",
-        " bg-white hover:text-white ": this.buttonType === "white",
+        " bg-white hover:text-white hover:bg-blue-500 ":
+          this.buttonType === "white",
+        "border text-white bg-[rgba(0,0,0,0)] hover:text-blue-500  hover:border-blue-500 ":
+          this.buttonType === "bordered",
 
         // rounded classes
         "rounded-sm": this.roundSize === 1,
