@@ -1,27 +1,29 @@
 <template>
-  <swiper
-    :slidesPerView="2"
-    :spaceBetween="30"
-    :autoplay="true"
-    :pagination="{
-      clickable: true,
-    }"
-    :modules="modules"
-    class="mySwiper pb-10 px-4"
-  >
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-    <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-  </swiper>
+  <div class="max-w-7xl w-full mx-auto">
+    <swiper
+      :slidesPerView="6"
+      :spaceBetween="30"
+      :autoplay="true"
+      :pagination="{
+        clickable: true,
+      }"
+      :modules="modules"
+      class="mySwiper pb-10 px-4"
+    >
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+    </swiper>
+  </div>
 </template>
 <script>
 // Import Swiper Vue.js components
