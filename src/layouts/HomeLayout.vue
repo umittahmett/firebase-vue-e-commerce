@@ -2,7 +2,7 @@
   <div class="w-full">
     <Navbar />
     <Hero />
-    <router-view class="max-w-7xl mx-auto w-full mt-10 px-3" />
+    <router-view class="w-full mt-10" />
   </div>
 </template>
 
