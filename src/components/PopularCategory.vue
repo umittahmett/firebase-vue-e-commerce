@@ -1,10 +1,10 @@
 <template>
   <div
-    class="max-w-7xl w-full mx-auto my-20 px-2 flex justify-center items-center gap-10"
+    class="max-w-7xl w-full py-10 mx-auto px-2 flex justify-center flex-col md:flex-row items-center gap-10"
   >
-    <div class="w-full relative">
+    <div class="w-full relative max-w-md md:max-w-full">
       <img
-        class="w-full h-[560px] object-cover bg-center"
+        class="w-full md:h-[560px] object-cover bg-center"
         src="/example/pc.png"
         alt=""
       />
@@ -12,13 +12,13 @@
       <div
         class="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-[rgba(0,0,0,0.3)] hover:bg-[rgba(58,62,78,0.4)] transition-all"
       >
-        <Button class="text-xl" :buttonType="'bordered'">Computer</Button>
+        <Button class="text-xl" :buttonType="'white'">Computer</Button>
       </div>
     </div>
 
-    <div class="w-full relative">
+    <div class="w-full relative max-w-md md:max-w-full">
       <img
-        class="w-full h-[560px] object-cover bg-center"
+        class="w-full h-[450px] md:h-[560px] object-cover bg-center"
         src="/example/pc.png"
         alt=""
       />
@@ -26,7 +26,7 @@
       <div
         class="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-[rgba(0,0,0,0.3)] hover:bg-[rgba(58,62,78,0.4)] transition-all"
       >
-        <Button class="text-xl" :buttonType="'bordered'">Phone</Button>
+        <Button class="text-xl" :buttonType="'white'">Phone</Button>
       </div>
     </div>
   </div>
