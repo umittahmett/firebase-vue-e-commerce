@@ -39,11 +39,9 @@ export default {
     computedClasses() {
       return {
         // custom button types
-        "!border-none !p-0 bg-transparent focus:!outline-none focus:!ring-0 !text-sky-500 hover:bg-transparent !shadow-none hover:underline ":
-          this.buttonType === "link",
-        " bg-white hover:text-white hover:bg-blue-500 ":
-          this.buttonType === "white",
-        "border text-white bg-[rgba(0,0,0,0)] hover:text-blue-500  hover:border-blue-500 ":
+        " focus:!outline-none focus:!ring-0": this.buttonType === "link",
+        " hover:text-white hover:bg-blue-600 ": this.buttonType === "white",
+        "border text-white !bg-[rgba(0,0,0,0)] hover:text-blue-600  hover:border-blue-600 ":
           this.buttonType === "bordered",
 
         // rounded classes
