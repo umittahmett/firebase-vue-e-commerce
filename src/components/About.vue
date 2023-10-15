@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-[#F4F8FD] py-20 mt-10">
+  <div class="bg-[#F4F8FD] py-20">
     <div
-      class="max-w-7xl w-full mx-auto flex justify-center gap-10 lg:gap-20 items-center px-2"
+      class="max-w-7xl w-full mx-auto flex justify-center gap-10 lg:gap-20 items-center px-2 flex-col-reverse lg:flex-row text-center lg:text-start"
     >
       <div class="relative">
         <img
-          class="h-[380px] lg:h-[450px] object-cover bg-center rounded-lg"
+          class="h-auto sm:h-[380px] lg:h-[450px] object-cover bg-center rounded-lg"
           src="/hero/about.jpg"
           alt=""
         />
@@ -19,8 +19,10 @@
 
       <div>
         <h2 class="text-blue-500 uppercase font-semibold text-xl">About Us</h2>
-        <h4 class="text-5xl font-medium mt-6">Who We Are</h4>
-        <p class="mt-6 max-w-md">
+
+        <h4 class="text-4xl lg:text-5xl font-medium mt-6">Who We Are</h4>
+
+        <p class="mt-6 max-w-md font-light">
           At Seçkin Bilişim, we’re passionate about bringing you the best in
           quality electronics. Our team is dedicated to providing top-notch
           customer service and offering a wide range of products to meet your
