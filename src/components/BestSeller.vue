@@ -1,18 +1,18 @@
 <template>
-  <div class="max-w-7xl w-full mx-auto my-20 px-2">
-    <div class="flex justify-between items-center w-full">
+  <div class="max-w-7xl w-full mx-auto py-10 px-2">
+    <div class="flex justify-between items-center w-full ">
       <h2 class="text-xl font-medium">Our Best Seller</h2>
       <button
-        class="hover:text-blue-500 transition-colors hover:border-blue-500 text-xl font-medium border-b border-black"
+        class="hover:text-blue-500 text-gray-400 transition-colors hover:border-blue-500 text-xl font-medium border-b border-gray-400 font-light" 
       >
         View All Best Sellers
       </button>
     </div>
 
-    <div class="flex justify-between items-start text-center gap-4 mt-10">
-      <div v-for="product in products" :key="product.name" class="relative">
+    <div class="flex items-center text-center gap-4 gap-y-10 mt-10 lg:flex-row flex-col justify-between w-full">
+      <div v-for="product in products" :key="product.name" class="relative ">
         <img
-          class="object-cover bg-center w-[400px] h-[380px]"
+          class="object-cover bg-center w-[400px] h-[340px]"
           :src="product.image"
           alt=""
         />
@@ -21,15 +21,22 @@
             {{ product.name }}
           </h4>
 
-          <p class="text-gray-500 line-clamp-4 mt-4 font-light">
+          <p class="text-gray-500 line-clamp-4 mt-2 font-light">
             {{ product.description }}
           </p>
 
-          <p class="mt-4 text-gray-700 font-light text-xl">
-            {{ product.price }} &#8378;
+          <p class="mt-2 text-gray-700 font-light text-xl flex items-center gap-x-1">
+           <div class="flex items-center gap-1 justify-center w-full">
+            <div v-if="product.discount" class="">
+             <p class="text-gray-600 line-through text-base ">{{ product.price }}&#8378;</p> 
+            </div>
+
+            {{ product.discount ? product.price - product.price/100 * product.discount :product.price }}&#8378;
+           </div>
           </p>
         </div>
-        <Sale v-if="product.discount" />
+        
+        <Sale :bgColor="'blue'" v-if="product.discount" />
       </div>
     </div>
   </div>
@@ -66,7 +73,7 @@ export default {
         name: "MSI",
         description: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
         price: 1299.99,
-        discount: 100,
+        discount: 10,
         image: "/example/pc.png",
       },
     ];
