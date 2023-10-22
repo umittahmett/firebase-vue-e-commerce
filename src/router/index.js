@@ -17,12 +17,12 @@ const router = createRouter({
           name: "",
           component: HomeView,
         },
-        {
-          path: "/overview",
-          name: "overview",
-          component: ProductOverview,
-        },
       ],
+    },
+    {
+      path: "/overview",
+      name: "overview",
+      component: ProductOverview,
     },
   ],
 });
