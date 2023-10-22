@@ -1,6 +1,5 @@
 <template>
   <div class="w-full">
-    <Navbar />
     <Hero />
     <router-view class="w-full mt-10" />
   </div>
