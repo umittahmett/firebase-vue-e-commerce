@@ -1,7 +1,7 @@
 <template>
   <!-- Navbar -->
   <div
-    class="sm:px-10 mx-auto w-full bg-white p-4 flex justify-between items-center sticky top-0 left-0 z-50"
+    class="sm:px-10 mx-auto w-full bg-white p-4 flex justify-between items-center sticky top-0 left-0 z-50 shadow-sm"
   >
     <div class="flex justify-start items-center gap-20">
       <!-- Logo -->
