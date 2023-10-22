@@ -5,8 +5,8 @@
     >
       <div class="relative">
         <img
-          class="h-auto sm:h-[380px] lg:h-[450px] object-cover bg-center rounded-lg"
-          src="/hero/about.jpg"
+          class="h-auto sm:h-[380px] lg:h-[450px] object-cover bg-center border border-[#e8f1fa]"
+          src="/about.png"
           alt=""
         />
 
