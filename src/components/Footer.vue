@@ -50,7 +50,7 @@
           href="https://umitahmed.com"
           class="font-light text-blue-600 border-b-blue-600 border-b opacity-70"
         >
-          Developer : Ümit Ahmed
+          umitahmed.com
         </a>
       </div>
     </div>
