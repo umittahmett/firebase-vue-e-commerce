@@ -5,6 +5,9 @@ import { createPinia } from "pinia";
 import { markRaw } from "vue";
 import "./assets/index.css";
 import PrimeVue from "primevue/config";
+import "primevue/resources/themes/lara-light-teal/theme.css";
+import "primevue/resources/primevue.min.css"; /* Deprecated */
+import "primeicons/primeicons.css";
 
 const pinia = createPinia();
 const app = createApp(App);
