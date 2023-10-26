@@ -7,7 +7,6 @@
     <NewArrivals class="mt-10" />
     <OurMission id="mission" class="mt-10" />
     <Features />
-    <Footer />
   </div>
 </template>
 
@@ -19,7 +18,6 @@ import NewArrivals from "../components/NewArrivals.vue";
 import PopularCategory from "../components/PopularCategory.vue";
 import OurMission from "../components/OurMission.vue";
 import Features from "../components/Features.vue";
-import Footer from "../components/Footer.vue";
 
 export default {
   data() {
@@ -33,7 +31,6 @@ export default {
     NewArrivals,
     OurMission,
     Features,
-    Footer,
   },
 };
 </script>
