@@ -2,7 +2,9 @@
   <div
     class="max-w-7xl w-full py-10 mx-auto px-2 flex justify-center flex-col md:flex-row items-center gap-10"
   >
-    <div class="w-full relative max-w-md md:max-w-full">
+    <div
+      class="w-full relative max-w-md md:max-w-full rounded-md overflow-hidden"
+    >
       <img
         class="w-full md:h-[560px] object-cover bg-center"
         src="/example/pc.png"
@@ -16,7 +18,9 @@
       </div>
     </div>
 
-    <div class="w-full relative max-w-md md:max-w-full">
+    <div
+      class="w-full relative max-w-md md:max-w-full rounded-md overflow-hidden"
+    >
       <img
         class="w-full h-[450px] md:h-[560px] object-cover bg-center"
         src="/example/pc.png"
