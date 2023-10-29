@@ -3,7 +3,7 @@
     <Breadcrumb :home="home" :model="items">
       <template #item="{ label, item, props }">
         <a v-if="item.route" :href="item.route" custom>
-          <i class="pi pi-home text-xl mr-1"></i>
+          <i class="pi pi-home text-blue-500 text-xl mr-1"></i>
         </a>
         <a
           v-else
