@@ -84,7 +84,7 @@
 
 
 
-    <RelatedProducts class="mt-20"/>
+   <ProductSlider :products="products"/>
     
   </div>
 </template>
@@ -93,7 +93,7 @@
 import Galleria from "primevue/galleria";
 import BreadCrumb from "../components/Common/BreadCrumb.vue";
 import Sale from "../components/Common/Sale.vue";
-import RelatedProducts from '../components/RelatedProducts.vue'
+import ProductSlider from "../components/ProductSlider.vue";
 
 export default {
   data() {
@@ -205,6 +205,78 @@ export default {
         ],
       },
 
+      products:[
+        
+          {
+            name: "Asus",
+            description:
+              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+            price: 999.99,
+            discount: 20,
+            image: "/about.png",
+          },
+          {
+            name: "Iphone 12s",
+            description:
+              "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
+            price: 499.99,
+            discount: 0,
+            image: "/about.png",
+          },
+
+          {
+            name: "Asus",
+            description:
+              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+            price: 999.99,
+            discount: 20,
+            image: "/about.png",
+          },
+          {
+            name: "Iphone 12s",
+            description:
+              "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
+            price: 499.99,
+            discount: 0,
+            image: "/about.png",
+          },
+          {
+            name: "Asus",
+            description:
+              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+            price: 999.99,
+            discount: 20,
+            image: "/about.png",
+          },
+          {
+            name: "Iphone 12s",
+            description:
+              "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
+            price: 499.99,
+            discount: 0,
+            image: "/about.png",
+          },
+
+          {
+            name: "MSI",
+            description:
+              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+            price: 1299.99,
+            discount: 10,
+            image: "/about.png",
+          },
+
+          {
+            name: "MSI",
+            description:
+              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+            price: 1299.99,
+            discount: 10,
+            image: "/public/example/pc.png",
+          },
+        
+      ],
+
       responsiveOptions: [
         {
           breakpoint: "991px",
@@ -222,7 +294,7 @@ export default {
     Galleria,
     BreadCrumb,
     Sale,
-    RelatedProducts
-  },
+    ProductSlider
+},
 };
 </script>
