@@ -1,39 +1,80 @@
 <template>
   <!-- Navbar -->
-  <div
-    class="sm:px-10 mx-auto w-full bg-white p-4 flex justify-between items-center sticky top-0 left-0 z-50 shadow-sm"
-  >
-    <div class="flex justify-start items-center gap-20">
-      <!-- Logo -->
-      <a href="/" class="text-2xl font-medium leading-6 tracking-wide">
-        SEÇKIN <br />
-        BILIŞIM
-      </a>
+  <div class="relative" v-on:mouseleave="dropDownMenu = false">
+    <div
+      class="sm:px-10 mx-auto w-full bg-white p-4 flex justify-between items-center sticky top-0 left-0 z-50 shadow-sm"
+    >
+      <div class="flex justify-start items-center gap-20">
+        <!-- Logo -->
+        <a href="/" class="text-2xl font-medium leading-6 tracking-wide">
+          SEÇKIN <br />
+          BILIŞIM
+        </a>
 
-      <!-- Nav -->
+        <!-- Nav -->
+        <div
+          class="justify-start text-gray-400 font-semibold gap-5 hidden lg:flex"
+        >
+          <div v-for="page in pages" :key="page.name" class="h-full">
+            <button
+              v-on:mouseover="
+                page.name === 'Ürünler'
+                  ? (dropDownMenu = true)
+                  : (dropDownMenu = false)
+              "
+              class="hover:text-blue-600 transition-colors h-full"
+            >
+              <router-link to="">{{ page.name }}</router-link>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-10">
+        <form action="">
+          <div class="flex items-center justify-center">
+            <input
+              placeholder="Ürün Ara..."
+              type="text"
+              class="border rounded-l-md p-2 w-[240px] outline-0 ring-0 focus:ring-1 focus:ring-blue-500"
+            />
+            <button
+              class="p-2 px-4 rounded-r-md text-blue-500 border border-l-0 transition-all hover:bg-gray-200"
+            >
+              <img class="w-6" src="/navbar/search.png" alt="" />
+            </button>
+          </div>
+        </form>
+        <button
+          class="hover:text-blue-600 transition-colors text-gray-400 font-semibold hidden lg:block"
+        >
+          <router-link to="">İletişim</router-link>
+        </button>
+      </div>
+
+      <button class="w-7 h-7 lg:hidden">
+        <img src="/navbar/bars.png" alt="" />
+      </button>
+    </div>
+
+    <div
+      v-if="dropDownMenu"
+      class="transition-all absolute left-0 z-50 w-full animate_animated animate__fadeInUp"
+    >
       <div
-        class="justify-start text-gray-400 font-semibold gap-5 hidden lg:flex"
+        class="max-w-7xl mx-auto bg-gray-50 px-10 flex justify-start items-start flex-wrap gap-6 rounded-b-md p-5"
       >
-        <div v-for="page in pages" :key="page.name">
-          <button class="hover:text-blue-600 transition-colors">
-            <router-link to="">{{ page.name }}</router-link>
-          </button>
+        <div
+          v-for="product in products"
+          :key="product.name"
+          class="p-4 text-center rounded-md hover:bg-gray-100 px-8 cursor-pointer"
+        >
+          <img :src="product.img" alt="" class="max-w-[50px]" />
+          <p class="mt-2">{{ product.name }}</p>
         </div>
       </div>
     </div>
-
-    <button
-      class="hover:text-blue-600 transition-colors text-gray-400 font-semibold hidden lg:block"
-    >
-      <router-link to="">Contact</router-link>
-    </button>
-
-    <button class="w-7 h-7 lg:hidden">
-      <img src="/navbar/bars.png" alt="" />
-    </button>
   </div>
-
-  <div v-if="condition"></div>
 </template>
 
 <script>
@@ -44,8 +85,28 @@ export default {
     return {
       menuToggle: false,
       pages: [
-        { name: "Sale", href: "/" },
-        { name: "Shop", href: "/add_product" },
+        { name: "Ürünler", href: "/" },
+        { name: "Hakımızda", href: "/about" },
+        { name: "Referanslar", href: "/references" },
+      ],
+      dropDownMenu: false,
+      products: [
+        {
+          name: "Kamera",
+          img: "/navbar/security-camera.png",
+        },
+        {
+          name: "Laptop",
+          img: "/navbar/laptop.png",
+        },
+        {
+          name: "Bilgisayar",
+          img: "/navbar/pc.png",
+        },
+        {
+          name: "Monitor",
+          img: "/navbar/monitor.png",
+        },
       ],
     };
   },
