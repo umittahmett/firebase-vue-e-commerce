@@ -1,11 +1,20 @@
 <template>
   <div class="max-w-7xl w-full mx-auto py-10">
     <swiper
-      :slidesPerView="6"
       :spaceBetween="30"
-      :autoplay="true"
-      :pagination="{
-        clickable: true,
+      :autoplay="{
+        delay: 1000,
+      }"
+      :breakpoints="{
+        0: {
+          slidesPerView: 3,
+        },
+        640: {
+          slidesPerView: 3,
+        },
+        768: {
+          slidesPerView: 6,
+        },
       }"
       :modules="modules"
       class="mySwiper pb-10 px-4"
@@ -36,7 +45,7 @@ import "swiper/css/free-mode";
 import "swiper/css/pagination";
 
 // import required modules
-import { FreeMode, Pagination } from "swiper/modules";
+import { FreeMode, Pagination, Autoplay } from "swiper/modules";
 
 export default {
   components: {
@@ -45,7 +54,7 @@ export default {
   },
   setup() {
     return {
-      modules: [FreeMode, Pagination],
+      modules: [FreeMode, Pagination, Autoplay],
     };
   },
 };
