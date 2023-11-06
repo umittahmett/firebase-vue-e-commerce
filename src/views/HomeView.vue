@@ -4,15 +4,16 @@
     <About class="mt-10" />
     <ProductSlider
       :name="'Yeni Gelenler'"
-      :products="newArrvals"
+      :products="newArrivals"
       class="mt-10"
     />
     <PopularCategory class="mt-10" />
     <ProductSlider
-      :name="'En Cok Satanlar'"
-      :products="pupolar"
+      :name="'En Çok Satanlar'"
+      :products="popular"
       class="mt-10"
     />
+
     <OurMission id="mission" class="mt-10" />
     <Features />
   </div>
@@ -26,150 +27,26 @@ import PopularCategory from "../components/PopularCategory.vue";
 import OurMission from "../components/OurMission.vue";
 import Features from "../components/Features.vue";
 
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  where,
+  query,
+  orderBy,
+  limit,
+} from "firebase/firestore";
+
 export default {
   data() {
     return {
-      newArrvals: [
-        {
-          name: "Asus",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 999.99,
-          discount: 20,
-          image: "/example/pc.png",
-        },
-        {
-          name: "Iphone 12s",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 499.99,
-          discount: 0,
-          image: "/example/pc.png",
-        },
-
-        {
-          name: "Asus",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 999.99,
-          discount: 20,
-          image: "/example/pc.png",
-        },
-        {
-          name: "Iphone 12s",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 499.99,
-          discount: 0,
-          image: "/example/pc.png",
-        },
-        {
-          name: "Asus",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 999.99,
-          discount: 20,
-          image: "/example/pc.png",
-        },
-        {
-          name: "Iphone 12s",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 499.99,
-          discount: 0,
-          image: "/example/pc.png",
-        },
-
-        {
-          name: "MSI",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 1299.99,
-          discount: 10,
-          image: "/example/pc.png",
-        },
-
-        {
-          name: "MSI",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 1299.99,
-          discount: 10,
-          image: "/example/pc.png",
-        },
-      ],
-
-      pupolar: [
-        {
-          name: "Asus",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 999.99,
-          discount: 20,
-          image: "/example/pc.png",
-        },
-        {
-          name: "Iphone 12s",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 499.99,
-          discount: 0,
-          image: "/example/pc.png",
-        },
-
-        {
-          name: "Asus",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 999.99,
-          discount: 20,
-          image: "/example/pc.png",
-        },
-        {
-          name: "Iphone 12s",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 499.99,
-          discount: 0,
-          image: "/example/pc.png",
-        },
-        {
-          name: "Asus",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 999.99,
-          discount: 20,
-          image: "/example/pc.png",
-        },
-        {
-          name: "Iphone 12s",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 499.99,
-          discount: 0,
-          image: "/example/pc.png",
-        },
-
-        {
-          name: "MSI",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 1299.99,
-          discount: 10,
-          image: "/example/pc.png",
-        },
-
-        {
-          name: "MSI",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 1299.99,
-          discount: 10,
-          image: "/example/pc.png",
-        },
-      ],
+      newArrivals: [],
+      popular: [],
+      products: [],
+      loading: true,
     };
   },
+
   components: {
     LogoSlider,
     About,
@@ -177,6 +54,99 @@ export default {
     PopularCategory,
     OurMission,
     Features,
+  },
+
+  async mounted() {
+    const db = getFirestore();
+
+    // Firestore'dan yalnızca gerekli alanları içeren ürünleri sorgula ve sadece ilk 10 ürünü al
+    const productsRef = collection(db, "products");
+    const productsQuery = query(
+      productsRef,
+      orderBy("created_date", "desc"),
+      limit(10)
+    );
+    const latestProductsSnapshot = await getDocs(productsQuery);
+
+    const latestProducts = [];
+
+    latestProductsSnapshot.forEach((product) => {
+      const productData = {
+        id: product.id,
+        created_date: product.data().created_date,
+      };
+      latestProducts.push(productData);
+    });
+
+    // En çok satan ürünleri almak için stok bilgilerini kullanın
+    const stocksRef = collection(db, "stocks");
+    const stockQuery = query(
+      stocksRef,
+      orderBy("sell_count", "desc"),
+      limit(10)
+    );
+    const topSellingStocksSnapshot = await getDocs(stockQuery);
+
+    const topSellingProducts = [];
+
+    topSellingStocksSnapshot.forEach((stock) => {
+      const productData = {
+        id: stock.data().product_id,
+        sell_count: stock.data().sell_count,
+      };
+      topSellingProducts.push(productData);
+    });
+
+    // Hem son eklenen hem de en çok satan ürünler için ayrı Firestore sorguları yapın
+    const latestProductDetailsQuery = query(
+      productsRef,
+      where(
+        "id",
+        "in",
+        latestProducts.map((product) => product.id)
+      )
+    );
+    const topSellingProductDetailsQuery = query(
+      productsRef,
+      where(
+        "id",
+        "in",
+        topSellingProducts.map((product) => product.id)
+      )
+    );
+
+    const latestProductDetailsSnapshot = await getDocs(
+      latestProductDetailsQuery
+    );
+
+    const topSellingProductDetailsSnapshot = await getDocs(
+      topSellingProductDetailsQuery
+    );
+
+    // Get New Arrivals
+    latestProducts.forEach((product) => {
+      const productDetails = latestProductDetailsSnapshot.docs.find(
+        (doc) => doc.data().id === product.id
+      );
+      product.title = productDetails.data().title;
+      product.description = productDetails.data().description;
+      product.price = productDetails.data().price;
+      product.discount = productDetails.data().discount;
+    });
+
+    // Get Best Sellers
+    topSellingProducts.forEach((product) => {
+      const productDetails = topSellingProductDetailsSnapshot.docs.find(
+        (doc) => doc.data().id === product.id
+      );
+      product.title = productDetails.data().title;
+      product.description = productDetails.data().description;
+      product.price = productDetails.data().price;
+      product.discount = productDetails.data().discount;
+    });
+
+    this.newArrivals = latestProducts;
+    this.popular = topSellingProducts;
   },
 };
 </script>

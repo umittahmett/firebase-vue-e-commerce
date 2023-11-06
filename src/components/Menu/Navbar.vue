@@ -6,7 +6,10 @@
     >
       <div class="flex justify-start items-center gap-20">
         <!-- Logo -->
-        <a href="/" class="text-2xl font-medium leading-6 tracking-wide">
+        <a
+          href="/"
+          class="text-2xl max-sm:text-lg font-medium max-sm:leading-5 leading-6 tracking-wide"
+        >
           SEÇKIN <br />
           BILIŞIM
         </a>
@@ -31,13 +34,15 @@
       </div>
 
       <div class="flex justify-end gap-10">
-        <form action="">
+        <form v-if="store" @submit.prevent="search()" action="">
           <div class="flex items-center justify-center">
             <input
               placeholder="Ürün Ara..."
               type="text"
-              class="border rounded-l-md p-2 w-[240px] outline-0 ring-0 focus:ring-1 focus:ring-blue-500"
+              class="border rounded-l-md p-2 max-sm:w-[120px] w-[240px] outline-0 ring-0 focus:ring-1 focus:ring-blue-500"
+              v-model="searchedWord"
             />
+
             <button
               class="p-2 px-4 rounded-r-md text-blue-500 border border-l-0 transition-all hover:bg-gray-200"
             >
@@ -45,6 +50,7 @@
             </button>
           </div>
         </form>
+
         <button
           class="hover:text-blue-600 transition-colors text-gray-400 font-semibold hidden lg:block"
         >
@@ -79,6 +85,7 @@
 
 <script>
 import "animate.css";
+import { createWizardStore } from "../../stores/counter";
 
 export default {
   data() {
@@ -89,6 +96,7 @@ export default {
         { name: "Hakımızda", href: "/about" },
         { name: "Referanslar", href: "/references" },
       ],
+      searchedWord: "",
       dropDownMenu: false,
       products: [
         {
@@ -108,7 +116,18 @@ export default {
           img: "/navbar/monitor.png",
         },
       ],
+      store: null,
     };
+  },
+
+  methods: {
+    search() {
+      localStorage.setItem("searchedWord", this.searchedWord);
+      this.store.search();
+    },
+  },
+  mounted() {
+    this.store = createWizardStore();
   },
 };
 </script>

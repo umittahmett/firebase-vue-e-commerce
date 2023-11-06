@@ -1,8 +1,11 @@
 <template>
   <div class="max-w-7xl w-full mx-auto py-5 px-3">
     <BreadCrumb />
-    <div class="flex items-start flex-col lg:flex-row justify-between gap-10 mt-5">
-      <div class="card bg-[#f4f4f4] max-w-[610px]  relative max-lg:mx-auto">
+    <div
+      v-if="product.id"
+      class="flex items-start flex-col lg:flex-row justify-between gap-10 mt-5"
+    >
+      <div class="card bg-[#f4f4f4] max-w-[610px] relative max-lg:mx-auto">
         <Galleria
           :value="product.images"
           :responsiveOptions="responsiveOptions"
@@ -11,81 +14,153 @@
           :showItemNavigators="true"
         >
           <template #item="slotProps">
-            <div class=" w-full sm:w-[610px] h-[320px] sm:h-[500px] overflow-hidden  flex justify-center items-center">
+            <div
+              class="w-full sm:w-[610px] h-[320px] sm:h-[500px] overflow-hidden flex justify-center items-center"
+            >
               <img
                 class="object-cover bg-center overflow-hidden"
                 :src="slotProps.item.itemImageSrc"
                 :alt="slotProps.item.alt"
-                style="width: 100%;  display: block"
+                style="width: 100%; display: block"
               />
             </div>
           </template>
 
           <template #thumbnail="slotProps">
             <img
-            class="object-cover bg-center w-[100px] h-[100px] "
+              class="object-cover bg-center w-[100px] h-[100px]"
               :src="slotProps.item.thumbnailImageSrc"
               :alt="slotProps.item.alt"
               style="display: block"
             />
           </template>
         </Galleria>
-        <Sale v-if="product.discount"/>
+        <Sale v-if="product.discount" />
       </div>
-      <div class="text-start w-full mt-10">
-        <h2 class="text-4xl">{{ product.name }}</h2>
+      <div class="text-start w-full mt-4">
+        <h2 class="text-4xl">{{ product.title }}</h2>
 
-        <p class="mt-3 text-gray-700 font-light text-xl flex items-center gap-x-1 ">
-           <div class="flex items-center gap-1 justify-center ">
+        <p class="mt-3 text-base">{{ product.description }}</p>
+
+        <div
+          class="mt-4 text-gray-700 font-light text-xl flex items-start gap-x-1"
+        >
+          <div class="flex items-center gap-1 justify-start w-full">
             <div v-if="product.discount" class="">
-             <p class="text-gray-600 line-through text-base ">{{ product.price }}&#8378;</p> 
+              <p class="text-gray-600 line-through text-base mr-0.5">
+                {{ formatPrice(product.price) }}&#8378;
+              </p>
             </div>
 
-            {{ product.discount ? product.price - product.price/100 * product.discount :product.price }}&#8378;
-           </div>
-          </p>
+            <p class="text-2xl font-medium">
+              {{
+                formatPrice(
+                  product.discount
+                    ? product.price - (product.price / 100) * product.discount
+                    : product.price
+                )
+              }}&#8378;
+            </p>
+          </div>
+        </div>
 
-        <p class="mt-3">{{ product.description }}</p>
+        <p class="text-sm">
+          stok:
+          <span class="text-gray-600 font-light text-xs">
+            {{ product.stock_count }} 20</span
+          >
+        </p>
 
-        <p class="text-gray-600 mt-3 border-b pb-2 " >{{ product.stock }} in stock</p>
-
-        <p class="mt-3 font-bold">Category: <span class="text-gray-600 font-normal"> {{ product.category }}</span></p>
-
-        <p class="font-bold mt-6">Contact:</p>
+        <p class="font-bold mt-6">İletişim</p>
 
         <div class="flex justify-start items-center gap-5">
-          <div>
-            <p class="text-gray-400 text-sm pl-1 mt-1">5527273780</p>
-            <a class="px-6 py-3 bg-green-500 rounded-xl text-white flex items-center gap-2"  href="https://wa.me/05527273780">
-            <img class="w-8 h-8 rounded-md" src="/public/Logos/wp.png" alt="">
-            Whatsaspp 
-          </a>
+          <div class="mt-2">
+            <p class="text-gray-400 text-sm pl-1 mt-1">+905527273780</p>
+
+            <a
+              class="px-6 py-3 bg-green-500 rounded-xl text-white flex items-center gap-2"
+              href="https://wa.me/05527273780"
+            >
+              <img
+                class="w-8 h-8 rounded-md"
+                src="/public/Logos/wp.png"
+                alt=""
+              />
+              Whatsaspp
+            </a>
           </div>
 
-         <div>
-          <p class="text-gray-400 text-sm pl-1 mt-1">5527273780</p>
+          <div class="mt-2">
+            <p class="text-gray-400 text-sm pl-1 mt-1">+905527273780</p>
 
-          <a class="px-6 py-3 bg-blue-500 rounded-xl text-white flex items-center gap-2"  href="tel:+905527273780">
-            <img class="w-8 h-8 rounded-md" src="/public/Logos/phone.png" alt="">
-            Phone 
-          </a>
-         </div>
+            <a
+              class="px-6 py-3 bg-blue-500 rounded-xl text-white flex items-center gap-2"
+              href="https://wa.me/05527273780"
+            >
+              <img
+                class="w-8 h-8 rounded-md"
+                src="/public/Logos/phone.png"
+                alt=""
+              />
+              Phone
+            </a>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Features -->
-    <h2 class="text-3xl border-b text-start mt-10 pb-2 mb-2 ">Product Features</h2>
+    <div class="w-full flex items-center gap-10 h-[60vh] p-5" v-else>
+      <div
+        class="w-full h-full bg-slate-300 grid-cols-2 rounded-xl animate-pulse"
+      ></div>
 
-    <div class="flex items-center justify-start gap-2 py-2 mt-1 pl-2 border-b border-l-blue-500 border-l-2" v-for="feature in product.features" :key="feature.name">
-      <p class="font-medium ">{{ feature.feature_name }}:</p>
-      <p class="text-gray-500">{{ feature.feature }} {{ feature.feature_unit_name }}</p>
+      <div class="flex flex-col gap-3 w-full h-full">
+        <div
+          class="w-full h-full bg-slate-300 grid-cols-2 rounded-xl animate-pulse"
+        ></div>
+
+        <div
+          class="w-full h-full bg-slate-300 grid-cols-2 rounded-xl animate-pulse"
+        ></div>
+
+        <div
+          class="w-full h-full bg-slate-300 grid-cols-2 rounded-xl animate-pulse"
+        ></div>
+      </div>
     </div>
 
+    <!-- Features -->
+    <h2 class="text-3xl border-b text-start mt-10 pb-2 mb-2">
+      Product Features
+    </h2>
 
+    <div class="grid grid-cols-2 w-full gap-4 border-b pb-3">
+      <div
+        v-if="product.id"
+        class="flex items-center justify-between gap-2 py-2.5 mt-1 p-4 border-b bg-gray-100 rounded-lg"
+        v-for="feature in product.features"
+        :key="feature.name"
+      >
+        <p class="text-gray-400 font-light">{{ feature.name }}</p>
+        <p class="font-bold">{{ feature.feature }} {{ feature.unit_name }}</p>
+      </div>
 
-   <ProductSlider :products="products"/>
-    
+      <div v-else class="grid col-span-2 grid-cols-2 gap-4 w-full">
+        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
+
+        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
+
+        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
+
+        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
+
+        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
+
+        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
+      </div>
+    </div>
+
+    <ProductSlider :products="products" />
   </div>
 </template>
 
@@ -94,79 +169,132 @@ import Galleria from "primevue/galleria";
 import BreadCrumb from "../components/Common/BreadCrumb.vue";
 import Sale from "../components/Common/Sale.vue";
 import ProductSlider from "../components/ProductSlider.vue";
+import ProgressSpinner from "primevue/progressspinner";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  where,
+  query,
+} from "firebase/firestore";
 
 export default {
   data() {
     return {
-      product: {
+      product: {},
 
-        id: 109,
-        name: "Asus",
-        description: "Lorem ipsum dolor sit amet consectetur adipiscing elit.Lorem ipsum dolor sit amet consectetur adipiscing elit.Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-        price: 999.99,
-        discount: 20,
-        stock: 20,
-        category: "Laptop",
-        type_id: 3,
-        features:[  
+      products: [
         {
-          products_type_feature_id: 77,
-          feature_name: "Ekran Boyutu",
-          feature_unit_name: "inç",
-          feature: "13.3"
+          name: "Asus",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+          price: 999.99,
+          discount: 20,
+          image: "/about.png",
         },
         {
-          products_type_feature_id: 78,
-          feature_name: "Çözünürlük",
-          feature_unit_name: "",
-          feature: "2560 x 1600"
+          name: "Iphone 12s",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
+          price: 499.99,
+          discount: 0,
+          image: "/about.png",
         },
-        {
-          products_type_feature_id: 79,
-          feature_name: "Panel Türü",
-          feature_unit_name: "",
-          feature: "IPS Retina"
-        },
-        {
-          products_type_feature_id: 80,
-          feature_name: "Yenileme Hızı",
-          feature_unit_name: "Hz",
-          feature: "60"
-        },
-        {
-          products_type_feature_id: 81,
-          feature_name: "Tepki Süresi",
-          feature_unit_name: "ms",
-          feature: "5"
-        },
-        {
-          products_type_feature_id: 82,
-          feature_name: "Bağlantı Noktaları",
-          feature_unit_name: "",
-          feature: "2 x Thunderbolt 4 (USB-C), 3.5mm kulaklık girişi"
-        },
-        {
-          products_type_feature_id: 83,
-          feature_name: "Hoparlörler",
-          feature_unit_name: "",
-          feature: "Stereo hoparlörler"
-        },
-        {
-          products_type_feature_id: 84,
-          feature_name: "VESA Montajı",
-          feature_unit_name: "",
-          feature: "Desteklenmiyor"
-        },
-        {
-          products_type_feature_id: 85,
-          feature_name: "Enerji Tüketimi",
-          feature_unit_name: "Watt",
-          feature: "65"
-        }]
 
-,
+        {
+          name: "Asus",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+          price: 999.99,
+          discount: 20,
+          image: "/about.png",
+        },
+        {
+          name: "Iphone 12s",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
+          price: 499.99,
+          discount: 0,
+          image: "/about.png",
+        },
+        {
+          name: "Asus",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+          price: 999.99,
+          discount: 20,
+          image: "/about.png",
+        },
+        {
+          name: "Iphone 12s",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
+          price: 499.99,
+          discount: 0,
+          image: "/about.png",
+        },
 
-        images: [
+        {
+          name: "MSI",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+          price: 1299.99,
+          discount: 10,
+          image: "/about.png",
+        },
+
+        {
+          name: "MSI",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+          price: 1299.99,
+          discount: 10,
+          image: "/public/example/pc.png",
+        },
+      ],
+
+      responsiveOptions: [
+        {
+          breakpoint: "991px",
+          numVisible: 4,
+        },
+
+        {
+          breakpoint: "575px",
+          numVisible: 3,
+        },
+      ],
+    };
+  },
+
+  methods: {
+    formatPrice(price) {
+      if (typeof price !== "number") {
+        return "e";
+      }
+
+      return price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
+    },
+  },
+  async mounted() {
+    const db = getFirestore();
+    const cur_overview_product_id = localStorage.getItem(
+      "cur_overview_product_id"
+    );
+
+    if (cur_overview_product_id) {
+      const productsRef = collection(db, "products");
+      const queryRef = query(
+        productsRef,
+        where("id", "==", parseInt(cur_overview_product_id))
+      );
+      const productSnapshot = await getDocs(queryRef);
+
+      if (!productSnapshot.empty) {
+        const productData = productSnapshot.docs[0].data();
+
+        productData.images = [
           {
             itemImageSrc: "/public/example/pc.png",
             thumbnailImageSrc: "/public/example/pc.png",
@@ -202,99 +330,102 @@ export default {
             thumbnailImageSrc: "/public/hero/herobg.jpg",
             alt: "Image 7",
           },
-        ],
-      },
+        ];
 
-      products:[
-        
-          {
-            name: "Asus",
-            description:
-              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-            price: 999.99,
-            discount: 20,
-            image: "/about.png",
-          },
-          {
-            name: "Iphone 12s",
-            description:
-              "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-            price: 499.99,
-            discount: 0,
-            image: "/about.png",
-          },
+        // Get Brand Name
+        const brandsRef = collection(db, "brands");
+        const brandQuery = query(
+          brandsRef,
+          where("id", "==", productData.brand_id)
+        );
+        const brandSnapshot = await getDocs(brandQuery);
 
-          {
-            name: "Asus",
-            description:
-              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-            price: 999.99,
-            discount: 20,
-            image: "/about.png",
-          },
-          {
-            name: "Iphone 12s",
-            description:
-              "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-            price: 499.99,
-            discount: 0,
-            image: "/about.png",
-          },
-          {
-            name: "Asus",
-            description:
-              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-            price: 999.99,
-            discount: 20,
-            image: "/about.png",
-          },
-          {
-            name: "Iphone 12s",
-            description:
-              "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-            price: 499.99,
-            discount: 0,
-            image: "/about.png",
-          },
+        if (!brandSnapshot.empty) {
+          productData.brand_name = brandSnapshot.docs[0].data().name;
+        }
 
-          {
-            name: "MSI",
-            description:
-              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-            price: 1299.99,
-            discount: 10,
-            image: "/about.png",
-          },
+        console.log("features does work1");
 
-          {
-            name: "MSI",
-            description:
-              "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-            price: 1299.99,
-            discount: 10,
-            image: "/public/example/pc.png",
-          },
-        
-      ],
+        // Get Category Name
+        const categoriesRef = collection(db, "categories");
+        const categoryQuery = query(
+          categoriesRef,
+          where("id", "==", productData.category_id)
+        );
+        const categorySnapshot = await getDocs(categoryQuery);
 
-      responsiveOptions: [
-        {
-          breakpoint: "991px",
-          numVisible: 4,
-        },
+        if (!categorySnapshot.empty) {
+          productData.category_name = categorySnapshot.docs[0].data().name;
+        }
+        console.log("features does work2");
 
-        {
-          breakpoint: "575px",
-          numVisible: 3,
-        },
-      ],
-    };
+        // Get Feature Types
+        const product_category_featuresRef = collection(
+          db,
+          "product_cetegory_features"
+        );
+
+        const product_category_featuresQuery = query(
+          product_category_featuresRef,
+          where("category_id", "==", productData.id)
+        );
+
+        const product_category_featuresSnapshot = await getDocs(
+          product_category_featuresQuery
+        );
+
+        console.log(
+          "product_category_featuresSnapshot :",
+          product_category_featuresSnapshot.docs
+        );
+
+        console.log("features does work3");
+
+        if (product_category_featuresSnapshot.docs) {
+          for (const featureDoc of product_category_featuresSnapshot.docs) {
+            console.log("features does work 4");
+
+            const featureData = featureDoc.data();
+
+            // Query For Get Unit Values Of Current Product Feature
+            const products_featuresRef = collection(db, "products_features");
+            const products_featuresQuery = query(
+              products_featuresRef,
+              where("product_id", "==", productData.id)
+            );
+            const products_featuresSnapshot = await getDocs(
+              products_featuresQuery
+            );
+            let product_features = [];
+
+            for (const featureValueDoc of products_featuresSnapshot.docs) {
+              console.log("products aliniyor");
+              const featureValueData = featureValueDoc.data();
+              product_features.push({
+                name: featureData.name,
+                unit_name: featureData.unit_name,
+                feature: featureValueData.unit_value,
+              });
+              console.log(product_features);
+            }
+
+            productData.features = product_features;
+          }
+        } else {
+          console.log("features is empty");
+        }
+
+        this.product = productData;
+        console.log(productData);
+      }
+    }
   },
   components: {
     Galleria,
     BreadCrumb,
     Sale,
-    ProductSlider
-},
+    ProductSlider,
+    ProgressSpinner,
+  },
 };
 </script>
