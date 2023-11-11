@@ -106,7 +106,6 @@ export default {
         latestProducts.map((product) => product.id)
       )
     );
-
     const topSellingProductDetailsQuery = query(
       productsRef,
       where(

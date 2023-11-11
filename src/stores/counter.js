@@ -2,8 +2,7 @@ import { defineStore } from "pinia";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 export const createWizardStore = defineStore("counter", {
   state: () => ({
-    categories: [],
-    prices: [{ min: null, max: null }],
+    products: [],
   }),
   actions: {
     async search() {
