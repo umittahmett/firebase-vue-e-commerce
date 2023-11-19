@@ -1,24 +1,23 @@
 <template>
-  <router-link to="/overview">
+  <a href="/overview">
     <div
       @click="sendProductId(product.id)"
       :class="{
         'text-start': text_align === 'start',
       }"
-      class="text-center rounded-md overflow-hidden w-fit flex flex-col justify-center items-center"
+      class="text-center rounded-md overflow-hidden w-fit flex flex-col justify-center items-center h-[440px]"
     >
-      <div class="relative w-fit mx-auto h-full">
+      <div class="relative w-full mx-auto h-full">
         <img
-          class="object-cover bg-center w-[220px] h-[250px] rounded-t-md"
-          :src="'/public/example/img1.webp'"
+          class="object-cover bg-center w-full h-[250px] rounded-t-md"
+          :src="product.cover_image"
           alt=""
         />
         <Sale :bgColor="'blue'" v-if="product.discount" />
       </div>
-      <div
-        class="p-2 flex flex-col justify-between h-full mx-auto max-w-[220px]"
-      >
-        <div>
+
+      <div class="p-2 flex flex-col justify-between h-full w-full bg-[#F4F8FD]">
+        <div class="text-start mr-auto">
           <h4 class="font-medium text-lg line-clamp-2 mt-1">
             {{ product.title }}
           </h4>
@@ -43,7 +42,7 @@
               </p>
             </div>
 
-            <p class="text-2xl font-medium">
+            <p class="text-2xl font-bold">
               {{
                 formatPrice(
                   product.discount
@@ -56,7 +55,7 @@
         </div>
       </div>
     </div>
-  </router-link>
+  </a>
 </template>
 
 <script>
