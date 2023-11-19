@@ -1,20 +1,20 @@
 <template>
   <div>
     <LogoSlider />
+
     <About class="mt-10" />
+
     <ProductSlider
       :name="'Yeni Gelenler'"
-      :products="newArrivals"
+      :products="latestProducts"
       class="mt-10"
     />
     <PopularCategory class="mt-10" />
-    <ProductSlider
-      :name="'En Çok Satanlar'"
-      :products="popular"
-      class="mt-10"
-    />
+
+    <ProductSlider :name="'Populer'" :products="bestSellers" class="mt-10" />
 
     <OurMission id="mission" class="mt-10" />
+
     <Features />
   </div>
 </template>
@@ -40,9 +40,9 @@ import {
 export default {
   data() {
     return {
-      newArrivals: [],
+      bestSellers: [],
       popular: [],
-      products: [],
+      latestProducts: [],
       loading: true,
     };
   },
@@ -59,94 +59,51 @@ export default {
   async mounted() {
     const db = getFirestore();
 
-    // Limited Filter
+    // Get New Arrival Products
     const productsRef = collection(db, "products");
-    const productsQuery = query(
+    const latestProductsQuery = query(
       productsRef,
-      orderBy("created_date", "desc"),
-      limit(10)
+      orderBy("created_date", "asc"),
+      limit(12)
     );
-    const latestProductsSnapshot = await getDocs(productsQuery);
-
-    const latestProducts = [];
-
-    latestProductsSnapshot.forEach((product) => {
+    const latestProductsSnapshot = await getDocs(latestProductsQuery);
+    latestProductsSnapshot.forEach(async (product) => {
       const productData = {
         id: product.id,
         created_date: product.data().created_date,
+        title: product.data().title,
+        description: product.data().description,
+        price: product.data().price,
+        discount: product.data().discount,
+        cover_image: product.data().cover_image,
       };
-      latestProducts.push(productData);
+
+      console.log(productData);
+      this.latestProducts.push(productData);
     });
+    //>
 
-    // Best Sellers Ref
-    const stocksRef = collection(db, "stocks");
-    const stockQuery = query(
-      stocksRef,
-      orderBy("sell_count", "desc"),
-      limit(10)
+    // Get Best Seller Products
+    const bestSelProductsQuery = query(
+      productsRef,
+      orderBy("created_date", "asc"),
+      limit(12)
     );
-    const topSellingStocksSnapshot = await getDocs(stockQuery);
-
-    const topSellingProducts = [];
-
-    topSellingStocksSnapshot.forEach((stock) => {
+    const bestSelProductsSnapshot = await getDocs(bestSelProductsQuery);
+    bestSelProductsSnapshot.forEach((product) => {
       const productData = {
-        id: stock.data().product_id,
-        sell_count: stock.data().sell_count,
+        id: product.id,
+        created_date: product.data().created_date,
+        title: product.data().title,
+        description: product.data().description,
+        price: product.data().price,
+        discount: product.data().discount,
+        cover_image: product.data().cover_image,
       };
-      topSellingProducts.push(productData);
+      this.bestSellers.push(productData);
+      console.log(productData);
     });
-
-    // Hem son eklenen hem de en çok satan ürünler için ayrı Firestore sorguları yapın
-    const latestProductDetailsQuery = query(
-      productsRef,
-      where(
-        "id",
-        "in",
-        latestProducts.map((product) => product.id)
-      )
-    );
-    const topSellingProductDetailsQuery = query(
-      productsRef,
-      where(
-        "id",
-        "in",
-        topSellingProducts.map((product) => product.id)
-      )
-    );
-
-    const latestProductDetailsSnapshot = await getDocs(
-      latestProductDetailsQuery
-    );
-
-    const topSellingProductDetailsSnapshot = await getDocs(
-      topSellingProductDetailsQuery
-    );
-
-    // Get New Arrivals
-    latestProducts.forEach((product) => {
-      const productDetails = latestProductDetailsSnapshot.docs.find(
-        (doc) => doc.data().id === product.id
-      );
-      product.title = productDetails.data().title;
-      product.description = productDetails.data().description;
-      product.price = productDetails.data().price;
-      product.discount = productDetails.data().discount;
-    });
-
-    // Get Best Sellers
-    topSellingProducts.forEach((product) => {
-      const productDetails = topSellingProductDetailsSnapshot.docs.find(
-        (doc) => doc.data().id === product.id
-      );
-      product.title = productDetails.data().title;
-      product.description = productDetails.data().description;
-      product.price = productDetails.data().price;
-      product.discount = productDetails.data().discount;
-    });
-
-    this.newArrivals = latestProducts;
-    this.popular = topSellingProducts;
+    //>
   },
 };
 </script>
