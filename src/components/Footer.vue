@@ -46,12 +46,15 @@
           Seçkin Bilişim Copyright © 2023 All rights reserved
         </p>
 
-        <a
-          href="https://umitahmed.com"
-          class="font-light text-blue-600 border-b-blue-600 border-b opacity-70"
-        >
-          umitahmed.com
-        </a>
+        <div class="flex items-center gap-2">
+          <p class="text-gray-500 font-light">created by</p>
+          <a
+            href="https://umitahmed.com"
+            class="font-light text-blue-600 border-b-blue-600 border-b opacity-70"
+          >
+            umitahmed.com
+          </a>
+        </div>
       </div>
     </div>
   </div>
