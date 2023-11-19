@@ -1,19 +1,13 @@
 <template>
-  <div class="w-full h-[100vh] overflow-hidden relative text-white">
+  <div class="w-full h-[85vh] overflow-hidden relative text-white">
     <img
       class="object-cover w-full h-full bg-center"
-      src="/hero/herobg.jpg"
+      src="/hero/heroBg.jpg"
       alt=""
     />
 
-    <a
-      class="text-[10px] absolute bottom-0 left-0 p-2 z-10 text-gray-500"
-      href="http://www.freepik.com"
-      >Designed by macrovector / Freepik</a
-    >
-
     <div
-      class="absolute top-0 left-0 w-full sm:pt-28 pt-20 sm:pl-10 pl-4 h-full bg-[rgba(0,0,0,0.4)]"
+      class="absolute top-0 left-0 w-full sm:pt-28 pt-20 sm:pl-10 pl-4 h-full bg-[rgba(0,0,0,0.3)]"
     >
       <div>
         <h1
@@ -28,8 +22,7 @@
         </p>
 
         <div class="flex items-center justify-start gap-4 mt-10">
-          <Button :buttonType="'white'">Products</Button>
-          <Button :buttonType="'white'">Categories</Button>
+          <Button :buttonType="'white'">İletişim</Button>
         </div>
       </div>
     </div>
