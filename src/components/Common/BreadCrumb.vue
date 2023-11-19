@@ -31,14 +31,21 @@ export default {
         route: "/",
       },
       items: [
-        { label: "Home", url: "/" },
-        { label: "Computers", url: "/" },
+        { label: "Search", url: "/search" },
+        { label: "", url: "/search" },
       ],
     };
   },
 
   components: {
     Breadcrumb,
+  },
+
+  mounted() {
+    let searched = JSON.parse(localStorage.getItem("searchedWord"));
+    const truncatedText = searched.word.slice(0, 10);
+    this.items[1].label =
+      truncatedText.length > 6 ? truncatedText + ".." : truncatedText;
   },
 };
 </script>
