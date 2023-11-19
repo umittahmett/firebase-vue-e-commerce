@@ -1,42 +1,47 @@
 <template>
   <div
-    class="max-w-7xl w-full py-10 mx-auto px-2 flex justify-center flex-col md:flex-row items-center gap-10"
+    class="max-w-7xl w-full py-10 mx-auto px-3 flex justify-center flex-col md:flex-row items-center gap-10"
   >
     <div
       class="w-full relative max-w-md md:max-w-full rounded-md overflow-hidden"
     >
       <img
-        class="w-full md:h-[560px] object-cover bg-center"
-        src="/example/pc.png"
+        class="w-full h-[400px] md:h-[560px] object-cover bg-center"
+        src="/example/pc2_category.jpg"
         alt=""
       />
 
-      <div
+      <a
+        href="/search"
+        @click="store && store.addSearchedCategory(0)"
         class="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-[rgba(0,0,0,0.3)] hover:bg-[rgba(58,62,78,0.4)] transition-all"
       >
-        <Button class="text-xl" :buttonType="'white'">Computer</Button>
-      </div>
+        <Button class="text-xl" :buttonType="'white'">Biligisayar</Button>
+      </a>
     </div>
 
     <div
       class="w-full relative max-w-md md:max-w-full rounded-md overflow-hidden"
     >
       <img
-        class="w-full h-[450px] md:h-[560px] object-cover bg-center"
-        src="/example/pc.png"
+        class="w-full h-[400px] md:h-[560px] object-cover bg-center"
+        src="/example/laptop_category.jpg"
         alt=""
       />
 
-      <div
+      <a
+        href="/search"
+        @click="store && store.addSearchedCategory(1)"
         class="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-[rgba(0,0,0,0.3)] hover:bg-[rgba(58,62,78,0.4)] transition-all"
       >
-        <Button class="text-xl" :buttonType="'white'">Phone</Button>
-      </div>
+        <Button class="text-xl" :buttonType="'white'">Laptop</Button>
+      </a>
     </div>
   </div>
 </template>
 <script>
 import Sale from "../components/Common/Sale.vue";
+import { createWizardStore } from "../stores/counter";
 import Button from "./Common/Button.vue";
 
 export default {
@@ -44,34 +49,12 @@ export default {
   data() {
     return {
       products: null,
+      store: null,
     };
   },
 
   mounted() {
-    this.products = [
-      {
-        name: "Asus",
-        description: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-        price: 999.99,
-        discount: 20,
-        image: "/example/pc.png",
-      },
-      {
-        name: "Iphone 12s",
-        description: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-        price: 499.99,
-        discount: 0,
-        image: "/example/pc.png",
-      },
-
-      {
-        name: "MSI",
-        description: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-        price: 1299.99,
-        discount: 100,
-        image: "/example/pc.png",
-      },
-    ];
+    this.store = createWizardStore();
   },
 };
 </script>
