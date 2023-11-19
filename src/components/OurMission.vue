@@ -1,7 +1,9 @@
 <template>
-  <div class="w-full bg-[url(/public/OurMissionBg.jpg)] text-white mt-20">
+  <div
+    class="w-full bg-[url(/public/OurMissionBg.jpg)] bg-center bg-cover text-white mt-20"
+  >
     <div
-      class="flex justify-center items-center py-20 px-2 gap-10 min-h-[600px] h-full flex-col text-center bg-[rgba(0,0,0,0.3)]"
+      class="flex justify-center items-center py-20 gap-10 min-h-[600px] h-full flex-col text-center bg-[rgba(0,0,0,0.2)]"
     >
       <h2 class="text-5xl font-bold">Our Mission</h2>
 
@@ -13,7 +15,7 @@
         part.
       </p>
 
-      <Button :buttonType="'white'">View Products</Button>
+      <a href="/"><Button :buttonType="'white'">Ürünlere Gözat</Button></a>
     </div>
   </div>
 </template>
