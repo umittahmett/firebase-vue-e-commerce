@@ -1,41 +1,57 @@
 <template>
   <div class="max-w-7xl w-full mx-auto py-5 px-3">
     <BreadCrumb />
+
+    <!-- Image Gallery -->
     <div
       v-if="product.id"
       class="flex items-start flex-col lg:flex-row justify-between gap-10 mt-5"
     >
-      <div class="card bg-[#f4f4f4] max-w-[610px] relative max-lg:mx-auto">
+      <div
+        class="card bg-[#f4f4f4] max-w-[610px] max-lg:mx-auto relative rounded-t-md"
+        :class="{
+          ' w-full max-w-[100%] h-full !fixed top-0 left-0 flex justify-center items-center z-50 bg-[rgba(0,0,0,0.8)] ':
+            fullscreenView === true,
+        }"
+      >
+        <XMarkIcon
+          @click="fullscreenView = false"
+          class="w-10 h-10 absolute top-5 right-5 text-white"
+          v-if="fullscreenView"
+        />
+
         <Galleria
           :value="product.images"
           :responsiveOptions="responsiveOptions"
           :numVisible="5"
           :circular="true"
           :showItemNavigators="true"
+          :changeItemOnIndicatorHover="true"
         >
           <template #item="slotProps">
             <div
-              class="w-full sm:w-[610px] h-[320px] sm:h-[500px] overflow-hidden flex justify-center items-center"
+              class="w-full sm:w-[610px] h-[390px] sm:h-[500px] overflow-hidden flex justify-center items-center cursor-pointer"
+              @click="fullscreenView = true"
+              :class="{
+                ' h-[500px] ': fullscreenView === true,
+              }"
             >
               <img
                 class="object-cover bg-center overflow-hidden"
-                :src="slotProps.item.itemImageSrc"
-                :alt="slotProps.item.alt"
+                :src="slotProps.item"
                 style="width: 100%; display: block"
               />
             </div>
           </template>
 
-          <template #thumbnail="slotProps">
+          <template #thumbnail="slotProps" class="z-40">
             <img
               class="object-cover bg-center w-[100px] h-[100px]"
-              :src="slotProps.item.thumbnailImageSrc"
-              :alt="slotProps.item.alt"
-              style="display: block"
+              :src="slotProps.item"
             />
           </template>
         </Galleria>
-        <Sale v-if="product.discount" />
+        <Sale v-if="product.discount && !fullscreenView" />
       </div>
       <div class="text-start w-full mt-4">
         <h2 class="text-4xl">{{ product.title }}</h2>
@@ -109,6 +125,7 @@
       </div>
     </div>
 
+    <!-- Imagee Gallery Loading Block -->
     <div class="w-full flex items-center gap-10 h-[60vh] p-5" v-else>
       <div
         class="w-full h-full bg-slate-300 grid-cols-2 rounded-xl animate-pulse"
@@ -134,6 +151,7 @@
       Product Features
     </h2>
 
+    <!-- Features Loading Block -->
     <div class="grid grid-cols-2 w-full gap-4 border-b pb-3">
       <div
         v-if="product.id"
@@ -160,7 +178,8 @@
       </div>
     </div>
 
-    <ProductSlider :products="products" />
+    <!-- Similar Products -->
+    <ProductSlider v-if="!similarProductsEmpty" :products="similarProducts" />
   </div>
 </template>
 
@@ -177,83 +196,19 @@ import {
   getDocs,
   where,
   query,
+  limit,
+  doc,
+  getDoc,
 } from "firebase/firestore";
+
+import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
+import { XMarkIcon } from "@heroicons/vue/20/solid";
 
 export default {
   data() {
     return {
       product: {},
-
-      products: [
-        {
-          name: "Asus",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 999.99,
-          discount: 20,
-          image: "/about.png",
-        },
-        {
-          name: "Iphone 12s",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 499.99,
-          discount: 0,
-          image: "/about.png",
-        },
-
-        {
-          name: "Asus",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 999.99,
-          discount: 20,
-          image: "/about.png",
-        },
-        {
-          name: "Iphone 12s",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 499.99,
-          discount: 0,
-          image: "/about.png",
-        },
-        {
-          name: "Asus",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 999.99,
-          discount: 20,
-          image: "/about.png",
-        },
-        {
-          name: "Iphone 12s",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 499.99,
-          discount: 0,
-          image: "/about.png",
-        },
-
-        {
-          name: "MSI",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 1299.99,
-          discount: 10,
-          image: "/about.png",
-        },
-
-        {
-          name: "MSI",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-          price: 1299.99,
-          discount: 10,
-          image: "/public/example/pc.png",
-        },
-      ],
-
+      similarProducts: [],
       responsiveOptions: [
         {
           breakpoint: "991px",
@@ -265,6 +220,8 @@ export default {
           numVisible: 3,
         },
       ],
+      similarProductsEmpty: false,
+      fullscreenView: false,
     };
   },
 
@@ -276,156 +233,219 @@ export default {
 
       return price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
     },
-  },
-  async mounted() {
-    const db = getFirestore();
-    const cur_overview_product_id = localStorage.getItem(
-      "cur_overview_product_id"
-    );
 
-    if (cur_overview_product_id) {
+    // Get Similar Products
+    async getSimilarProducts() {
+      const db = getFirestore();
+
+      // Get Similar Products
       const productsRef = collection(db, "products");
-      const queryRef = query(
+      const latestProductsQuery = query(
         productsRef,
-        where("id", "==", parseInt(cur_overview_product_id))
+        where("id", "!=", this.product.id),
+        where("brand_id", "==", this.product.brand_id),
+        where("category_id", "==", this.product.category_id),
+        limit(10)
       );
-      const productSnapshot = await getDocs(queryRef);
 
-      if (!productSnapshot.empty) {
-        const productData = productSnapshot.docs[0].data();
+      const latestProductsSnapshot = await getDocs(latestProductsQuery);
+      if (!latestProductsSnapshot.empty) {
+        latestProductsSnapshot.forEach(async (product) => {
+          const productData = {
+            id: product.id,
+            created_date: product.data().created_date,
+            title: product.data().title,
+            description: product.data().description,
+            price: product.data().price,
+            discount: product.data().discount,
+            cover_image: product.data().cover_image,
+          };
+          console.log(productData);
+          this.similarProducts.push(productData);
+        });
+      } else {
+        this.similarProductsEmpty = true;
+      }
 
-        productData.images = [
-          {
-            itemImageSrc: "/public/example/pc.png",
-            thumbnailImageSrc: "/public/example/pc.png",
-            alt: "Image 1",
-          },
-          {
-            itemImageSrc: "/public/example/img2.webp",
-            thumbnailImageSrc: "/public/example/img2.webp",
-            alt: "Image 2",
-          },
-          {
-            itemImageSrc: "/public/example/img3.webp",
-            thumbnailImageSrc: "/public/example/img3.webp",
-            alt: "Image 3",
-          },
-          {
-            itemImageSrc: "/public/example/img1.webp",
-            thumbnailImageSrc: "/public/example/img1.webp",
-            alt: "Image 4",
-          },
-          {
-            itemImageSrc: "/public/example/img2.webp",
-            thumbnailImageSrc: "/public/example/img2.webp",
-            alt: "Image 5",
-          },
-          {
-            itemImageSrc: "/public/example/img3.webp",
-            thumbnailImageSrc: "/public/example/img3.webp",
-            alt: "Image 6",
-          },
-          {
-            itemImageSrc: "/public/hero/herobg.jpg",
-            thumbnailImageSrc: "/public/hero/herobg.jpg",
-            alt: "Image 7",
-          },
-        ];
+      //>
+    },
 
-        // Get Brand Name
-        const brandsRef = collection(db, "brands");
-        const brandQuery = query(
-          brandsRef,
-          where("id", "==", productData.brand_id)
-        );
-        const brandSnapshot = await getDocs(brandQuery);
+    // Get Product Data
+    async getOverviewProductData() {
+      const db = getFirestore();
+      const storage = getStorage();
 
-        if (!brandSnapshot.empty) {
-          productData.brand_name = brandSnapshot.docs[0].data().name;
-        }
+      const cur_overview_product_id = localStorage.getItem(
+        "cur_overview_product_id"
+      );
 
-        console.log("features does work1");
+      if (cur_overview_product_id) {
+        const productRef = doc(db, "products", cur_overview_product_id);
+        const productSnapshot = await getDoc(productRef);
 
-        // Get Category Name
-        const categoriesRef = collection(db, "categories");
-        const categoryQuery = query(
-          categoriesRef,
-          where("id", "==", productData.category_id)
-        );
-        const categorySnapshot = await getDocs(categoryQuery);
-
-        if (!categorySnapshot.empty) {
-          productData.category_name = categorySnapshot.docs[0].data().name;
-        }
-        console.log("features does work2");
-
-        // Get Feature Types
-        const product_category_featuresRef = collection(
-          db,
-          "product_cetegory_features"
-        );
-
-        const product_category_featuresQuery = query(
-          product_category_featuresRef,
-          where("category_id", "==", productData.id)
-        );
-
-        const product_category_featuresSnapshot = await getDocs(
-          product_category_featuresQuery
-        );
-
-        console.log(
-          "product_category_featuresSnapshot :",
-          product_category_featuresSnapshot.docs
-        );
-
-        console.log("features does work3");
-
-        if (product_category_featuresSnapshot.docs) {
-          for (const featureDoc of product_category_featuresSnapshot.docs) {
-            console.log("features does work 4");
-
-            const featureData = featureDoc.data();
-
-            // Query For Get Unit Values Of Current Product Feature
-            const products_featuresRef = collection(db, "products_features");
-            const products_featuresQuery = query(
-              products_featuresRef,
-              where("product_id", "==", productData.id)
+        if (productSnapshot) {
+          const productData = productSnapshot.data();
+          console.log(productData);
+          // Get Product Images
+          const imagesRef = ref(
+            storage,
+            `products_images/${productData.images_folder}`
+          );
+          productData.images = [];
+          try {
+            const res = await listAll(imagesRef);
+            await Promise.all(
+              res.items.map(async (itemRef) => {
+                const url = await getDownloadURL(itemRef);
+                productData.images.push(url);
+                console.log(url);
+              })
             );
-            const products_featuresSnapshot = await getDocs(
-              products_featuresQuery
-            );
-            let product_features = [];
+          } catch (error) {
+            switch (error.code) {
+              case "storage/object-not-found":
+                console.log("File doesn't exist");
+                break;
+              case "storage/unauthorized":
+                console.log(
+                  "User doesn't have permission to access the object"
+                );
+                break;
+              case "storage/canceled":
+                console.log("User canceled the upload");
+                break;
+              case "storage/unknown":
+                console.log(
+                  "Unknown error occurred, inspect the server response"
+                );
+                break;
+              default:
+                console.log(error);
+            }
+          }
 
-            for (const featureValueDoc of products_featuresSnapshot.docs) {
-              console.log("products aliniyor");
-              const featureValueData = featureValueDoc.data();
-              product_features.push({
-                name: featureData.name,
-                unit_name: featureData.unit_name,
-                feature: featureValueData.unit_value,
-              });
-              console.log(product_features);
+          // Get Brand Name
+          const brandsRef = collection(db, "brands");
+          const brandQuery = query(
+            brandsRef,
+            where("id", "==", productData.brand_id)
+          );
+          const brandSnapshot = await getDocs(brandQuery);
+
+          if (!brandSnapshot.empty) {
+            productData.brand_name = brandSnapshot.docs[0].data().name;
+          }
+
+          console.log("features does work1");
+
+          // Get Category Name
+          const categoriesRef = collection(db, "categories");
+          const categoryQuery = query(
+            categoriesRef,
+            where("id", "==", productData.category_id)
+          );
+          const categorySnapshot = await getDocs(categoryQuery);
+
+          if (!categorySnapshot.empty) {
+            productData.category_name = categorySnapshot.docs[0].data().name;
+          }
+          console.log("features does work2");
+
+          // Get Feature Types
+          const product_category_featuresRef = collection(
+            db,
+            "product_cetegory_features"
+          );
+          const product_category_featuresQuery = query(
+            product_category_featuresRef,
+            where("category_id", "==", productData.category_id)
+          );
+
+          console.log("productData.category_id: ", productData.category_id);
+          const product_category_featuresSnapshot = await getDocs(
+            product_category_featuresQuery
+          );
+
+          console.log(
+            "product_cetegory_featuresSnapshot :",
+            product_category_featuresSnapshot.docs
+          );
+
+          console.log("features does work3");
+
+          if (!product_category_featuresSnapshot.empty) {
+            // Array to store promises for product features
+            const featurePromises = [];
+
+            for (const featureDoc of product_category_featuresSnapshot.docs) {
+              console.log("features does work 4");
+
+              const featureData = featureDoc.data();
+
+              // Create a separate array for each feature
+              const product_features = [];
+
+              // Query For Get Unit Values Of Current Product Feature
+              const products_featuresRef = collection(db, "products_features");
+              const products_featuresQuery = query(
+                products_featuresRef,
+                where("product_id", "==", cur_overview_product_id),
+                where("product_category_feature_id", "==", featureData.id) // Add this condition
+              );
+
+              // Collect the promise for the product features query
+              const featurePromise = getDocs(products_featuresQuery).then(
+                (products_featuresSnapshot) => {
+                  for (const featureValueDoc of products_featuresSnapshot.docs) {
+                    console.log("products aliniyor");
+                    const featureValueData = featureValueDoc.data();
+                    product_features.push({
+                      name: featureData.name,
+                      unit_name: featureData.unit_name,
+                      feature: featureValueData.unit_value,
+                    });
+                    console.log(product_features);
+                  }
+
+                  return product_features;
+                }
+              );
+
+              featurePromises.push(featurePromise);
             }
 
-            productData.features = product_features;
-          }
-        } else {
-          console.log("features is empty");
-        }
+            // Wait for all featurePromises to resolve
+            const allFeatures = await Promise.all(featurePromises);
 
-        this.product = productData;
-        console.log(productData);
+            // Flatten the array of arrays into a single array of features
+            const flattenedFeatures = allFeatures.flat();
+
+            // Assign the features to the productData
+            productData.features = flattenedFeatures;
+          } else {
+            console.log("features is empty");
+          }
+
+          this.product = productData;
+          console.log(productData);
+        }
       }
-    }
+    },
   },
+
+  async mounted() {
+    await this.getOverviewProductData();
+    await this.getSimilarProducts();
+    console.log(JSON.stringify(this.product));
+  },
+
   components: {
     Galleria,
     BreadCrumb,
     Sale,
     ProductSlider,
     ProgressSpinner,
+    XMarkIcon,
   },
 };
 </script>
