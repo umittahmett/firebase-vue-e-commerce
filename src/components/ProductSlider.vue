@@ -1,52 +1,50 @@
 <template>
-  <div class="max-w-7xl w-full mx-auto py-10 px-2">
-    <div class="grid grid-rows-1 items-center w-full">
-      <h2 class="text-xl font-medium">{{ name }}</h2>
-      <button
-        class="hover:text-blue-500 text-gray-400 transition-colors hover:border-blue-500 font-medium border-b border-gray-300"
+  <div class="w-full px-3">
+    <div class="max-w-7xl w-full mx-auto py-10">
+      <h2 class="text-xl text-start font-medium">{{ name }}</h2>
+
+      <swiper
+        :spaceBetween="10"
+        :freeMode="false"
+        :pagination="{
+          clickable: true,
+        }"
+        :autoplay="{
+          delay: 5000,
+        }"
+        :breakpoints="{
+          0: {
+            slidesPerView: 1,
+          },
+          320: {
+            slidesPerView: 2,
+          },
+          640: {
+            slidesPerView: 3,
+          },
+          900: {
+            slidesPerView: 4,
+          },
+          1024: {
+            slidesPerView: 5,
+          },
+        }"
+        :modules="modules"
+        class="mySwiper"
       >
-        All {{ name }}
-      </button>
+        <swiper-slide
+          v-for="product in products"
+          :key="product.name"
+          class="mb-10 cursor-grab mt-5 flex justify-center items-center border rounded-md"
+        >
+          <Product :product="product" :text_align="'center'" />
+        </swiper-slide>
+      </swiper>
     </div>
 
-    <swiper
-      :spaceBetween="10"
-      :freeMode="false"
-      :pagination="{
-        clickable: true,
-      }"
-      :autoplay="{
-        delay: 5000,
-      }"
-      :breakpoints="{
-        0: {
-          slidesPerView: 2,
-        },
-        640: {
-          slidesPerView: 3,
-        },
-        900: {
-          slidesPerView: 4,
-        },
-        1024: {
-          slidesPerView: 5,
-        },
-      }"
-      :modules="modules"
-      class="mySwiper"
-    >
-      <swiper-slide
-        v-for="product in products"
-        :key="product.name"
-        class="mb-10 cursor-grab mt-5 flex justify-center items-center"
-      >
-        <Product :product="product" :text_align="'center'" />
-      </swiper-slide>
-    </swiper>
-  </div>
-
-  <div v-if="products.length == 0" class="text-center">
-    <ProgressSpinner class="w-24 h-24" />
+    <div v-if="products.length == 0" class="text-center">
+      <ProgressSpinner class="w-24 h-24" />
+    </div>
   </div>
 </template>
 
