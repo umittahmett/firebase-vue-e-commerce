@@ -1,20 +1,14 @@
 <template>
-  <div class="bg-[#F4F8FD] py-20">
+  <div class="bg-[#F4F8FD] py-20 px-3">
     <div
-      class="max-w-7xl w-full mx-auto flex justify-center gap-10 lg:gap-20 items-center px-2 flex-col-reverse lg:flex-row text-center lg:text-start"
+      class="max-w-7xl w-full mx-auto flex justify-center gap-10 lg:gap-20 items-center flex-col-reverse lg:flex-row text-center lg:text-start"
     >
       <div class="relative">
         <img
-          class="h-auto sm:h-[380px] lg:h-[450px] object-cover bg-center border border-[#e8f1fa]"
-          src="/about.png"
+          class="h-auto sm:h-[500px] rounded-md lg:h-[500px] w-[600px] object-cover bg-center border border-[#e8f1fa]"
+          src="/about.jpg"
           alt=""
         />
-
-        <a
-          class="text-[8px] absolute p-1 bottom-0 left-0 z-10 text-gray-200"
-          href="http://www.freepik.com"
-          >Designed by macrovector / Freepik</a
-        >
       </div>
 
       <div>
