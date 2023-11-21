@@ -1,17 +1,24 @@
 <template>
-  <div
-    class="w-full bg-[#F4F8FD] p-4 text-black pt-32 transition-opacity font-[Gilroy-Regular] mt-20"
-  >
+  <div class="w-full bg-[#F4F8FD] p-4 text-black pt-32 transition-opacity">
     <div class="max-w-7xl mx-auto w-full">
       <div
         class="flex flex-col md:flex-row gap-y-20 items-start place-items-start"
       >
         <div class="max-md:w-full">
-          <h1 class="font-normal text-4xl">Seçkin Bilişim</h1>
+          <!-- Logo -->
+          <a href="/">
+            <img
+              class="max-sm:w-[140px] w-[200px] flex-shrink-0"
+              src="/public/Logos/sckn.png"
+              alt=""
+            />
+          </a>
 
-          <p class="max-w-md mt-10 text-lg font-light">
-            The advantage of hiring a workspace with us is that givees you
-            comfortable service and all-around facilities.
+          <p class="max-w-md mt-4 text-lg font-light">
+            Seçkin Bilişim ve Güvenlik Sistemleri olarak IT Destek Hizmetleri,
+            en son teknolojileri kullanarak, müşterilerimize kapsamlı bir hizmet
+            sunmaktayız. Profesyonel ekibimiz ile sorunlarınızı özelleştirilmiş
+            çözümler ile hızlı ve güvenli şekilde hizmet vermekteyiz.
           </p>
         </div>
 
@@ -23,16 +30,23 @@
             :key="menu.title"
             class="text-start w-fit flex flex-col"
           >
-            <h3 class="text-2xl font-medium">{{ menu.title }}</h3>
+            <h3 class="text-2xl font-medium text-blue-500">{{ menu.title }}</h3>
 
             <div v-for="select in menu.selects" :key="select.name" class="mt-4">
-              <router-link :to="select.url">
+              <a
+                :href="select.url"
+                @click="
+                  select.category_id &&
+                    store &&
+                    store.addSearchedCategory(category.id)
+                "
+              >
                 <p
                   class="font-light text-gray-600 hover:text-blue-600 transition-colors"
                 >
                   {{ select.name }}
                 </p>
-              </router-link>
+              </a>
             </div>
           </div>
         </div>
@@ -47,7 +61,7 @@
         </p>
 
         <div class="flex items-center gap-2">
-          <p class="text-gray-500 font-light">created by</p>
+          <p class="text-gray-500 font-light">Created by</p>
           <a
             href="https://umitahmed.com"
             class="font-light text-blue-600 border-b-blue-600 border-b opacity-70"
@@ -61,38 +75,57 @@
 </template>
 
 <script>
+import { createWizardStore } from "../stores/counter";
+
 export default {
   data() {
     return {
+      store: null,
       menus: [
         {
-          title: "Shop",
+          title: "Alışveriş",
           selects: [
-            { name: "Laptop", url: "/laptops" },
-            { name: "Computer", url: "/computers" },
-            { name: "Phone", url: "/phones" },
+            {
+              name: "Laptop",
+              url: "/search",
+              category_id: "JKZiGCzf7P5eywfL58z6",
+            },
+            {
+              name: "Bilgisayar",
+              url: "/search",
+              category_id: "wePgj231vYLejYG6D5Wt",
+            },
+            {
+              name: "Tablet",
+              url: "/search",
+              category_id: "W3JKh6SICKwr3n6L7SC3",
+            },
+            {
+              name: "Monitör",
+              url: "/search",
+              category_id: "BvmX2uncsNWy0UyP2Zir",
+            },
           ],
         },
 
         {
           title: "About",
           selects: [
-            { name: "Home", url: "/" },
-            { name: "Contact", url: "/contact" },
-            { name: "Our Mission", url: "#mission" },
+            { name: "Anasayfa", url: "/" },
+            { name: "İletişim", url: "/contact" },
           ],
         },
 
         {
-          title: "Need Help?",
-          selects: [
-            { name: "My Account", url: "/account" },
-            { name: "Cart", url: "/cart" },
-            { name: "Shop", url: "/shop" },
-          ],
+          title: "Destek Hattı",
+          selects: [{ name: "info@seckinbilisim.com.tr", url: "" }],
         },
       ],
     };
+  },
+
+  mounted() {
+    this.store = createWizardStore();
   },
 };
 </script>
