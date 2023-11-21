@@ -9,6 +9,7 @@
 ::-webkit-scrollbar {
   width: 5px;
 }
+
 /* Track stil */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
@@ -37,4 +38,11 @@
 }
 .p-galleria .p-galleria-thumbnail-container {
   background: rgb(240, 240, 240) !important;
+}
+
+.p-inputnumber-input {
+  padding: 10px;
+}
+.p-dropdown-label {
+  padding: 10px;
 }
