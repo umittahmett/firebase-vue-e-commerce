@@ -41,6 +41,8 @@ export default {
         // custom button types
         " focus:!outline-none focus:!ring-0": this.buttonType === "link",
         " hover:text-white hover:bg-blue-600 ": this.buttonType === "white",
+        " hover:!bg-blue-600 !text-white !bg-blue-500 rounded-md ":
+          this.buttonType === "blue",
         "border text-white !bg-[rgba(0,0,0,0)] hover:text-blue-600  hover:border-blue-600 ":
           this.buttonType === "bordered",
 
