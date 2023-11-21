@@ -1,6 +1,7 @@
 <template>
   <div class="max-w-7xl w-full mx-auto px-3">
     <BreadCrumb class="border-b-0 mt-4 mb-4" />
+
     <div class="flex justify-start items-start gap-4">
       <!-- Filters -->
       <div
@@ -62,9 +63,9 @@
                   type="radio"
                   @change="selectFilter(range.min, range.max)"
                 />
-                <label :for="range.id" class="ml-2 text-gray-500">{{
-                  range.min + " - " + range.max
-                }}</label>
+                <label :for="range.id" class="ml-2 text-gray-500"
+                  >{{ range.min + " - " + range.max }}
+                </label>
               </div>
             </div>
           </form>
@@ -109,6 +110,11 @@
                       : (priceFilterError = true)
                   "
                 >
+                  <div class="w-full text-end">
+                    <button @click="priceFilterVisible = false">
+                      <XMarkIcon class="w-7 h-7" />
+                    </button>
+                  </div>
                   <div
                     class="flex items-center justify-center mr-auto max-w-xl"
                   >
@@ -325,6 +331,7 @@ import {
   ChevronRightIcon,
   ChevronDoubleRightIcon,
   ChevronDoubleLeftIcon,
+  XMarkIcon,
 } from "@heroicons/vue/20/solid";
 import RadioButton from "primevue/radiobutton";
 
@@ -501,6 +508,7 @@ export default {
     RadioButton,
     ChevronDoubleRightIcon,
     ChevronDoubleLeftIcon,
+    XMarkIcon,
   },
 
   mounted() {
@@ -508,8 +516,9 @@ export default {
     const searchedCategory = JSON.parse(
       localStorage.getItem("searchedCategory")
     );
+
     this.searchedWord =
-      searchedWord.addingDate > searchedCategory
+      searchedWord.addingDate > searchedCategory.addingDate
         ? searchedWord.word
         : searchedCategory.category_name;
 
