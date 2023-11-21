@@ -10,13 +10,13 @@
       <div
         class="card bg-[#f4f4f4] max-w-[610px] max-lg:mx-auto relative rounded-t-md"
         :class="{
-          ' w-full max-w-[100%] h-full !fixed top-0 left-0 flex justify-center items-center z-50 bg-[rgba(0,0,0,0.8)] ':
+          ' !w-full !max-w-full h-full !fixed top-0 left-0 flex justify-center items-center z-50 bg-[rgba(0,0,0,0.8)] ':
             fullscreenView === true,
         }"
       >
         <XMarkIcon
           @click="fullscreenView = false"
-          class="w-10 h-10 absolute top-5 right-5 text-white"
+          class="w-10 h-10 absolute top-5 right-5 text-white cursor-pointer hover:opacity-70 transition-opacity"
           v-if="fullscreenView"
         />
 
@@ -30,17 +30,13 @@
         >
           <template #item="slotProps">
             <div
-              class="w-full sm:w-[610px] h-[390px] sm:h-[500px] overflow-hidden flex justify-center items-center cursor-pointer"
+              class="w-full sm:w-[610px] h-[390px] sm:h-[500px] overflow-hidden flex justify-center items-center cursor-pointer bg-[#fff]"
               @click="fullscreenView = true"
               :class="{
-                ' h-[500px] ': fullscreenView === true,
+                ' !h-[500px] ': fullscreenView === true,
               }"
             >
-              <img
-                class="object-cover bg-center overflow-hidden"
-                :src="slotProps.item"
-                style="width: 100%; display: block"
-              />
+              <img class="w-full" :src="slotProps.item" />
             </div>
           </template>
 
@@ -80,22 +76,22 @@
           </div>
         </div>
 
-        <p class="text-sm">
+        <p class="text-sm" v-if="product.stock_count">
           stok:
           <span class="text-gray-600 font-light text-xs">
-            {{ product.stock_count }} 20</span
-          >
+            {{ product.stock_count }}
+          </span>
         </p>
 
-        <p class="font-bold mt-6">İletişim</p>
+        <p class="font-bold mt-4">İletişim</p>
 
         <div class="flex justify-start items-center gap-5">
           <div class="mt-2">
-            <p class="text-gray-400 text-sm pl-1 mt-1">+905527273780</p>
+            <p class="text-gray-400 text-sm pl-1 mt-1">+90 552 549 80 69</p>
 
             <a
               class="px-6 py-3 bg-green-500 rounded-xl text-white flex items-center gap-2"
-              href="https://wa.me/05527273780"
+              href="https://wa.me/05525498069"
             >
               <img
                 class="w-8 h-8 rounded-md"
@@ -107,11 +103,11 @@
           </div>
 
           <div class="mt-2">
-            <p class="text-gray-400 text-sm pl-1 mt-1">+905527273780</p>
+            <p class="text-gray-400 text-sm pl-1 mt-1">+90 552 549 80 69</p>
 
             <a
               class="px-6 py-3 bg-blue-500 rounded-xl text-white flex items-center gap-2"
-              href="https://wa.me/05527273780"
+              href="https://wa.me/05525498069"
             >
               <img
                 class="w-8 h-8 rounded-md"
@@ -126,44 +122,55 @@
     </div>
 
     <!-- Imagee Gallery Loading Block -->
-    <div class="w-full flex items-center gap-10 h-[60vh] p-5" v-else>
+    <div
+      class="w-full flex max-lg:flex-col flex-row items-center gap-10 h-[60vh] grid-cols-2 p-5"
+      v-else
+    >
       <div
-        class="w-full h-full bg-slate-300 grid-cols-2 rounded-xl animate-pulse"
+        class="w-full h-full bg-slate-300 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
       ></div>
 
-      <div class="flex flex-col gap-3 w-full h-full">
+      <div class="flex flex-col gap-3 w-full h-full col-span-1">
         <div
-          class="w-full h-full bg-slate-300 grid-cols-2 rounded-xl animate-pulse"
+          class="max-h-[60px] w-full h-full bg-slate-300 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
         ></div>
 
         <div
-          class="w-full h-full bg-slate-300 grid-cols-2 rounded-xl animate-pulse"
+          class="max-h-[60px] w-full h-full bg-slate-300 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
         ></div>
 
         <div
-          class="w-full h-full bg-slate-300 grid-cols-2 rounded-xl animate-pulse"
+          class="max-h-[60px] w-full h-full bg-slate-300 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
         ></div>
       </div>
     </div>
 
     <!-- Features -->
     <h2 class="text-3xl border-b text-start mt-10 pb-2 mb-2">
-      Product Features
+      Ürün Özellikleri
     </h2>
 
-    <!-- Features Loading Block -->
-    <div class="grid grid-cols-2 w-full gap-4 border-b pb-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 w-full gap-4 border-b pb-3">
       <div
         v-if="product.id"
-        class="flex items-center justify-between gap-2 py-2.5 mt-1 p-4 border-b bg-gray-100 rounded-lg"
+        class="flex items-center justify-between gap-2 py-3 mt-1 p-3 border-b bg-gray-100 rounded-lg"
         v-for="feature in product.features"
         :key="feature.name"
       >
-        <p class="text-gray-400 font-light">{{ feature.name }}</p>
-        <p class="font-bold">{{ feature.feature }} {{ feature.unit_name }}</p>
+        <p class="text-gray-400 font-light m-0 max-sm:text-sm text-start">
+          {{ feature.name }}
+        </p>
+
+        <p class="font-bold ml-3 m-0 max-sm:font-medium text-end">
+          {{ feature.feature || "Bilinmiyor" }} {{ feature.unit_name }}
+        </p>
       </div>
 
-      <div v-else class="grid col-span-2 grid-cols-2 gap-4 w-full">
+      <!-- Features Loading Block -->
+      <div
+        v-else
+        class="grid grid-cols-1 col-span-2 sm:grid-cols-2 gap-4 w-full"
+      >
         <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
 
         <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
@@ -243,7 +250,7 @@ export default {
       const latestProductsQuery = query(
         productsRef,
         where("id", "!=", this.product.id),
-        where("brand_id", "==", this.product.brand_id),
+        where("brand", "==", this.product.brand),
         where("category_id", "==", this.product.category_id),
         limit(10)
       );
@@ -259,6 +266,7 @@ export default {
             price: product.data().price,
             discount: product.data().discount,
             cover_image: product.data().cover_image,
+            brand: product.data().brand,
           };
           console.log(productData);
           this.similarProducts.push(productData);
@@ -324,18 +332,6 @@ export default {
             }
           }
 
-          // Get Brand Name
-          const brandsRef = collection(db, "brands");
-          const brandQuery = query(
-            brandsRef,
-            where("id", "==", productData.brand_id)
-          );
-          const brandSnapshot = await getDocs(brandQuery);
-
-          if (!brandSnapshot.empty) {
-            productData.brand_name = brandSnapshot.docs[0].data().name;
-          }
-
           console.log("features does work1");
 
           // Get Category Name
@@ -344,6 +340,7 @@ export default {
             categoriesRef,
             where("id", "==", productData.category_id)
           );
+
           const categorySnapshot = await getDocs(categoryQuery);
 
           if (!categorySnapshot.empty) {
