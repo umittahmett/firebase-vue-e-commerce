@@ -19,18 +19,11 @@
       :modules="modules"
       class="mySwiper pb-10 px-4"
     >
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/google.png" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/wossew.jpeg" alt="" /></swiper-slide>
+      <swiper-slide><img src="/Logos/brninsaat.jpeg" alt="" /></swiper-slide>
+      <swiper-slide
+        ><img src="/Logos/mobilyasitesi.jpeg" alt=""
+      /></swiper-slide>
     </swiper>
   </div>
 </template>
