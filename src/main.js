@@ -10,8 +10,8 @@ import "primevue/resources/primevue.min.css"; /* Deprecated */
 import "primeicons/primeicons.css";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import "ant-design-vue/dist/reset.css";
 import Antd from "ant-design-vue";
+import ConfirmationService from "primevue/confirmationservice";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBIgPC68AG_2l2qZhZn7-QUCr6CX9VhiSI",
@@ -38,5 +38,6 @@ app.use(Antd);
 app.use(router);
 app.use(pinia);
 app.use(analytics);
+app.use(ConfirmationService);
 
 app.mount("#app");
