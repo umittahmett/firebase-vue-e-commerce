@@ -12,16 +12,27 @@
       </div>
 
       <div>
-        <h2 class="text-blue-500 uppercase font-semibold text-xl">About Us</h2>
+        <h2 class="text-blue-500 uppercase font-semibold text-xl">
+          Hakkımızda
+        </h2>
 
-        <h4 class="text-4xl lg:text-5xl font-medium mt-6">Who We Are</h4>
+        <h4 class="text-4xl lg:text-5xl font-medium mt-6">Biz Kimiz</h4>
 
         <p class="mt-6 max-w-md font-light">
-          At Seçkin Bilişim, we’re passionate about bringing you the best in
-          quality electronics. Our team is dedicated to providing top-notch
-          customer service and offering a wide range of products to meet your
-          needs. Whether you’re in the market for a new phone, computer, or
-          laptop, we’ve got you covered.
+          Kurumsal teknoloji hizmetlerinde, müşterilerine çok yönlü hizmet sunan
+          seçkin bilişim ve güvenlik sistemleri 2018 yılında kurulmuştur.
+          Müşteri odaklı yaklaşımı ve çağdaş bir yönetim anlayışı ile bilişim
+          sektörünün önde gelen kuruluşlarındandır. Sektörün önde gelen
+          teknoloji firmaları ile iş ortaklıkları yaparak farklı konularda ürün,
+          çözüm ve hizmet sunmaktadır. Seçkin bilişim ve güvenlik sistemlerini,
+          kurulduğumuz günden itibaren yalın ve düz bir çizgide gelişmiştir.
+          Uzman kadromuz tarafından benimsenen öncelikli prensip maksimum
+          müşteri memnuniyeti sağlamaktır. Bu prensip çerçevesinde üst düzey
+          mühendislik hizmetleri ile geleceğe yönelik teknolojileri
+          müşterilerimize sunmaktayız. Seçkin bilişim ve güvenlik sistemleri
+          olarak müşterilerle uzun vadeli ilişki kurmak, bu süreç içerisinde
+          gelişen yeni teknolojileri müşterilerimizin hizmetine sunmak öncelikli
+          hedefimizdir.
         </p>
       </div>
     </div>
