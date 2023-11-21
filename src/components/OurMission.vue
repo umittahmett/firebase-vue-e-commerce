@@ -1,22 +1,39 @@
 <template>
   <div
-    class="w-full bg-[url(/public/OurMissionBg.jpg)] bg-center bg-cover text-white mt-20"
+    class="w-full bg-[url(/public/OurMissionBg.jpg)] bg-center bg-cover mt-20 relative top-16 h-[500px] py-10"
   >
-    <div
-      class="flex justify-center items-center py-20 gap-10 min-h-[600px] h-full flex-col text-center bg-[rgba(0,0,0,0.2)]"
+    <form
+      action="https://formspree.io/f/xleykkol"
+      method="POST"
+      class="max-w-xl px-3 w-full mx-auto flex flex-col"
     >
-      <h2 class="text-5xl font-bold">Our Mission</h2>
+      <label for="Mail" class="text-gray-400">Email*</label>
+      <input
+        required
+        class="p-2.5 w-full rounded-md"
+        placeholder="Email"
+        type="email"
+        name="email"
+        id="Mail"
+      />
 
-      <p class="max-w-5xl">
-        At Seçkin Bilişim, our mission is to provide our customers with the best
-        in quality electronics products, while also making a positive impact on
-        the world. We believe that businesses have a responsibility to be
-        sustainable and socially responsible, and we’re committed to doing our
-        part.
-      </p>
+      <label for="message" class="text-gray-400 mt-4">Mesaj*</label>
+      <textarea
+        style="resize: none"
+        required
+        class="rounded-md p-2.5 w-full"
+        placeholder="Mesajınız"
+        name="message"
+        id="message"
+        cols="30"
+        rows="8"
+        maxlength="1000"
+      ></textarea>
 
-      <a href="/"><Button :buttonType="'white'">Ürünlere Gözat</Button></a>
-    </div>
+      <Button class="mx-auto w-full mt-4" type="submit" :buttonType="'blue'"
+        >Gönder</Button
+      >
+    </form>
   </div>
 </template>
 
