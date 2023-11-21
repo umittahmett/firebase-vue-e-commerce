@@ -5,24 +5,25 @@
       :class="{
         'text-start': text_align === 'start',
       }"
-      class="text-center rounded-md overflow-hidden w-fit flex flex-col justify-center items-center h-[440px]"
+      class="text-center rounded-md overflow-hidden w-fit flex flex-col justify-center items-center h-[450px]"
     >
-      <div class="relative w-full mx-auto h-full">
-        <img
-          class="object-cover bg-center w-full h-[250px] rounded-t-md"
-          :src="product.cover_image"
-          alt=""
-        />
+      <div
+        class="relative w-full mx-auto h-[250px] overflow-hidden flex justify-center items-center"
+      >
+        <img class="w-full rounded-t-md" :src="product.cover_image" alt="" />
+
         <Sale :bgColor="'blue'" v-if="product.discount" />
       </div>
 
-      <div class="p-2 flex flex-col justify-between h-full w-full bg-[#F4F8FD]">
+      <div
+        class="p-2 flex flex-col justify-between w-full h-[200px] bg-[#F4F8FD]"
+      >
         <div class="text-start mr-auto">
-          <h4 class="font-medium text-lg line-clamp-2 mt-1">
+          <h4 class="font-medium text-lg leading-[20px] line-clamp-3 mt-1">
             {{ product.title }}
           </h4>
 
-          <p class="text-gray-500 line-clamp-2 font-light">
+          <p class="mt-2 line-clamp-2 text-gray-500 leading-5">
             {{ product.description }}
           </p>
         </div>
@@ -37,7 +38,7 @@
             }"
           >
             <div v-if="product.discount" class="">
-              <p class="text-gray-600 line-through text-sm mr-0.5">
+              <p class="text-gray-600 line-through text-sm mr-0.5 mb-0">
                 {{ formatPrice(product.price) }}&#8378;
               </p>
             </div>
