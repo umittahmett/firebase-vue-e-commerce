@@ -11,11 +11,13 @@
     />
     <PopularCategory class="mt-10" />
 
-    <ProductSlider :name="'Populer'" :products="bestSellers" class="mt-10" />
+    <ProductSlider
+      :name="'Popüler Ürünler '"
+      :products="bestSellers"
+      class="mt-10"
+    />
 
     <OurMission id="mission" class="mt-10" />
-
-    <Features />
   </div>
 </template>
 
@@ -25,7 +27,6 @@ import ProductSlider from "../components/ProductSlider.vue";
 import LogoSlider from "../components/LogoSlider.vue";
 import PopularCategory from "../components/PopularCategory.vue";
 import OurMission from "../components/OurMission.vue";
-import Features from "../components/Features.vue";
 
 import {
   getFirestore,
@@ -53,7 +54,6 @@ export default {
     ProductSlider,
     PopularCategory,
     OurMission,
-    Features,
   },
 
   async mounted() {
