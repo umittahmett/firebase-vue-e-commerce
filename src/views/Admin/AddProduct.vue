@@ -286,6 +286,7 @@ export default {
 
           const newProductData = {
             category_id: this.selectedCategory.id,
+            category_name: this.selectedCategory.name,
             brand:
               typeof this.selectedBrand === "string"
                 ? this.selectedBrand
