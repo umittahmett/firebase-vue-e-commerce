@@ -9,11 +9,10 @@
         v-if="store && store.products && displayedProducts.length > 0"
       >
         <!-- Price Filter -->
-        <div class="w-full rounded-md bg-gray-50 p-2 border">
-          <p class="mb-3">Fiyat</p>
+        <div class="w-full rounded-md bg-gray-50 p-2 border text-center">
+          <p class="mb-3 text-start">Fiyat</p>
 
           <form
-            action=""
             @submit.prevent="
               minPrice || maxPrice ? priceFilter() : (priceFilterError = true)
             "
@@ -69,6 +68,14 @@
               </div>
             </div>
           </form>
+
+          <Button
+            v-if="filteredProducts"
+            @click="deleteFilter()"
+            :buttonType="'blue'"
+            class="!px-3 !py-2 !text-sm !mx-auto mt-3"
+            >Filtreyi Kaldir</Button
+          >
         </div>
       </div>
 
@@ -103,7 +110,6 @@
                 class="w-full rounded-md bg-gray-50 p-2 border lg:hidden absolute top-0 left-0 z-50"
               >
                 <form
-                  action=""
                   @submit.prevent="
                     minPrice || maxPrice
                       ? priceFilter()
@@ -172,6 +178,14 @@
                     </div>
                   </div>
                 </form>
+
+                <Button
+                  v-if="filteredProducts"
+                  @click="deleteFilter()"
+                  :buttonType="'blue'"
+                  class="!px-3 !py-2 !text-sm !mx-auto mt-3"
+                  >Filtreyi Kaldir</Button
+                >
               </div>
             </div>
 
@@ -227,12 +241,12 @@
       <!-- Onboarding Animation -->
       <div
         v-if="store && store.loading && store.loading === true"
-        class="grid grid-cols-4 justify-center items-start gap-2 w-full"
+        class="grid sm:grid-cols-4 justify-center items-start gap-2 w-full"
       >
         <div
           v-for="i in 8"
           :key="i"
-          class="w-full h-full min-h-[300px] bg-slate-300 rounded-lg animate-pulse"
+          class="w-full h-full min-h-[200px] lg:min-h-[300px] bg-slate-300 rounded-lg animate-pulse"
         ></div>
       </div>
     </div>
@@ -324,6 +338,7 @@
 
 <script>
 import BreadCrumb from "../components/Common/BreadCrumb.vue";
+import Button from "../components/Common/Button.vue";
 import Product from "../components/Common/Product.vue";
 import { createWizardStore } from "../stores/counter";
 import {
@@ -332,6 +347,7 @@ import {
   ChevronDoubleRightIcon,
   ChevronDoubleLeftIcon,
   XMarkIcon,
+  FaceSmileIcon,
 } from "@heroicons/vue/20/solid";
 import RadioButton from "primevue/radiobutton";
 
@@ -391,21 +407,34 @@ export default {
     },
 
     displayedProducts() {
-      return (
-        (this.filteredProducts
-          ? this.filteredProducts.slice(this.startIndex, this.endIndex + 1)
-          : this.store &&
-            this.store.products.slice(this.startIndex, this.endIndex + 1)) || []
-      );
+      console.log(this.filteredProducts);
+      return this.filteredProducts
+        ? this.filteredProducts.slice(this.startIndex, this.endIndex + 1)
+        : (this.store &&
+            this.store.products.slice(this.startIndex, this.endIndex + 1)) ||
+            [];
     },
   },
 
   methods: {
+    deleteFilter() {
+      this.filteredProducts = null;
+      this.maxPrice = null;
+      this.minPrice = null;
+
+      this.store &&
+        this.store.priceRanges.map((range) => {
+          range.activity = false;
+        });
+
+      this.priceFilterVisible = false;
+    },
+
     priceFilter() {
-      this.filteredProducts = this.store.products;
-      this.filteredProducts = this.filteredProducts.filter((product) => {
+      const products = this.store.products;
+      this.filteredProducts = this.store.products.filter((product) => {
         const discountedPrice = product.discount
-          ? product.price * (product.discount / 100)
+          ? (product.price * (100 - product.discount)) / 100
           : product.price;
 
         const meetsMinPrice =
@@ -509,6 +538,7 @@ export default {
     ChevronDoubleRightIcon,
     ChevronDoubleLeftIcon,
     XMarkIcon,
+    Button,
   },
 
   mounted() {
