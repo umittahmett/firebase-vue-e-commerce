@@ -8,7 +8,7 @@
       class="flex items-start flex-col lg:flex-row justify-between gap-10 mt-5"
     >
       <div
-        class="card bg-[#f4f4f4] max-w-[610px] max-lg:mx-auto relative rounded-t-md"
+        class="card bg-[#f4f4f4] max-w-[610px] max-lg:mx-auto relative rounded-t-md w-full"
         :class="{
           ' !w-full !max-w-full h-full !fixed top-0 left-0 flex justify-center items-center z-50 bg-[rgba(0,0,0,0.8)] ':
             fullscreenView === true,
@@ -30,7 +30,7 @@
         >
           <template #item="slotProps">
             <div
-              class="w-full sm:w-[610px] h-[390px] sm:h-[500px] overflow-hidden flex justify-center items-center cursor-pointer bg-[#fff]"
+              class="w-full min-w-full sm:w-[610px] h-[390px] sm:h-[500px] overflow-hidden flex justify-center items-center cursor-pointer bg-[#fff]"
               @click="fullscreenView = true"
               :class="{
                 ' !h-[500px] ': fullscreenView === true,
@@ -186,7 +186,11 @@
     </div>
 
     <!-- Similar Products -->
-    <ProductSlider v-if="!similarProductsEmpty" :products="similarProducts" />
+    <ProductSlider
+      :name="'Benzer Ürünler'"
+      v-if="!similarProductsEmpty"
+      :products="similarProducts"
+    />
   </div>
 </template>
 
