@@ -7,7 +7,7 @@
     />
 
     <div
-      class="absolute top-0 left-0 w-full sm:pt-24 pt-10 sm:pl-10 pl-4 h-full bg-[rgba(0,0,0,0.3)]"
+      class="absolute top-0 left-0 w-full sm:pt-28 pt-28 sm:pl-10 pl-4 h-full bg-[rgba(0,0,0,0.3)]"
     >
       <div>
         <h1
@@ -17,7 +17,7 @@
           Profesyonel <br />
           IT Destek
         </h1>
-        <p class="mt-6 max-w-md">
+        <p class="mt-6 max-w-md pr-10">
           Seçkin Bilişim Mağazası, güvenilir elektronik ürünleriyle bilgi ve
           kaliteyi bir araya getiriyor. Kaliteli alışverişin adresi!
         </p>
