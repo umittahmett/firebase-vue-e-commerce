@@ -1,5 +1,9 @@
 <template>
   <div class="max-w-7xl w-full mx-auto py-10">
+    <h2 class="text-blue-500 text-center font-bold text-4xl mb-10">
+      Referanslar
+    </h2>
+
     <swiper
       :spaceBetween="30"
       :autoplay="{
@@ -7,22 +11,39 @@
       }"
       :breakpoints="{
         0: {
-          slidesPerView: 3,
+          slidesPerView: 2,
         },
         640: {
           slidesPerView: 3,
         },
         768: {
-          slidesPerView: 6,
+          slidesPerView: 3,
+        },
+
+        1024: {
+          slidesPerView: 4,
         },
       }"
       :modules="modules"
-      class="mySwiper pb-10 px-4"
+      class="mySwiper pb-10 px-4 justify-center flex"
     >
-      <swiper-slide><img src="/Logos/wossew.jpeg" alt="" /></swiper-slide>
-      <swiper-slide><img src="/Logos/brninsaat.jpeg" alt="" /></swiper-slide>
       <swiper-slide
-        ><img src="/Logos/mobilyasitesi.jpeg" alt=""
+        ><img
+          class="sm:h-[200px] md:h-[230px] object-cover w-full"
+          src="/Logos/wossew.jpeg"
+          alt=""
+      /></swiper-slide>
+      <swiper-slide
+        ><img
+          class="sm:h-[200px] md:h-[230px] object-cover w-full"
+          src="/Logos/brninsaat.jpeg"
+          alt=""
+      /></swiper-slide>
+      <swiper-slide
+        ><img
+          class="sm:h-[200px] md:h-[230px] object-cover w-full"
+          src="/Logos/mobilyasitesi.jpeg"
+          alt=""
       /></swiper-slide>
     </swiper>
   </div>
