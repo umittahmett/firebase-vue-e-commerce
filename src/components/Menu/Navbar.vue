@@ -62,10 +62,10 @@
                 "
                 class="hover:text-blue-600 transition-colors h-full"
               >
-                <router-link class="flex" to=""
+                <a :href="page.href" class="flex"
                   >{{ page.name }}
                   <ChevronDownIcon v-if="page.dropDown" class="w-5"
-                /></router-link>
+                /></a>
               </button>
             </div>
           </div>
@@ -90,11 +90,11 @@
             </button>
 
             <a
+              @click="store && store.addSearchedCategory(category.id)"
               href="/search"
               v-for="category in categories"
               :key="category.name"
               class="p-2 sm:p-4 text-center rounded-md hover:bg-gray-100 lg:px-8 cursor-pointer"
-              @click="store && store.addSearchedCategory(category.id)"
             >
               <img
                 :src="category.image"
@@ -143,10 +143,19 @@
             "
             class="hover:text-blue-600 transition-colors"
           >
-            <router-link class="flex" to=""
-              >{{ page.name }}
-              <ChevronDownIcon v-if="page.dropDown" class="w-5"
-            /></router-link>
+            <div v-if="page.href">
+              <a :href="page.href" class="flex"
+                >{{ page.name }}
+                <ChevronDownIcon v-if="page.dropDown" class="w-5"
+              /></a>
+            </div>
+
+            <div v-else>
+              <button class="flex">
+                {{ page.name }}
+                <ChevronDownIcon v-if="page.dropDown" class="w-5" />
+              </button>
+            </div>
           </button>
         </div>
       </div>
@@ -165,9 +174,9 @@ export default {
     return {
       menuToggle: false,
       pages: [
-        { name: "Ürünler", href: "/", dropDown: true },
-        { name: "Hakımızda", href: "/about", dropDown: false },
-        { name: "Referanslar", href: "/references", dropDown: false },
+        { name: "Ürünler", dropDown: true },
+        { name: "Hakımızda", href: "#about", dropDown: false },
+        { name: "İletişim", href: "#contact", dropDown: false },
       ],
       searchedWord: "",
       dropDownMenu: false,
