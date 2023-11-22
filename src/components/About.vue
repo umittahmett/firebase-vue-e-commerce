@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#F4F8FD] py-20 px-3">
+  <div id="about" class="bg-[#F4F8FD] py-20 px-3">
     <div
       class="max-w-7xl w-full mx-auto flex justify-center gap-10 lg:gap-20 items-center flex-col-reverse lg:flex-row text-center lg:text-start"
     >
