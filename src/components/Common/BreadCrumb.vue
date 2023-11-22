@@ -42,8 +42,17 @@ export default {
   },
 
   mounted() {
-    let searched = JSON.parse(localStorage.getItem("searchedWord"));
-    const truncatedText = searched.word.slice(0, 10);
+    const searchedWord = JSON.parse(localStorage.getItem("searchedWord"));
+    const searchedCategory = JSON.parse(
+      localStorage.getItem("searchedCategory")
+    );
+
+    const word =
+      searchedWord.addingDate > searchedCategory.addingDate
+        ? searchedWord.word
+        : searchedCategory.category_name;
+
+    const truncatedText = word.slice(0, 10);
     this.items[1].label =
       truncatedText.length > 6 ? truncatedText + ".." : truncatedText;
   },
