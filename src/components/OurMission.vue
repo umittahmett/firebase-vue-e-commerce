@@ -1,8 +1,13 @@
 <template>
   <div
-    class="w-full bg-[url(/public/OurMissionBg.jpg)] bg-center bg-cover mt-20 relative top-16 h-[500px] py-10"
+    class="w-full bg-[url(/public/OurMissionBg.jpg)] bg-center bg-cover mt-20 relative top-16 h-[600px] py-10"
   >
+    <h2 class="text-white text-center font-bold text-4xl mb-10">
+      Bizimle İletişime Geç
+    </h2>
+
     <form
+      id="contact"
       action="https://formspree.io/f/xleykkol"
       method="POST"
       class="max-w-xl px-3 w-full mx-auto flex flex-col"
