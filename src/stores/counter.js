@@ -29,19 +29,26 @@ export const createWizardStore = defineStore("counter", {
         this.products = productSnapshot.docs
           .map((doc) => doc.data())
           .filter((product) => {
-            const { title, description, model, category_id } = product;
+            const { title, description, model, category_name, category_id } =
+              product;
             if (searchedWord.addingDate > searchedCategory.addingDate) {
+              console.log(product.price);
               return (
                 title.toLowerCase().includes(searchedWord.word.toLowerCase()) ||
                 description
                   .toLowerCase()
                   .includes(searchedWord.word.toLowerCase()) ||
-                model.toLowerCase().includes(searchedWord.word.toLowerCase())
+                model.toLowerCase().includes(searchedWord.word.toLowerCase()) ||
+                (category_name &&
+                  category_name
+                    .toLowerCase()
+                    .includes(searchedWord.word.toLowerCase()))
               );
             } else {
               return category_id == searchedCategory.category_id;
             }
           });
+
         this.loading = false;
 
         if (!this.products[0]) {
@@ -54,41 +61,42 @@ export const createWizardStore = defineStore("counter", {
         this.loading = false;
       }
 
-      const allPrices = this.products.map((product) =>
-        product.discount
-          ? (product.price * product.discount) / 100
-          : product.price
-      );
+      const prices = this.products.map((product) => {
+        const discountedPrice = product.discount
+          ? product.price - (product.price * product.discount) / 100
+          : product.price;
+        return discountedPrice;
+      });
 
-      const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : 0;
-      const maxPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
-      this.priceRanges = [];
+      const uniquePrices = Array.from(new Set(prices)); // Tekil fiyatları bul
 
-      for (let i = 0; i < 5; i++) {
-        const rangeWidth = (maxPrice - minPrice) / 5;
-        const minRange = minPrice + i * rangeWidth;
-        const maxRange = minPrice + (i + 1) * rangeWidth;
+      uniquePrices.sort((a, b) => a - b); // Fiyatları küçükten büyüğe sırala
 
-        // Fiyat aralığında en az bir ürün var mı kontrol et
-        const hasProductsInRange = this.products.some(
-          (product) =>
-            (product.discount
-              ? (product.price * product.discount) / 100
-              : product.price) >= minRange &&
-            (product.discount
-              ? (product.price * product.discount) / 100
-              : product.price) < maxRange
-        );
+      const priceRanges = [];
+      const numRanges = 5;
+      const rangeWidth = uniquePrices.length / numRanges;
 
-        if (hasProductsInRange) {
-          this.priceRanges.push({
+      for (let i = 0; i < numRanges; i++) {
+        const startIndex = Math.floor(i * rangeWidth);
+        const endIndex =
+          i === numRanges - 1
+            ? uniquePrices.length
+            : Math.floor((i + 1) * rangeWidth);
+
+        if (endIndex > startIndex) {
+          const minPrice = uniquePrices[startIndex];
+          const maxPrice = uniquePrices[endIndex - 1];
+
+          priceRanges.push({
             id: i,
-            min: Math.floor(minRange / 1000) * 1000,
-            max: Math.ceil(maxRange / 1000) * 1000,
+            min: Math.floor(minPrice / 1000) * 1000,
+            max: Math.ceil(maxPrice / 1000) * 1000,
             activity: false,
           });
         }
       }
+
+      this.priceRanges = priceRanges;
     },
 
     addSearchedCategory(category_id) {
@@ -96,14 +104,16 @@ export const createWizardStore = defineStore("counter", {
       const data = {
         category_id: category_id,
         category_name:
-          category_id == 0
+          category_id == "wePgj231vYLejYG6D5Wt"
             ? "Bilgisayar"
-            : category_id == 1
+            : category_id == "JKZiGCzf7P5eywfL58z6"
             ? "Laptop"
-            : category_id == 2
+            : category_id == "BvmX2uncsNWy0UyP2Zir"
             ? "Monitör"
-            : category_id == 3
+            : category_id == "yLxw5GTJBkv9ieiX4UmA"
             ? "Güvenlik Kamerası"
+            : category_id == "W3JKh6SICKwr3n6L7SC3"
+            ? "Tablet"
             : "kategori",
 
         addingDate: now,
