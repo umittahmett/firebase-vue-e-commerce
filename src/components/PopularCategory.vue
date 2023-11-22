@@ -13,7 +13,7 @@
 
       <a
         href="/search"
-        @click="store && store.addSearchedCategory(0)"
+        @click="store && store.addSearchedCategory('wePgj231vYLejYG6D5Wt')"
         class="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-[rgba(0,0,0,0.3)] hover:bg-[rgba(58,62,78,0.4)] transition-all"
       >
         <Button class="text-xl" :buttonType="'white'">Biligisayar</Button>
@@ -31,7 +31,7 @@
 
       <a
         href="/search"
-        @click="store && store.addSearchedCategory(1)"
+        @click="store && store.addSearchedCategory('JKZiGCzf7P5eywfL58z6')"
         class="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-[rgba(0,0,0,0.3)] hover:bg-[rgba(58,62,78,0.4)] transition-all"
       >
         <Button class="text-xl" :buttonType="'white'">Laptop</Button>
