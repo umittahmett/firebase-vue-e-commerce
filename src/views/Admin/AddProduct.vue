@@ -1,5 +1,10 @@
 <template>
-  <div class="w-full bg-gray-100">
+  <div
+    class="w-full bg-gray-100"
+    :class="{
+      'opacity-70': loading === true,
+    }"
+  >
     <div
       class="w-full max-w-7xl mx-auto bg-gray-100 px-3 py-10 flex justify-between gap-10"
     >
@@ -177,7 +182,7 @@
         </div>
 
         <!-- Messages -->
-        <div class="absolute top-5 right-5 max-w-sm">
+        <div class="fixed top-5 right-5 max-w-sm">
           <Message :hidden="!succesMessage" severity="success"
             >Başarılı
           </Message>
@@ -236,6 +241,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       imageUrls: [],
       selectedCategory: null,
       categories: [],
@@ -256,6 +262,8 @@ export default {
   },
   methods: {
     async saveProductHead() {
+      this.loading = true;
+
       if (
         (this.selectedBrand,
         this.selectedCategory,
@@ -333,25 +341,51 @@ export default {
           });
 
           // Images
-          for (const file of this.$refs.fileUploadRef.files) {
-            const storageRef = ref(
-              storage,
-              `products_images/product_${docRef.id}/${Date.now()}_${file.name}`
-            );
+          if (
+            this.$refs.fileUploadRef.files &&
+            this.$refs.fileUploadRef.files.length > 0
+          ) {
+            for (const file of this.$refs.fileUploadRef.files) {
+              const storageRef = ref(
+                storage,
+                `products_images/product_${docRef.id}/${Date.now()}_${
+                  file.name
+                }`
+              );
 
-            console.log("Çalışıyor");
+              try {
+                // Dosyayı Firebase Storage'a yükleyin
+                await uploadBytes(storageRef, file);
+
+                // Dosyanın URL'sini alın
+                const url = await getDownloadURL(storageRef);
+
+                // URL'yi imageUrls dizisine ekleyin
+                this.imageUrls.push(url);
+              } catch (error) {
+                console.error("Dosya yükleme hatası: ", error);
+              }
+            }
+          } else {
+            // Eğer dosya yoksa, proje dosyasındaki bir fotoğrafı kullanın
+            const filePath = "public/noImage.png"; // Fotoğrafın projedeki yolu
+            const response = await fetch(filePath);
+            const blob = await response.blob();
+
+            const exampleStorageRef = ref(
+              storage,
+              `products_images/product_${docRef.id}/${Date.now()}_noImage`
+            );
 
             try {
               // Dosyayı Firebase Storage'a yükleyin
-              await uploadBytes(storageRef, file);
+              await uploadBytes(exampleStorageRef, blob);
 
               // Dosyanın URL'sini alın
-              const url = await getDownloadURL(storageRef);
+              const exampleImageUrl = await getDownloadURL(exampleStorageRef);
 
               // URL'yi imageUrls dizisine ekleyin
-              this.imageUrls.push(url);
-
-              console.log("Uploaded a blob or file! URL:", url);
+              this.imageUrls.push(exampleImageUrl);
             } catch (error) {
               console.error("Dosya yükleme hatası: ", error);
             }
@@ -366,9 +400,12 @@ export default {
           await updateDoc(updatedProductDoc, additionalData);
 
           this.succesMessage = true;
+          this.loading = false;
+          window.location.reload();
         } catch (error) {
           console.log(error);
           this.errorMessage = true;
+          this.loading = false;
         }
       } else {
         console.log("kutulari eksiksiz doldurun");
@@ -394,7 +431,6 @@ export default {
           feature: "",
         };
 
-        console.log(featureData);
         this.featureTypes.push(featureData);
       });
       //>
@@ -420,7 +456,6 @@ export default {
     const brandsSnapshot = await getDocs(brandsRef);
     if (!brandsSnapshot.empty) {
       const brands = brandsSnapshot.docs;
-      console.log(brands);
       brands.forEach((brand) => {
         this.brands.push(brand.data());
       });
