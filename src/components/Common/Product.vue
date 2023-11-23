@@ -1,5 +1,5 @@
 <template>
-  <a href="/overview">
+  <a :href="url">
     <div
       @click="sendProductId(product.id)"
       :class="{
@@ -19,11 +19,13 @@
         class="p-2 flex flex-col justify-between w-full h-[200px] bg-[#F4F8FD]"
       >
         <div class="text-start mr-auto">
-          <h4 class="font-medium text-lg leading-[20px] line-clamp-3 mt-1">
+          <h4
+            class="font-medium text-lg leading-[20px] line-clamp-3 mt-1 break-all"
+          >
             {{ product.title }}
           </h4>
 
-          <p class="mt-2 line-clamp-2 text-gray-500 leading-5">
+          <p class="mt-2 line-clamp-2 text-gray-500 leading-5 break-all">
             {{ product.description }}
           </p>
         </div>
@@ -72,6 +74,10 @@ export default {
       typeof: String,
       default: "start",
     },
+    url: {
+      typeof: String,
+      default: "/overview",
+    },
   },
   components: { Sale },
   data() {
@@ -90,7 +96,6 @@ export default {
 
     sendProductId(id) {
       localStorage.setItem("cur_overview_product_id", id);
-      console.log("current id :", id);
     },
   },
   mounted() {
