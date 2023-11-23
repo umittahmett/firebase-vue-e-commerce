@@ -407,7 +407,6 @@ export default {
     },
 
     displayedProducts() {
-      console.log(this.filteredProducts);
       return this.filteredProducts
         ? this.filteredProducts.slice(this.startIndex, this.endIndex + 1)
         : (this.store &&
@@ -540,17 +539,31 @@ export default {
     XMarkIcon,
     Button,
   },
-
   mounted() {
-    const searchedWord = JSON.parse(localStorage.getItem("searchedWord"));
-    const searchedCategory = JSON.parse(
-      localStorage.getItem("searchedCategory")
-    );
+    const searchedWordMethod = localStorage.getItem("searchedWord");
+    const searchedCategoryMethod = localStorage.getItem("searchedCategory");
 
-    this.searchedWord =
-      searchedWord.addingDate > searchedCategory.addingDate
-        ? searchedWord.word
-        : searchedCategory.category_name;
+    const searchedWordJSON = searchedWordMethod
+      ? JSON.parse(searchedWordMethod)
+      : null;
+    const searchedCategoryJSON = searchedCategoryMethod
+      ? JSON.parse(searchedCategoryMethod)
+      : null;
+
+    if (!searchedWordJSON && !searchedCategoryJSON) {
+      this.searchedWord = "Bilgisayar";
+    } else {
+      if (searchedWordJSON && searchedCategoryJSON) {
+        this.searchedWord =
+          searchedWordJSON.addingDate > searchedCategoryJSON.addingDate
+            ? searchedWordJSON.word
+            : searchedCategoryJSON.category_name;
+      } else if (!searchedWordJSON && searchedCategoryJSON) {
+        this.searchedWord = searchedCategoryJSON.category_name;
+      } else if (searchedWordJSON && !searchedCategoryJSON) {
+        this.searchedWord = searchedWordJSON.word;
+      }
+    }
 
     this.store = createWizardStore();
     this.store.search();
