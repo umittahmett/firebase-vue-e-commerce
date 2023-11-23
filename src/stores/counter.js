@@ -6,46 +6,83 @@ export const createWizardStore = defineStore("counter", {
     loading: false,
     emptyResult: false,
     priceRanges: [],
+    navbarAndFooterVisibility: true,
   }),
   actions: {
     async search() {
       this.loading = true;
       this.emptyResult = false;
-      const searchedWordMethod = JSON.parse(
-        localStorage.getItem("searchedWord")
-      );
-      const searchedWord = searchedWordMethod;
 
-      const searchedCategoryMethod = JSON.parse(
-        localStorage.getItem("searchedCategory")
-      );
-      const searchedCategory = searchedCategoryMethod;
+      const searchedWordMethod = localStorage.getItem("searchedWord");
+      const searchedCategoryMethod = localStorage.getItem("searchedCategory");
+
+      // Eğer her ikisi de varsa JSON.parse işlemini gerçekleştir, aksi halde null veya undefined'dir.
+      const searchedWord = searchedWordMethod
+        ? JSON.parse(searchedWordMethod)
+        : null;
+      const searchedCategory = searchedCategoryMethod
+        ? JSON.parse(searchedCategoryMethod)
+        : null;
+
       const db = getFirestore();
       const productsRef = collection(db, "products");
-
       const productSnapshot = await getDocs(productsRef);
 
-      if (!productSnapshot[0]) {
+      if (productSnapshot.docs.length > 0) {
         this.products = productSnapshot.docs
           .map((doc) => doc.data())
           .filter((product) => {
             const { title, description, model, category_name, category_id } =
               product;
-            if (searchedWord.addingDate > searchedCategory.addingDate) {
-              console.log(product.price);
+            if (searchedWord && searchedCategory) {
+              if (searchedWord.addingDate > searchedCategory.addingDate) {
+                return (
+                  (title &&
+                    title
+                      .toLowerCase()
+                      .includes(searchedWord.word.toLowerCase())) ||
+                  (description &&
+                    description
+                      .toLowerCase()
+                      .includes(searchedWord.word.toLowerCase())) ||
+                  (model &&
+                    model
+                      .toLowerCase()
+                      .includes(searchedWord.word.toLowerCase())) ||
+                  (category_name &&
+                    category_name
+                      .toLowerCase()
+                      .includes(searchedWord.word.toLowerCase()))
+                );
+              } else {
+                return category_id == searchedCategory.category_id;
+              }
+            } else if (!searchedWord && searchedCategory) {
+              return category_id == searchedCategory.category_id;
+            } else if (searchedWord && !searchedCategory) {
               return (
-                title.toLowerCase().includes(searchedWord.word.toLowerCase()) ||
-                description
-                  .toLowerCase()
-                  .includes(searchedWord.word.toLowerCase()) ||
-                model.toLowerCase().includes(searchedWord.word.toLowerCase()) ||
+                (title &&
+                  title
+                    .toLowerCase()
+                    .includes(searchedWord.word.toLowerCase())) ||
+                (description &&
+                  description
+                    .toLowerCase()
+                    .includes(searchedWord.word.toLowerCase())) ||
+                (model &&
+                  model
+                    .toLowerCase()
+                    .includes(searchedWord.word.toLowerCase())) ||
                 (category_name &&
                   category_name
                     .toLowerCase()
                     .includes(searchedWord.word.toLowerCase()))
               );
             } else {
-              return category_id == searchedCategory.category_id;
+              return (
+                category_name &&
+                category_name.toLowerCase().includes("Bilgisayar")
+              );
             }
           });
 
