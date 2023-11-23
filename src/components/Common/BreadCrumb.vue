@@ -42,15 +42,32 @@ export default {
   },
 
   mounted() {
-    const searchedWord = JSON.parse(localStorage.getItem("searchedWord"));
-    const searchedCategory = JSON.parse(
-      localStorage.getItem("searchedCategory")
-    );
+    const searchedWordMethod = localStorage.getItem("searchedWord");
+    const searchedCategoryMethod = localStorage.getItem("searchedCategory");
 
-    const word =
-      searchedWord.addingDate > searchedCategory.addingDate
-        ? searchedWord.word
-        : searchedCategory.category_name;
+    const searchedWordJSON = searchedWordMethod
+      ? JSON.parse(searchedWordMethod)
+      : null;
+    const searchedCategoryJSON = searchedCategoryMethod
+      ? JSON.parse(searchedCategoryMethod)
+      : null;
+
+    let word = "";
+
+    if (!searchedWordJSON && !searchedCategoryJSON) {
+      word = "Bilgisayar";
+    } else {
+      if (searchedWordJSON && searchedCategoryJSON) {
+        word =
+          searchedWordJSON.addingDate > searchedCategoryJSON.addingDate
+            ? searchedWordJSON.word
+            : searchedCategoryJSON.category_name;
+      } else if (!searchedWordJSON && searchedCategoryJSON) {
+        word = searchedCategoryJSON.category_name;
+      } else if (searchedWordJSON && !searchedCategoryJSON) {
+        word = searchedWordJSON.word;
+      }
+    }
 
     const truncatedText = word.slice(0, 10);
     this.items[1].label =
