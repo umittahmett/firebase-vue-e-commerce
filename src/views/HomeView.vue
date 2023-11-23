@@ -1,5 +1,7 @@
 <template>
   <div>
+    <Hero />
+
     <LogoSlider />
 
     <About class="mt-10" />
@@ -22,6 +24,7 @@
 </template>
 
 <script>
+import Hero from "../components/Menu/Hero.vue";
 import About from "../components/About.vue";
 import ProductSlider from "../components/ProductSlider.vue";
 import LogoSlider from "../components/LogoSlider.vue";
@@ -54,6 +57,7 @@ export default {
     ProductSlider,
     PopularCategory,
     OurMission,
+    Hero,
   },
 
   async mounted() {
@@ -78,7 +82,6 @@ export default {
         cover_image: product.data().cover_image,
       };
 
-      console.log(productData);
       this.latestProducts.push(productData);
     });
     //>
@@ -101,7 +104,6 @@ export default {
         cover_image: product.data().cover_image,
       };
       this.bestSellers.push(productData);
-      console.log(productData);
     });
     //>
   },
