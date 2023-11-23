@@ -1,13 +1,14 @@
 <template>
   <div class="w-full">
-    <Hero />
-    <router-view class="w-full mt-10" />
+    <Navbar />
+    <router-view class="w-full" />
+    <Footer />
   </div>
 </template>
 
 <script>
-import Hero from "../components/Menu/Hero.vue";
 import Navbar from "../components/Menu/Navbar.vue";
+import Footer from "../components/Footer.vue";
 
 export default {
   data() {
@@ -15,7 +16,7 @@ export default {
   },
   components: {
     Navbar,
-    Hero,
+    Footer,
   },
 };
 </script>
