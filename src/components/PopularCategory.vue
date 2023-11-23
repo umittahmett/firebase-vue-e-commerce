@@ -16,7 +16,7 @@
         @click="store && store.addSearchedCategory('wePgj231vYLejYG6D5Wt')"
         class="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-[rgba(0,0,0,0.3)] hover:bg-[rgba(58,62,78,0.4)] transition-all"
       >
-        <Button class="text-xl" :buttonType="'white'">Biligisayar</Button>
+        <Button class="text-xl" :buttonType="'white'">Bilgisayar</Button>
       </a>
     </div>
 
