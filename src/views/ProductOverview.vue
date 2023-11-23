@@ -272,7 +272,6 @@ export default {
             cover_image: product.data().cover_image,
             brand: product.data().brand,
           };
-          console.log(productData);
           this.similarProducts.push(productData);
         });
       } else {
@@ -297,7 +296,6 @@ export default {
 
         if (productSnapshot) {
           const productData = productSnapshot.data();
-          console.log(productData);
           // Get Product Images
           const imagesRef = ref(
             storage,
@@ -310,7 +308,6 @@ export default {
               res.items.map(async (itemRef) => {
                 const url = await getDownloadURL(itemRef);
                 productData.images.push(url);
-                console.log(url);
               })
             );
           } catch (error) {
@@ -336,8 +333,6 @@ export default {
             }
           }
 
-          console.log("features does work1");
-
           // Get Category Name
           const categoriesRef = collection(db, "categories");
           const categoryQuery = query(
@@ -350,7 +345,6 @@ export default {
           if (!categorySnapshot.empty) {
             productData.category_name = categorySnapshot.docs[0].data().name;
           }
-          console.log("features does work2");
 
           // Get Feature Types
           const product_category_featuresRef = collection(
@@ -362,25 +356,15 @@ export default {
             where("category_id", "==", productData.category_id)
           );
 
-          console.log("productData.category_id: ", productData.category_id);
           const product_category_featuresSnapshot = await getDocs(
             product_category_featuresQuery
           );
-
-          console.log(
-            "product_cetegory_featuresSnapshot :",
-            product_category_featuresSnapshot.docs
-          );
-
-          console.log("features does work3");
 
           if (!product_category_featuresSnapshot.empty) {
             // Array to store promises for product features
             const featurePromises = [];
 
             for (const featureDoc of product_category_featuresSnapshot.docs) {
-              console.log("features does work 4");
-
               const featureData = featureDoc.data();
 
               // Create a separate array for each feature
@@ -398,14 +382,12 @@ export default {
               const featurePromise = getDocs(products_featuresQuery).then(
                 (products_featuresSnapshot) => {
                   for (const featureValueDoc of products_featuresSnapshot.docs) {
-                    console.log("products aliniyor");
                     const featureValueData = featureValueDoc.data();
                     product_features.push({
                       name: featureData.name,
                       unit_name: featureData.unit_name,
                       feature: featureValueData.unit_value,
                     });
-                    console.log(product_features);
                   }
 
                   return product_features;
@@ -428,7 +410,6 @@ export default {
           }
 
           this.product = productData;
-          console.log(productData);
         }
       }
     },
@@ -437,7 +418,6 @@ export default {
   async mounted() {
     await this.getOverviewProductData();
     await this.getSimilarProducts();
-    console.log(JSON.stringify(this.product));
   },
 
   components: {
