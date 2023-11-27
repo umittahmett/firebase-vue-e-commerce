@@ -1,4 +1,5 @@
 <template>
+  <!-- Add new Category -->
   <div
     class="w-full bg-gray-100"
     :class="{
@@ -21,6 +22,7 @@
         placeholder="Kategori Adı"
       />
 
+      <!-- Category Feature Names -->
       <div
         v-for="numInput in Inputs"
         :key="numInput"
@@ -85,7 +87,7 @@
         </div>
       </Dialog>
 
-      <!-- Messages -->
+      <!-- Feedback Messages -->
       <div class="fixed top-5 right-5 max-w-sm">
         <Message :hidden="!succesMessage" severity="success">Başarılı </Message>
 
@@ -116,12 +118,7 @@ import Message from "primevue/message";
 import {
   getFirestore,
   collection,
-  getDocs,
-  where,
-  query,
-  limit,
   doc,
-  getDoc,
   addDoc,
   updateDoc,
   writeBatch,
@@ -173,6 +170,7 @@ export default {
       this.Inputs = this.Inputs.filter((input) => input.id !== id);
     },
 
+    // Save Category
     async saveCategory() {
       this.loading = true;
 
@@ -182,11 +180,12 @@ export default {
 
         try {
           const db = getFirestore();
-
           const categoriesCollection = collection(db, "categories");
+
           const catCollRef = await addDoc(categoriesCollection, {
             name: this.categoryName,
           });
+
           const updatedCategoryDoc = doc(db, "categories", catCollRef.id);
           await updateDoc(updatedCategoryDoc, { id: catCollRef.id });
 
@@ -199,7 +198,6 @@ export default {
 
           this.Inputs.forEach((featureType) => {
             const newDocRef = doc(prodCatFeaturesCollection);
-            // feature nesnesine id ekleyerek Firestore'a ekle
             batch.set(newDocRef, {
               id: newDocRef.id,
               name: featureType.name,
@@ -208,7 +206,6 @@ export default {
             });
           });
 
-          // İşlem yığınını gerçekleştir
           await batch.commit();
 
           this.succesMessage = true;
@@ -225,6 +222,7 @@ export default {
       }
     },
 
+    // Control Values
     valueControl() {
       if (this.categoryName) {
         let isAnyInputEmpty = false;
@@ -243,7 +241,5 @@ export default {
       console.log("Save Button Disabled: ", this.saveButtonDisabled);
     },
   },
-
-  async mounted() {},
 };
 </script>
