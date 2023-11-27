@@ -57,7 +57,7 @@
         class="w-full text-start border-t border-[rgba(0,0,0,0.10)] mt-14 py-4 flex justify-between md:items-center items-start gap-4 flex-col md:flex-row"
       >
         <p class="text-gray-500 font-light">
-          Seçkin Bilişim Copyright © 2023 All rights reserved
+          Seçkin Bilişim Copyright © 2023 Tüm hakları saklıdır.
         </p>
 
         <div class="flex items-center gap-2">
@@ -109,7 +109,7 @@ export default {
         },
 
         {
-          title: "About",
+          title: "Hakkımızda",
           selects: [
             { name: "Anasayfa", url: "/" },
             { name: "İletişim", url: "/contact" },
