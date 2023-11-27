@@ -1,4 +1,5 @@
 <template>
+  <!-- Update Product -->
   <div
     class="w-full bg-gray-100"
     :class="{
@@ -9,7 +10,6 @@
       <div class="px-3 flex justify-between gap-10">
         <div class="w-full max-w-[400px]">
           <!-- Brand -->
-
           <p class="font-light">Marka</p>
           <Dropdown
             editable
@@ -23,10 +23,12 @@
               <div v-if="slotProps.value">
                 <div>{{ slotProps.value.name }}</div>
               </div>
+
               <span v-else>
                 {{ slotProps.placeholder }}
               </span>
             </template>
+
             <template #option="slotProps">
               <div>
                 <div>{{ slotProps.option.name }}</div>
@@ -73,6 +75,8 @@
             currency="TRY"
             locale="tr"
           />
+
+          <!-- Discounted Price -->
           <p v-if="product.discount" class="font-light mt-1 text-sm">
             indirimli fiyat :
             <span class="font-bold">
@@ -120,6 +124,7 @@
       </div>
 
       <div class="card mt-4">
+        <!-- Add New Images -->
         <p class="font-light">Ürün Fotoğrafları Yükle</p>
         <FileUpload
           ref="fileUploadRef"
@@ -133,7 +138,7 @@
           </template>
         </FileUpload>
 
-        <!-- Images -->
+        <!-- Rule Images -->
         <p class="font-light mt-10">Fotoğraflar</p>
         <div class="flex items-center justify-start flex-wrap gap-8 mt-8">
           <div
@@ -169,6 +174,7 @@
           @click="alertPopupVivible = true"
         />
 
+        <!-- Alert Popup -->
         <Dialog
           id="dlg"
           header="Uyarı"
@@ -193,7 +199,7 @@
         </Dialog>
       </div>
 
-      <!-- Messages -->
+      <!-- Feedback Messages -->
       <div class="fixed top-5 right-5 max-w-sm">
         <Message :hidden="!succesMessage" severity="success">Başarılı </Message>
 
@@ -229,7 +235,6 @@ import {
   getDocs,
   where,
   query,
-  limit,
   doc,
   getDoc,
   updateDoc,
@@ -288,9 +293,11 @@ export default {
   },
 
   methods: {
+    // Taking a copy of product
     deepCopy(obj) {
       return JSON.parse(JSON.stringify(obj));
     },
+
     // Updating Product
     async saveProduct(product_id) {
       try {
