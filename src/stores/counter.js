@@ -8,7 +8,9 @@ export const createWizardStore = defineStore("counter", {
     priceRanges: [],
     navbarAndFooterVisibility: true,
   }),
+
   actions: {
+    // Search
     async search() {
       this.loading = true;
       this.emptyResult = false;
@@ -16,7 +18,7 @@ export const createWizardStore = defineStore("counter", {
       const searchedWordMethod = localStorage.getItem("searchedWord");
       const searchedCategoryMethod = localStorage.getItem("searchedCategory");
 
-      // Eğer her ikisi de varsa JSON.parse işlemini gerçekleştir, aksi halde null veya undefined'dir.
+      // Control SearchedWord and searchedCategory
       const searchedWord = searchedWordMethod
         ? JSON.parse(searchedWordMethod)
         : null;
@@ -98,6 +100,7 @@ export const createWizardStore = defineStore("counter", {
         this.loading = false;
       }
 
+      // Get Price Ranges
       const prices = this.products.map((product) => {
         const discountedPrice = product.discount
           ? product.price - (product.price * product.discount) / 100
@@ -105,9 +108,9 @@ export const createWizardStore = defineStore("counter", {
         return discountedPrice;
       });
 
-      const uniquePrices = Array.from(new Set(prices)); // Tekil fiyatları bul
+      const uniquePrices = Array.from(new Set(prices));
 
-      uniquePrices.sort((a, b) => a - b); // Fiyatları küçükten büyüğe sırala
+      uniquePrices.sort((a, b) => a - b);
 
       const priceRanges = [];
       const numRanges = 5;
@@ -136,6 +139,7 @@ export const createWizardStore = defineStore("counter", {
       this.priceRanges = priceRanges;
     },
 
+    // Add Searched Category
     addSearchedCategory(category_id) {
       const now = Date.now();
       const data = {
