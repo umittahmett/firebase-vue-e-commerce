@@ -72,17 +72,7 @@ export default {
     );
     const latestProductsSnapshot = await getDocs(latestProductsQuery);
     latestProductsSnapshot.forEach(async (product) => {
-      const productData = {
-        id: product.id,
-        created_date: product.data().created_date,
-        title: product.data().title,
-        description: product.data().description,
-        price: product.data().price,
-        discount: product.data().discount,
-        cover_image: product.data().cover_image,
-      };
-
-      this.latestProducts.push(productData);
+      this.latestProducts.push(product.data());
     });
     //>
 
@@ -94,16 +84,7 @@ export default {
     );
     const bestSelProductsSnapshot = await getDocs(bestSelProductsQuery);
     bestSelProductsSnapshot.forEach((product) => {
-      const productData = {
-        id: product.id,
-        created_date: product.data().created_date,
-        title: product.data().title,
-        description: product.data().description,
-        price: product.data().price,
-        discount: product.data().discount,
-        cover_image: product.data().cover_image,
-      };
-      this.bestSellers.push(productData);
+      this.bestSellers.push(product.data());
     });
     //>
   },
