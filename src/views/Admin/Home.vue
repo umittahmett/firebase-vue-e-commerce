@@ -1,5 +1,7 @@
 <template>
+  <!-- Admin Home -->
   <div class="max-w-7xl w-full mx-auto px-3">
+    <!-- Search -->
     <form
       class="w-full mb-6 max-w-3xl mx-auto"
       v-if="store"
@@ -22,6 +24,7 @@
         </button>
       </div>
     </form>
+
     <div class="flex justify-start items-start gap-4">
       <!-- Filters -->
       <div
@@ -117,12 +120,12 @@
 
           <div class="flex items-center gap-4 relative">
             <div>
-              <!-- Price Filter -->
+              <!-- Mobile Price Filter -->
               <button
                 @click="priceFilterVisible = true"
                 class="border rounded-md p-2 px-6 bg-gray-50 lg:hidden"
               >
-                Fiyat
+                Fiyat <ChevronDownIcon class="w-4" />
               </button>
 
               <div
@@ -141,6 +144,7 @@
                       <XMarkIcon class="w-7 h-7" />
                     </button>
                   </div>
+
                   <div
                     class="flex items-center justify-center mr-auto max-w-xl"
                   >
@@ -174,6 +178,7 @@
                     </button>
                   </div>
 
+                  <!-- Recomend Filters -->
                   <div
                     class="flex item-center flex-col gap-3 justify-start mt-2 rounded-md p-1 px-2 text-sm cursor-pointer"
                   >
@@ -209,6 +214,7 @@
               </div>
             </div>
 
+            <!-- List Type -->
             <select
               class="border rounded-md p-3 px-6 bg-gray-50"
               name="sirala"
@@ -369,6 +375,7 @@ import {
   ChevronDoubleLeftIcon,
   XMarkIcon,
   FaceSmileIcon,
+  ChevronDownIcon,
 } from "@heroicons/vue/20/solid";
 import RadioButton from "primevue/radiobutton";
 
@@ -427,6 +434,7 @@ export default {
       }
     },
 
+    // Products Data
     displayedProducts() {
       return this.filteredProducts
         ? this.filteredProducts.slice(this.startIndex, this.endIndex + 1)
@@ -437,6 +445,7 @@ export default {
   },
 
   methods: {
+    // Refresh Price Filter
     deleteFilter() {
       this.filteredProducts = null;
       this.maxPrice = null;
@@ -450,6 +459,7 @@ export default {
       this.priceFilterVisible = false;
     },
 
+    // Use Price Filter
     priceFilter() {
       const products = this.store.products;
       this.filteredProducts = this.store.products.filter((product) => {
@@ -467,6 +477,7 @@ export default {
       this.priceFilterVisible = false;
     },
 
+    // Pagination Elements
     nextPage() {
       if (this.currentPage < this.pageCount - 1) {
         this.currentPage++;
@@ -483,6 +494,7 @@ export default {
       this.currentPage = page;
     },
 
+    // Change List Type
     changeSelectedListType(newVal) {
       switch (parseInt(newVal)) {
         case 1:
@@ -514,40 +526,16 @@ export default {
       }
     },
 
+    // Custom Price Filter
     selectFilter(min, max) {
       this.minPrice = min;
       this.maxPrice = max;
       this.priceFilter();
     },
 
-    calculatePriceRanges() {
-      const allPrices = this.displayedProducts.map((product) => product.price);
-
-      // Eğer ürünlerin fiyat bilgisi varsa devam et, yoksa varsayılan bir değer kullan
-      const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : 0;
-      const maxPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
-
-      // Ortak fiyat aralıkları oluştur
-      this.priceRanges = [];
-      for (let i = 0; i < 5; i++) {
-        const rangeWidth = (maxPrice - minPrice) / 5;
-        const minRange = minPrice + i * rangeWidth;
-        const maxRange = minPrice + (i + 1) * rangeWidth;
-
-        this.priceRanges.push({
-          id: i,
-          min: Math.floor(minRange / 1000) * 1000,
-          max: Math.ceil(maxRange / 1000) * 1000,
-          activity: false,
-        });
-      }
-
-      // En yüksek fiyat aralığı "ve üstü" olarak güncellenir
-      this.priceRanges[this.priceRanges.length - 1].max = "ve üstü";
-    },
-
+    //Search
     search() {
-      const now = Date.now(); // Şu anki tarih ve saat Unix timestamp formatında
+      const now = Date.now();
       const dataToStore = {
         word: this.searchedWord,
         addingDate: now,
@@ -579,8 +567,10 @@ export default {
     ChevronDoubleLeftIcon,
     XMarkIcon,
     Button,
+    ChevronDownIcon,
   },
   mounted() {
+    // Get last searched word or category name from localstorage
     const searchedWordMethod = localStorage.getItem("searchedWord");
     const searchedCategoryMethod = localStorage.getItem("searchedCategory");
 
@@ -611,21 +601,3 @@ export default {
   },
 };
 </script>
-
-<!-- <form class="w-full max-w-xl mx-auto" @submit.prevent="search()" action="">
-  <div class="flex items-center w-full h-10 sm:h-12 lg:h-14">
-    <input
-      required
-      placeholder="Ürün Ara..."
-      type="text"
-      class="border rounded-l-md w-full h-full outline-0 ring-0 focus:ring-1 focus:ring-[#10b981] px-3"
-      v-model="searchedWord"
-    />
-
-    <button
-      class="px-6 max-lg:px-3 h-full rounded-r-md bg-[#10b981] border border-l-0 transition-all hover:bg-[#4bbc96]"
-    >
-      <img class="w-7" src="/public/Logos/searchWhite.png" alt="" />
-    </button>
-  </div>
-</form> -->
