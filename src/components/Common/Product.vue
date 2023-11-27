@@ -1,7 +1,7 @@
 <template>
   <a :href="url">
     <div
-      @click="sendProductId(product.id)"
+      @click="sendProductId(product.id, product.category_id)"
       :class="{
         'text-start': text_align === 'start',
       }"
@@ -94,8 +94,9 @@ export default {
       return price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
     },
 
-    sendProductId(id) {
+    sendProductId(id, category_id) {
       localStorage.setItem("cur_overview_product_id", id);
+      localStorage.setItem("cur_overview_category_id", category_id);
     },
   },
   mounted() {
