@@ -5,214 +5,224 @@
       'opacity-70': loading === true,
     }"
   >
-    <div
-      class="w-full max-w-7xl mx-auto bg-gray-100 px-3 py-10 flex justify-between gap-10"
-    >
-      <div class="w-full max-w-[400px]">
-        <!-- Category -->
-        <p class="font-light">Kategori</p>
-        <Dropdown
-          v-model="selectedCategory"
-          :options="categories"
-          optionLabel="name"
-          @change="getFeaturesTypes"
-          placeholder="Kategori Seç"
-          class="w-full md:w-14rem max-w-[400px]"
-        >
-          <template #value="slotProps">
-            <div v-if="slotProps.value">
-              <div>{{ slotProps.value.name }}</div>
-            </div>
-            <span v-else>
-              {{ slotProps.placeholder }}
-            </span>
-          </template>
-          <template #option="slotProps">
-            <div>
-              <div>{{ slotProps.option.name }}</div>
-            </div>
-          </template>
-        </Dropdown>
+    <div class="w-full max-w-7xl mx-auto bg-gray-100 py-10">
+      <div class="px-3 flex justify-between gap-10">
+        <div class="w-full max-w-[400px]">
+          <!-- Brand -->
 
-        <!-- Brand -->
-        <p class="font-light mt-4">Marka</p>
-        <Dropdown
-          editable
-          v-model="selectedBrand"
-          :options="brands"
-          optionLabel="name"
-          placeholder="Marka Seç"
-          class="w-full md:w-14rem max-w-[400px]"
-        >
-          <template #value="slotProps">
-            <div v-if="slotProps.value">
-              <div>{{ slotProps.value.name }}</div>
-            </div>
-            <span v-else>
-              {{ slotProps.placeholder }}
-            </span>
-          </template>
-          <template #option="slotProps">
-            <div>
-              <div>{{ slotProps.option.name }}</div>
-            </div>
-          </template>
-        </Dropdown>
-
-        <!-- Model  -->
-        <p class="font-light mt-4">Model</p>
-        <InputText
-          class="w-full max-w-[400px] p-2.5"
-          type="text"
-          v-model="productModel"
-          placeholder="Model Gir"
-        />
-
-        <!-- Title  -->
-        <p class="font-light mt-4">Başlık</p>
-        <InputText
-          class="w-full max-w-[400px] p-2.5"
-          type="text"
-          v-model="title"
-          placeholder="Başlık Gir"
-        />
-
-        <!-- Description  -->
-        <p class="font-light mt-4">Açıklama</p>
-        <Textarea
-          class="w-full max-w-[400px] p-2.5"
-          placeholder="Açıklama Gir"
-          v-model="description"
-          rows="5"
-          cols="30"
-        />
-
-        <!-- Price  -->
-        <p class="font-light mt-4">Fiyat</p>
-        <InputNumber
-          class="w-full max-w-[400px]"
-          placeholder="Fiyat Gir"
-          v-model="price"
-          inputId="currency-us"
-          mode="currency"
-          currency="TRY"
-          locale="tr"
-        />
-
-        <!-- Discount  -->
-        <p class="font-light mt-4">İndirim</p>
-        <InputNumber
-          class="w-full max-w-[400px]"
-          placeholder="İndirim Gir"
-          v-model="discount"
-          inputId="percent"
-          prefix="%"
-        />
-      </div>
-
-      <!-- Featuress -->
-      <div class="h-fit w-full">
-        <div v-if="featureTypes" class="grid grid-cols-3 gap-8">
-          <!-- Feature -->
-          <div
-            v-for="featureType in featureTypes"
-            :key="featureType.id"
-            class="w-full max-w-[400px] h-fit"
+          <p class="font-light">Marka</p>
+          <Dropdown
+            editable
+            v-model="product.brand"
+            :options="brands"
+            optionLabel="name"
+            placeholder="Marka Seç"
+            class="w-full md:w-14rem max-w-[400px]"
           >
-            <p class="font-light">{{ featureType.name }}</p>
-            <div class="w-full relative">
-              <InputText
-                class="w-full p-2.5"
-                type="text"
-                v-model="featureType.feature"
-                :placeholder="featureType.name"
-              />
-              <p class="absolute right-2.5 top-2.5 text-gray-400">
-                {{ featureType.unit_name }}
-              </p>
+            <template #value="slotProps">
+              <div v-if="slotProps.value">
+                <div>{{ slotProps.value.name }}</div>
+              </div>
+              <span v-else>
+                {{ slotProps.placeholder }}
+              </span>
+            </template>
+            <template #option="slotProps">
+              <div>
+                <div>{{ slotProps.option.name }}</div>
+              </div>
+            </template>
+          </Dropdown>
+
+          <!-- Model  -->
+          <p class="font-light mt-4">Model</p>
+          <InputText
+            class="w-full max-w-[400px] p-2.5"
+            type="text"
+            v-model="product.model"
+            placeholder="Model Gir"
+          />
+
+          <!-- Title  -->
+          <p class="font-light mt-4">Başlık</p>
+          <InputText
+            class="w-full max-w-[400px] p-2.5"
+            type="text"
+            v-model="product.title"
+            placeholder="Başlık Gir"
+          />
+
+          <!-- Description  -->
+          <p class="font-light mt-4">Açıklama</p>
+          <Textarea
+            class="w-full max-w-[400px] p-2.5"
+            placeholder="Açıklama Gir"
+            v-model="product.description"
+            rows="5"
+            cols="30"
+          />
+
+          <!-- Price  -->
+          <p class="font-light mt-4">Fiyat</p>
+          <InputNumber
+            class="w-full max-w-[400px]"
+            placeholder="Fiyat Gir"
+            v-model="product.price"
+            inputId="currency-us"
+            mode="currency"
+            currency="TRY"
+            locale="tr"
+          />
+          <p v-if="product.discount" class="font-light mt-1 text-sm">
+            indirimli fiyat :
+            <span class="font-bold">
+              {{
+                product.price - (product.price * product.discount) / 100
+              }}&#8378;</span
+            >
+          </p>
+
+          <!-- Discount  -->
+          <p class="font-light mt-4">İndirim</p>
+          <InputNumber
+            class="w-full max-w-[400px]"
+            placeholder="İndirim Gir"
+            v-model="product.discount"
+            inputId="percent"
+            prefix="%"
+          />
+        </div>
+
+        <!-- Featuress -->
+        <div class="h-fit w-full">
+          <div v-if="product.features" class="grid grid-cols-3 gap-8">
+            <!-- Feature -->
+            <div
+              v-for="feature in product.features"
+              :key="feature"
+              class="w-full max-w-[400px] h-fit"
+            >
+              <p class="font-light">{{ feature.name }}</p>
+              <div class="w-full relative">
+                <InputText
+                  class="w-full p-2.5"
+                  type="text"
+                  v-model="feature.unit_value"
+                  :placeholder="feature.name"
+                />
+                <p class="absolute right-2.5 top-2.5 text-gray-400">
+                  {{ feature.unit_name }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="card mt-4">
-          <p class="font-light">Ürün Fotoğrafları Yükle</p>
-          <FileUpload
-            ref="fileUploadRef"
-            :customUpload="true"
-            :multiple="true"
-            accept="image/*"
-            :maxFileSize="1000000"
+      <div class="card mt-4">
+        <p class="font-light">Ürün Fotoğrafları Yükle</p>
+        <FileUpload
+          ref="fileUploadRef"
+          :customUpload="true"
+          :multiple="true"
+          accept="image/*"
+          :maxFileSize="1000000"
+        >
+          <template #empty>
+            <p>Drag and drop files to here to upload.</p>
+          </template>
+        </FileUpload>
+
+        <!-- Images -->
+        <p class="font-light mt-10">Fotoğraflar</p>
+        <div class="flex items-center justify-start flex-wrap gap-8 mt-8">
+          <div
+            class="relative w-[100px] rounded-xl h-[100px] border-[#10b981] border-2"
+            :class="{
+              'border-[#f86060]': image.deleteImage === true,
+            }"
+            v-for="image in product.images"
+            :key="image"
           >
-            <template #empty>
-              <p>Drag and drop files to here to upload.</p>
-            </template>
-          </FileUpload>
+            <img class="w-full rounded-xl" :src="image.url" alt="" />
+
+            <Button
+              @click="image.deleteImage = !image.deleteImage"
+              :icon="image.deleteImage === true ? 'pi pi-times' : 'pi pi-check'"
+              severity="danger"
+              rounded
+              aria-label="Cancel"
+              class="absolute top-[-20px] right-[-20px] bg-[#10b981] text-white"
+              :class="{
+                'bg-[#f86060]': image.deleteImage === true,
+              }"
+            />
+          </div>
         </div>
+      </div>
 
-        <!-- Save -->
-        <div class="mt-6">
-          <Button
-            class="bg-[#10b981] text-white px-5 p-2.5"
-            label="Kaydet"
-            @click="alertPopupVivible = true"
-          />
+      <!-- Save -->
+      <div class="mt-10">
+        <Button
+          class="bg-[#10b981] text-white px-5 p-2.5"
+          label="Kaydet"
+          @click="alertPopupVivible = true"
+        />
 
-          <Dialog
-            id="dlg"
-            header="Uyarı"
-            v-model:visible="alertPopupVivible"
-            :style="{ width: '30vw' }"
-            class="text-center"
-          >
-            <p>Ürünü Kaydetmek İstiyor musunuz ?</p>
-            <div class="flex justify-center items-center mt-4 gap-4">
-              <Button
-                class="bg-[#10b981] text-white px-5 p-2.5"
-                label="Kaydet"
-                @click="saveProductHead"
-              />
+        <Dialog
+          id="dlg"
+          header="Uyarı"
+          v-model:visible="alertPopupVivible"
+          :style="{ width: '30vw' }"
+          class="text-center"
+        >
+          <p>Ürünü Kaydetmek İstiyor musunuz ?</p>
+          <div class="flex justify-center items-center mt-4 gap-4">
+            <Button
+              class="bg-[#10b981] text-white px-5 p-2.5"
+              label="Kaydet"
+              @click="saveProduct(product.id)"
+            />
 
-              <Button
-                class="bg-red-300 p-2.5"
-                label="İptal Et"
-                @click="alertPopupVivible = false"
-              />
-            </div>
-          </Dialog>
-        </div>
+            <Button
+              class="bg-red-300 p-2.5"
+              label="İptal Et"
+              @click="alertPopupVivible = false"
+            />
+          </div>
+        </Dialog>
+      </div>
 
-        <!-- Messages -->
-        <div class="fixed top-5 right-5 max-w-sm">
-          <Message :hidden="!succesMessage" severity="success"
-            >Başarılı
-          </Message>
+      <!-- Messages -->
+      <div class="fixed top-5 right-5 max-w-sm">
+        <Message :hidden="!succesMessage" severity="success">Başarılı </Message>
 
-          <Message :hidden="!errorMessage" severity="error"
-            >Bir Şeyler Ters Gitti
-          </Message>
+        <Message :hidden="!errorMessage" severity="error"
+          >Bir Şeyler Ters Gitti
+        </Message>
 
-          <Message :hidden="!warnMessage" severity="warn"
-            >Lütfen Kutuları Eksiksiz Doldurun
-          </Message>
-        </div>
+        <Message :hidden="!warnMessage" severity="warn"
+          >Lütfen Kutuları Eksiksiz Doldurun
+        </Message>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Galleria from "primevue/galleria";
+import ProgressSpinner from "primevue/progressspinner";
+import { XMarkIcon } from "@heroicons/vue/20/solid";
+import Button from "primevue/button";
 import FileUpload from "primevue/fileupload";
-import Toast from "primevue/toast";
 import Dropdown from "primevue/dropdown";
 import InputText from "primevue/inputtext";
-import Button from "primevue/button";
+import InputNumber from "primevue/inputnumber";
 import ConfirmPopup from "primevue/confirmpopup";
 import Textarea from "primevue/textarea";
-import InputNumber from "primevue/inputnumber";
 import Dialog from "primevue/dialog";
 import Message from "primevue/message";
 
-import { getStorage, uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import {
   getFirestore,
   collection,
@@ -222,14 +232,25 @@ import {
   limit,
   doc,
   getDoc,
-  addDoc,
   updateDoc,
 } from "firebase/firestore";
 
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  listAll,
+  deleteObject,
+  uploadBytes,
+} from "firebase/storage";
+
 export default {
   components: {
+    Galleria,
+    ProgressSpinner,
+    XMarkIcon,
+    Button,
     FileUpload,
-    Toast,
     Button,
     Dropdown,
     InputText,
@@ -239,219 +260,274 @@ export default {
     Dialog,
     Message,
   },
+
   data() {
     return {
-      loading: false,
-      imageUrls: [],
-      selectedCategory: null,
-      categories: [],
-      selectedBrand: null,
+      product: {},
+      productCopy: {},
+      similarProducts: [],
+      responsiveOptions: [
+        {
+          breakpoint: "991px",
+          numVisible: 4,
+        },
+        {
+          breakpoint: "575px",
+          numVisible: 3,
+        },
+      ],
+      similarProductsEmpty: false,
+      fullscreenView: false,
       brands: [],
-      productModel: null,
-      title: null,
-      description: null,
-      price: null,
-      discount: null,
+      loading: false,
       alertPopupVivible: false,
       succesMessage: false,
       errorMessage: false,
       warnMessage: false,
-      featureTypes: [],
-      features: null,
     };
   },
+
   methods: {
-    async saveProductHead() {
-      this.loading = true;
+    deepCopy(obj) {
+      return JSON.parse(JSON.stringify(obj));
+    },
+    // Updating Product
+    async saveProduct(product_id) {
+      try {
+        this.loading = true;
+        await this.saveProductHead(product_id);
+        await this.saveProductFeatures();
+        await this.saveProductImages(product_id);
 
-      if (
-        (this.selectedBrand,
-        this.selectedCategory,
-        this.productModel,
-        this.title,
-        this.description,
-        this.price)
-      ) {
-        this.alertPopupVivible = false;
+        this.loading = false;
         this.succesMessage = true;
+        this.errorMessage = false;
+        this.warnMessage = false;
+        window.location.reload();
+      } catch (error) {
+        this.errorMessage = true;
+        this.succesMessage = false;
+        this.warnMessage = false;
+        console.log(error);
+      }
+    },
 
-        try {
-          const db = getFirestore();
-          const storage = getStorage();
+    // Helper functions
+    async saveProductHead(product_id) {
+      try {
+        const db = getFirestore();
+        const changedProductData = {};
+        const fieldsToCheck = [
+          "brand",
+          "description",
+          "title",
+          "model",
+          "price",
+          "discount",
+        ];
 
-          if (this.selectedBrand && typeof this.selectedBrand === "string") {
-            const brandsCollection = collection(db, "brands");
-            await addDoc(brandsCollection, { name: this.selectedBrand });
+        fieldsToCheck.forEach((field) => {
+          if (this.productCopy[field] !== this.product[field]) {
+            changedProductData[field] = this.product[field];
           }
+          console.log("2 :", this.productCopy[field]);
+          console.log("1 :", this.product[field]);
+        });
+        const productRef = doc(db, "products", product_id);
+        await updateDoc(productRef, changedProductData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
-          const productsCollection = collection(db, "products");
+    async saveProductFeatures() {
+      const db = getFirestore();
 
-          const now = new Date();
-          const timestamp = {
-            seconds: Math.floor(now.getTime() / 1000),
-            nanoseconds: now.getMilliseconds() * 1000000,
-          };
+      let updatedFeatures = [];
+      for (let i = 0; i < this.product.features.length; i++) {
+        const feature = this.product.features[i];
+        const featureCopy = this.productCopy.features[i];
 
-          const newProductData = {
-            category_id: this.selectedCategory.id,
-            category_name: this.selectedCategory.name,
-            brand:
-              typeof this.selectedBrand === "string"
-                ? this.selectedBrand
-                : this.selectedBrand.name,
-            model: this.productModel,
-            title: this.title,
-            description: this.description,
-            price: this.price,
-            discount: this.discount,
-            created_date: timestamp,
-          };
-          const docRef = await addDoc(productsCollection, newProductData);
-          const updatedProductDoc = doc(db, "products", docRef.id);
-
-          const products_featuresCollection = collection(
-            db,
-            "products_features"
+        if (feature.unit_value !== featureCopy.unit_value) {
+          const featureRef = doc(db, "products_features", feature.id);
+          updatedFeatures.push(
+            updateDoc(featureRef, { unit_value: feature.unit_value })
           );
+        }
 
-          this.featureTypes.forEach(async (feature) => {
-            const newFeature = {
-              id: "",
-              product_category_feature_id: feature.id,
-              product_id: docRef.id,
-              unit_value: feature.feature,
-            };
+        await Promise.all(updatedFeatures);
+      }
+    },
 
-            const featureDocRef = await addDoc(
-              products_featuresCollection,
-              newFeature
-            );
+    async saveProductImages(product_id) {
+      // Delete Images
+      const downloadUrls = this.product.images
+        .filter((image) => image.deleteImage === true)
+        .map((image) => image.url);
 
-            const updatedFeatureDoc = doc(
-              db,
-              "products_features",
-              featureDocRef.id
-            );
+      const storage = getStorage();
 
-            const addFeatureId = {
-              id: featureDocRef.id,
-            };
-
-            await updateDoc(updatedFeatureDoc, addFeatureId);
+      const deletePromises = downloadUrls.map((url) => {
+        const storageRef = ref(storage, url);
+        return deleteObject(storageRef)
+          .then(() => {
+            console.log("Dosya başarıyla silindi:", url);
+          })
+          .catch((error) => {
+            console.error("Dosya silinirken bir hata oluştu:", url, error);
           });
+      });
+      await Promise.all(deletePromises);
 
-          // Images
-          if (
-            this.$refs.fileUploadRef.files &&
-            this.$refs.fileUploadRef.files.length > 0
-          ) {
-            for (const file of this.$refs.fileUploadRef.files) {
-              const storageRef = ref(
-                storage,
-                `products_images/product_${docRef.id}/${Date.now()}_${
-                  file.name
-                }`
-              );
-
-              try {
-                // Dosyayı Firebase Storage'a yükleyin
-                await uploadBytes(storageRef, file);
-
-                // Dosyanın URL'sini alın
-                const url = await getDownloadURL(storageRef);
-
-                // URL'yi imageUrls dizisine ekleyin
-                this.imageUrls.push(url);
-              } catch (error) {
-                console.error("Dosya yükleme hatası: ", error);
-              }
-            }
-          } else {
-            // Eğer dosya yoksa, proje dosyasındaki bir fotoğrafı kullanın
-            const filePath = "public/noImage.png"; // Fotoğrafın projedeki yolu
-            const response = await fetch(filePath);
-            const blob = await response.blob();
-
-            const exampleStorageRef = ref(
+      // Save Added Images
+      if (
+        this.$refs.fileUploadRef.files &&
+        this.$refs.fileUploadRef.files.length > 0
+      ) {
+        const uploadPromises = this.$refs.fileUploadRef.files.map(
+          async (file) => {
+            const storageRef = ref(
               storage,
-              `products_images/product_${docRef.id}/${Date.now()}_noImage`
+              `products_images/product_${product_id}/${Date.now()}_${file.name}`
             );
 
             try {
-              // Dosyayı Firebase Storage'a yükleyin
-              await uploadBytes(exampleStorageRef, blob);
-
-              // Dosyanın URL'sini alın
-              const exampleImageUrl = await getDownloadURL(exampleStorageRef);
-
-              // URL'yi imageUrls dizisine ekleyin
-              this.imageUrls.push(exampleImageUrl);
+              await uploadBytes(storageRef, file);
+              console.log("Dosya başarıyla yüklendi:", file.name);
             } catch (error) {
               console.error("Dosya yükleme hatası: ", error);
             }
           }
+        );
 
-          const additionalData = {
-            id: docRef.id,
-            images_folder: "product_" + docRef.id,
-            cover_image: this.imageUrls[0],
-          };
-          // Belgeyi güncelleyin
-          await updateDoc(updatedProductDoc, additionalData);
-
-          this.succesMessage = true;
-          this.loading = false;
-          window.location.reload();
-        } catch (error) {
-          console.log(error);
-          this.errorMessage = true;
-          this.loading = false;
-        }
+        await Promise.all(uploadPromises);
       } else {
-        console.log("kutulari eksiksiz doldurun");
-        this.warnMessage = true;
+        console.log("Eklenecek fotoğraflar bulunamadı");
       }
     },
 
-    async getFeaturesTypes() {
-      // Get Product Features
-      this.featureTypes = [];
+    // Getting Product Data
+    async getOverviewProductData() {
       const db = getFirestore();
-      const featuresRef = collection(db, "product_cetegory_features");
-      const featureQuery = query(
-        featuresRef,
-        where("category_id", "==", this.selectedCategory.id)
-      );
-      const featuresSnapshot = await getDocs(featureQuery);
-      featuresSnapshot.forEach(async (feature) => {
-        const featureData = {
-          id: feature.id,
-          name: feature.data().name,
-          unit_name: feature.data().unit_name,
-          feature: "",
-        };
+      const storage = getStorage();
 
-        this.featureTypes.push(featureData);
-      });
-      //>
+      const cur_overview_product_id = localStorage.getItem(
+        "cur_overview_product_id"
+      );
+
+      const cur_overview_category_id = localStorage.getItem(
+        "cur_overview_category_id"
+      );
+
+      if (!cur_overview_product_id) return;
+
+      try {
+        const [productData, images, features] = await Promise.all([
+          this.getProductData(db, cur_overview_product_id),
+          this.getProductImages(storage, `product_${cur_overview_product_id}`),
+          this.getProductFeatures(
+            db,
+            cur_overview_product_id,
+            cur_overview_category_id
+          ),
+        ]);
+
+        if (productData) {
+          productData.images = images.map((image) => {
+            const imageData = {
+              url: image,
+              deleteImage: false,
+            };
+
+            return imageData;
+          });
+          productData.features = features;
+
+          this.product = productData;
+          console.log(productData);
+          localStorage.setItem(
+            "curent_overview_product_data",
+            JSON.stringify(productData)
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    // Helper functions
+    async getProductData(db, productId) {
+      const productRef = doc(db, "products", productId);
+      const productSnapshot = await getDoc(productRef);
+
+      return productSnapshot ? productSnapshot.data() : null;
+    },
+
+    async getProductImages(storage, imagesFolder) {
+      const imagesRef = ref(storage, `products_images/${imagesFolder}`);
+      const res = await listAll(imagesRef);
+
+      return Promise.all(
+        res.items.map(async (itemRef) => getDownloadURL(itemRef))
+      );
+    },
+
+    async getProductFeatures(db, productId, categoryId) {
+      try {
+        const productCategoryFeaturesRef = collection(
+          db,
+          "product_cetegory_features"
+        );
+        const productCategoryFeaturesQuery = query(
+          productCategoryFeaturesRef,
+          where("category_id", "==", categoryId)
+        );
+
+        const productCategoryFeaturesSnapshot = await getDocs(
+          productCategoryFeaturesQuery
+        );
+
+        if (productCategoryFeaturesSnapshot.empty) return [];
+
+        const featurePromises = productCategoryFeaturesSnapshot.docs.map(
+          async (featureDoc) => {
+            const featureData = featureDoc.data();
+            const productsFeaturesRef = collection(db, "products_features");
+            const productsFeaturesQuery = query(
+              productsFeaturesRef,
+              where("product_id", "==", productId),
+              where("product_category_feature_id", "==", featureData.id)
+            );
+
+            const productsFeaturesSnapshot = await getDocs(
+              productsFeaturesQuery
+            );
+
+            return productsFeaturesSnapshot.docs.map((featureValueDoc) => {
+              const featureValueData = featureValueDoc.data();
+              return {
+                id: featureValueData.id,
+                name: featureData.name,
+                unit_name: featureData.unit_name,
+                unit_value: featureValueData.unit_value,
+              };
+            });
+          }
+        );
+
+        const features = (await Promise.all(featurePromises)).flat();
+        console.log("Features:", features); // Debug için eklendi
+        return features;
+      } catch (error) {
+        console.error("Error in getProductFeatures:", error); // Debug için eklendi
+        return [];
+      }
     },
   },
 
   async mounted() {
-    const db = getFirestore();
-    // Get Categories
-    const categoriesRef = collection(db, "categories");
-    const categorySnapshot = await getDocs(categoriesRef);
-    if (!categorySnapshot.empty) {
-      const categories = categorySnapshot.docs;
-      categories.forEach((category) => {
-        this.categories.push(category.data());
-      });
-    } else {
-      console.log("categories is empty");
-    }
-
     // Get Brands
+    const db = getFirestore();
     const brandsRef = collection(db, "brands");
     const brandsSnapshot = await getDocs(brandsRef);
     if (!brandsSnapshot.empty) {
@@ -462,6 +538,9 @@ export default {
     } else {
       console.log("categories is empty");
     }
+
+    await this.getOverviewProductData();
+    this.productCopy = this.deepCopy(this.product);
   },
 };
 </script>
