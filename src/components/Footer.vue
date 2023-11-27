@@ -1,4 +1,5 @@
 <template>
+  <!-- Footer -->
   <div class="w-full bg-[#F4F8FD] p-4 text-black pt-32 transition-opacity">
     <div class="max-w-7xl mx-auto w-full">
       <div
@@ -22,6 +23,7 @@
           </p>
         </div>
 
+        <!-- Menus -->
         <div
           class="w-full flex justify-start sm:flex-row sm:justify-around items-start place-items-start flex-col gap-y-10 gap-x-2"
         >
@@ -81,6 +83,7 @@ export default {
   data() {
     return {
       store: null,
+
       menus: [
         {
           title: "Alışveriş",
