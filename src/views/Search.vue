@@ -246,7 +246,7 @@
         <div
           v-for="i in 8"
           :key="i"
-          class="w-full h-full min-h-[200px] lg:min-h-[300px] bg-slate-300 rounded-lg animate-pulse"
+          class="w-full h-full min-h-[200px] lg:min-h-[300px] bg-slate-50 rounded-lg animate-pulse"
         ></div>
       </div>
     </div>
