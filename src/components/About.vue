@@ -1,8 +1,10 @@
 <template>
+  <!-- About -->
   <div id="about" class="bg-[#F4F8FD] py-20 px-3">
     <div
       class="max-w-7xl w-full mx-auto flex justify-center gap-10 lg:gap-20 items-center flex-col-reverse lg:flex-row text-center lg:text-start"
     >
+      <!-- Image -->
       <div class="relative">
         <img
           class="h-auto sm:h-[500px] rounded-md lg:h-[500px] w-[600px] object-cover bg-center border border-[#e8f1fa]"
@@ -11,6 +13,7 @@
         />
       </div>
 
+      <!-- Cotent Text -->
       <div>
         <h2 class="text-blue-500 uppercase font-semibold text-xl">
           Hakkımızda
@@ -38,6 +41,7 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   components: {},
