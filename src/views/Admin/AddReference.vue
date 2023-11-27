@@ -1,4 +1,5 @@
 <template>
+  <!-- Add Reference -->
   <div
     class="w-full bg-gray-100"
     :class="{
@@ -8,6 +9,7 @@
     <div
       class="w-full max-w-7xl mx-auto bg-gray-100 px-3 py-10 flex justify-center flex-col gap-10"
     >
+      <!-- Upload Images -->
       <div class="card mt-4">
         <p class="font-light">Referans Fotoğrafları Ekle</p>
         <FileUpload
@@ -32,6 +34,7 @@
         :disabled="!isButtonDisabled"
       />
 
+      <!-- Alert Popup -->
       <Dialog
         id="dlg"
         header="Uyarı"
@@ -55,7 +58,7 @@
         </div>
       </Dialog>
 
-      <!-- Messages -->
+      <!-- Feedback Messages -->
       <div class="fixed top-5 right-5 max-w-sm">
         <Message :hidden="!succesMessage" severity="success">Başarılı </Message>
 
@@ -109,6 +112,7 @@ export default {
       });
     },
 
+    // Save
     async saveReferences() {
       const storage = getStorage();
       this.loading = true;
