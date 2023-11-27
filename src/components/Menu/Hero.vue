@@ -1,4 +1,5 @@
 <template>
+  <!-- HomePage Hero -->
   <div class="w-full h-[90vh] overflow-hidden relative text-white">
     <img
       class="object-cover w-full h-full bg-center"
@@ -17,6 +18,7 @@
           Profesyonel <br />
           IT Destek
         </h1>
+
         <p class="mt-6 max-w-md pr-10">
           Seçkin Bilişim Mağazası, güvenilir elektronik ürünleriyle bilgi ve
           kaliteyi bir araya getiriyor. Kaliteli alışverişin adresi!
