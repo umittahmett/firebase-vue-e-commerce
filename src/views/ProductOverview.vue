@@ -49,6 +49,7 @@
           </template>
         </Galleria>
 
+        <!-- Onboarding Animation -->
         <div
           v-else
           class="max-w-[610px] h-[500px] max-lg:mx-auto w-full bg-slate-50 rounded-xl animate-pulse"
@@ -57,6 +58,7 @@
         <Sale v-if="product.discount && !fullscreenView" />
       </div>
 
+      <!-- Product Informations -->
       <div
         v-if="product.title || product.description"
         class="text-start w-full mt-4"
@@ -133,6 +135,7 @@
         </div>
       </div>
 
+      <!-- Informations Onboarding Animation -->
       <div v-else class="">
         <div
           class="h-[80px] w-[600px] bg-slate-50 rounded-xl animate-pulse"
@@ -157,7 +160,7 @@
       </div>
     </div>
 
-    <!-- Imagee Gallery Loading Block -->
+    <!-- Imagee Gallery Onboarding animation -->
     <div
       class="w-full flex max-lg:flex-col flex-row items-center gap-10 h-[60vh] grid-cols-2 p-5"
       v-else
@@ -176,7 +179,6 @@
     </div>
 
     <!-- Features -->
-
     <div class="grid grid-cols-1 sm:grid-cols-2 w-full gap-4 border-b pb-3">
       <h2
         class="text-3xl border-b text-start mt-10 pb-2 mb-2 col-span-1 sm:col-span-2"
@@ -355,6 +357,7 @@ export default {
       return productSnapshot ? productSnapshot.data() : null;
     },
 
+    // Get Product Images
     async getProductImages(storage, imagesFolder) {
       const imagesRef = ref(storage, `products_images/${imagesFolder}`);
       const res = await listAll(imagesRef);
@@ -363,7 +366,7 @@ export default {
         res.items.map(async (itemRef) => getDownloadURL(itemRef))
       );
     },
-
+    // Get Product Features
     async getProductFeatures(db, productId, categoryId) {
       try {
         const productCategoryFeaturesRef = collection(
@@ -417,6 +420,7 @@ export default {
   },
 
   async mounted() {
+    // Get last searched word or category name from localstorage
     const storageProductModel = localStorage.getItem(
       "curent_overview_product_data"
     );
