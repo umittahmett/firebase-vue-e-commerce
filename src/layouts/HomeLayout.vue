@@ -1,7 +1,10 @@
 <template>
+  <!-- Home Layout -->
   <div class="w-full">
     <Navbar />
+
     <router-view class="w-full" />
+
     <Footer />
   </div>
 </template>
@@ -11,9 +14,6 @@ import Navbar from "../components/Menu/Navbar.vue";
 import Footer from "../components/Footer.vue";
 
 export default {
-  data() {
-    return {};
-  },
   components: {
     Navbar,
     Footer,
