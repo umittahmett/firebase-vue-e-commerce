@@ -134,6 +134,7 @@
           </div>
         </div>
 
+        <!-- Upload Images -->
         <div class="card mt-4">
           <p class="font-light">Ürün Fotoğrafları Yükle</p>
           <FileUpload
@@ -157,6 +158,7 @@
             @click="alertPopupVivible = true"
           />
 
+          <!-- Alert Popup -->
           <Dialog
             id="dlg"
             header="Uyarı"
@@ -181,7 +183,7 @@
           </Dialog>
         </div>
 
-        <!-- Messages -->
+        <!-- Feedback Messages -->
         <div class="fixed top-5 right-5 max-w-sm">
           <Message :hidden="!succesMessage" severity="success"
             >Başarılı
@@ -219,9 +221,7 @@ import {
   getDocs,
   where,
   query,
-  limit,
   doc,
-  getDoc,
   addDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -279,6 +279,7 @@ export default {
           const db = getFirestore();
           const storage = getStorage();
 
+          // Add new Brand
           if (this.selectedBrand && typeof this.selectedBrand === "string") {
             const brandsCollection = collection(db, "brands");
             const newBrand = await addDoc(brandsCollection, {
@@ -291,13 +292,13 @@ export default {
           }
 
           const productsCollection = collection(db, "products");
-
           const now = new Date();
           const timestamp = {
             seconds: Math.floor(now.getTime() / 1000),
             nanoseconds: now.getMilliseconds() * 1000000,
           };
 
+          // New Product Data
           const newProductData = {
             category_id: this.selectedCategory.id,
             category_name: this.selectedCategory.name,
@@ -312,6 +313,7 @@ export default {
             discount: this.discount,
             created_date: timestamp,
           };
+
           const docRef = await addDoc(productsCollection, newProductData);
           const updatedProductDoc = doc(db, "products", docRef.id);
 
@@ -320,6 +322,7 @@ export default {
             "products_features"
           );
 
+          // Add Features
           this.featureTypes.forEach(async (feature) => {
             const newFeature = {
               id: "",
@@ -346,7 +349,7 @@ export default {
             await updateDoc(updatedFeatureDoc, addFeatureId);
           });
 
-          // Images
+          // Add Images
           if (
             this.$refs.fileUploadRef.files &&
             this.$refs.fileUploadRef.files.length > 0
@@ -397,12 +400,12 @@ export default {
             }
           }
 
+          // Update Product
           const additionalData = {
             id: docRef.id,
             images_folder: "product_" + docRef.id,
             cover_image: this.imageUrls[0],
           };
-          // Belgeyi güncelleyin
           await updateDoc(updatedProductDoc, additionalData);
 
           this.succesMessage = true;
