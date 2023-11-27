@@ -4,7 +4,7 @@
 
     <!-- Image Gallery -->
     <div
-      v-if="product.id"
+      v-if="product"
       class="flex items-start flex-col lg:flex-row justify-between gap-10 mt-5"
     >
       <div
@@ -21,6 +21,7 @@
         />
 
         <Galleria
+          v-if="product.images"
           :value="product.images"
           :responsiveOptions="responsiveOptions"
           :numVisible="5"
@@ -47,9 +48,19 @@
             />
           </template>
         </Galleria>
+
+        <div
+          v-else
+          class="max-w-[610px] h-[500px] max-lg:mx-auto w-full bg-slate-50 rounded-xl animate-pulse"
+        ></div>
+
         <Sale v-if="product.discount && !fullscreenView" />
       </div>
-      <div class="text-start w-full mt-4">
+
+      <div
+        v-if="product.title || product.description"
+        class="text-start w-full mt-4"
+      >
         <h2 class="text-4xl">{{ product.title }}</h2>
 
         <p class="mt-3 text-base">{{ product.description }}</p>
@@ -85,12 +96,14 @@
 
         <p class="font-bold mt-4">İletişim</p>
 
-        <div class="flex justify-start items-center gap-5">
-          <div class="mt-2">
+        <div
+          class="flex justify-start items-center gap-5 max-sm:flex-col max-sm:gap-2 max-sm:items-start"
+        >
+          <div class="mt-2 max-w-[170px] w-full">
             <p class="text-gray-400 text-sm pl-1 mt-1">+90 552 549 80 69</p>
 
             <a
-              class="px-6 py-3 bg-green-500 rounded-xl text-white flex items-center gap-2"
+              class="px-6 py-3 bg-green-500 rounded-xl text-white flex items-center justify-center gap-2"
               href="https://wa.me/05525498069"
             >
               <img
@@ -102,11 +115,11 @@
             </a>
           </div>
 
-          <div class="mt-2">
+          <div class="mt-2 max-w-[170px] w-full">
             <p class="text-gray-400 text-sm pl-1 mt-1">+90 552 549 80 69</p>
 
             <a
-              class="px-6 py-3 bg-blue-500 rounded-xl text-white flex items-center gap-2"
+              class="px-6 py-3 bg-blue-500 rounded-xl text-white flex items-center justify-center gap-2"
               href="https://wa.me/05525498069"
             >
               <img
@@ -114,9 +127,32 @@
                 src="/public/Logos/phone.png"
                 alt=""
               />
-              Phone
+              Telefon
             </a>
           </div>
+        </div>
+      </div>
+
+      <div v-else class="">
+        <div
+          class="h-[80px] w-[600px] bg-slate-50 rounded-xl animate-pulse"
+        ></div>
+
+        <div
+          class="h-[70px] w-[600px] bg-slate-50 rounded-xl animate-pulse mt-2"
+        ></div>
+
+        <div
+          class="h-[40px] w-[240px] bg-slate-50 rounded-xl animate-pulse mt-2"
+        ></div>
+
+        <div
+          class="h-[20px] w-[140px] bg-slate-50 rounded-xl animate-pulse mt-2"
+        ></div>
+
+        <div class="animate-pulse mt-4 flex justify-start items-center">
+          <div class="px-20 py-8 bg-slate-50 rounded-xl mr-4"></div>
+          <div class="px-20 py-8 bg-slate-50 rounded-xl"></div>
         </div>
       </div>
     </div>
@@ -127,33 +163,30 @@
       v-else
     >
       <div
-        class="w-full h-full bg-slate-300 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
+        class="w-full h-full bg-slate-50 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
       ></div>
 
       <div class="flex flex-col gap-3 w-full h-full col-span-1">
         <div
-          class="max-h-[60px] w-full h-full bg-slate-300 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
-        ></div>
-
-        <div
-          class="max-h-[60px] w-full h-full bg-slate-300 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
-        ></div>
-
-        <div
-          class="max-h-[60px] w-full h-full bg-slate-300 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
+          v-for="item in 3"
+          :key="item"
+          class="max-h-[60px] w-full h-full bg-slate-50 max-lg:grid-cols-1 grid-cols-2 rounded-xl animate-pulse"
         ></div>
       </div>
     </div>
 
     <!-- Features -->
-    <h2 class="text-3xl border-b text-start mt-10 pb-2 mb-2">
-      Ürün Özellikleri
-    </h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 w-full gap-4 border-b pb-3">
+      <h2
+        class="text-3xl border-b text-start mt-10 pb-2 mb-2 col-span-1 sm:col-span-2"
+      >
+        Ürün Özellikleri
+      </h2>
+
       <div
-        v-if="product.id"
-        class="flex items-center justify-between gap-2 py-3 mt-1 p-3 border-b bg-gray-100 rounded-lg"
+        v-if="product.features"
+        class="flex items-center justify-between gap-2 py-3 mt-1 p-3 border-b bg-[#F4F8FD] rounded-lg"
         v-for="feature in product.features"
         :key="feature.name"
       >
@@ -171,17 +204,11 @@
         v-else
         class="grid grid-cols-1 col-span-2 sm:grid-cols-2 gap-4 w-full"
       >
-        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
-
-        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
-
-        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
-
-        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
-
-        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
-
-        <div class="w-full h-12 bg-slate-300 rounded-lg animate-pulse"></div>
+        <div
+          v-for="item in 6"
+          :key="item"
+          class="w-full h-12 bg-slate-50 rounded-lg animate-pulse"
+        ></div>
       </div>
     </div>
 
@@ -200,6 +227,7 @@ import BreadCrumb from "../components/Common/BreadCrumb.vue";
 import Sale from "../components/Common/Sale.vue";
 import ProductSlider from "../components/ProductSlider.vue";
 import ProgressSpinner from "primevue/progressspinner";
+import { XMarkIcon } from "@heroicons/vue/20/solid";
 
 import {
   getFirestore,
@@ -213,7 +241,6 @@ import {
 } from "firebase/firestore";
 
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
-import { XMarkIcon } from "@heroicons/vue/20/solid";
 
 export default {
   data() {
@@ -225,7 +252,6 @@ export default {
           breakpoint: "991px",
           numVisible: 4,
         },
-
         {
           breakpoint: "575px",
           numVisible: 3,
@@ -277,8 +303,6 @@ export default {
       } else {
         this.similarProductsEmpty = true;
       }
-
-      //>
     },
 
     // Get Product Data
@@ -290,133 +314,125 @@ export default {
         "cur_overview_product_id"
       );
 
-      if (cur_overview_product_id) {
-        const productRef = doc(db, "products", cur_overview_product_id);
-        const productSnapshot = await getDoc(productRef);
+      const cur_overview_category_id = localStorage.getItem(
+        "cur_overview_category_id"
+      );
 
-        if (productSnapshot) {
-          const productData = productSnapshot.data();
-          // Get Product Images
-          const imagesRef = ref(
-            storage,
-            `products_images/${productData.images_folder}`
-          );
-          productData.images = [];
-          try {
-            const res = await listAll(imagesRef);
-            await Promise.all(
-              res.items.map(async (itemRef) => {
-                const url = await getDownloadURL(itemRef);
-                productData.images.push(url);
-              })
-            );
-          } catch (error) {
-            switch (error.code) {
-              case "storage/object-not-found":
-                console.log("File doesn't exist");
-                break;
-              case "storage/unauthorized":
-                console.log(
-                  "User doesn't have permission to access the object"
-                );
-                break;
-              case "storage/canceled":
-                console.log("User canceled the upload");
-                break;
-              case "storage/unknown":
-                console.log(
-                  "Unknown error occurred, inspect the server response"
-                );
-                break;
-              default:
-                console.log(error);
-            }
-          }
+      if (!cur_overview_product_id) return;
 
-          // Get Category Name
-          const categoriesRef = collection(db, "categories");
-          const categoryQuery = query(
-            categoriesRef,
-            where("id", "==", productData.category_id)
-          );
-
-          const categorySnapshot = await getDocs(categoryQuery);
-
-          if (!categorySnapshot.empty) {
-            productData.category_name = categorySnapshot.docs[0].data().name;
-          }
-
-          // Get Feature Types
-          const product_category_featuresRef = collection(
+      try {
+        const [productData, images, features] = await Promise.all([
+          this.getProductData(db, cur_overview_product_id),
+          this.getProductImages(storage, `product_${cur_overview_product_id}`),
+          this.getProductFeatures(
             db,
-            "product_cetegory_features"
-          );
-          const product_category_featuresQuery = query(
-            product_category_featuresRef,
-            where("category_id", "==", productData.category_id)
-          );
+            cur_overview_product_id,
+            cur_overview_category_id
+          ),
+        ]);
 
-          const product_category_featuresSnapshot = await getDocs(
-            product_category_featuresQuery
-          );
-
-          if (!product_category_featuresSnapshot.empty) {
-            // Array to store promises for product features
-            const featurePromises = [];
-
-            for (const featureDoc of product_category_featuresSnapshot.docs) {
-              const featureData = featureDoc.data();
-
-              // Create a separate array for each feature
-              const product_features = [];
-
-              // Query For Get Unit Values Of Current Product Feature
-              const products_featuresRef = collection(db, "products_features");
-              const products_featuresQuery = query(
-                products_featuresRef,
-                where("product_id", "==", cur_overview_product_id),
-                where("product_category_feature_id", "==", featureData.id) // Add this condition
-              );
-
-              // Collect the promise for the product features query
-              const featurePromise = getDocs(products_featuresQuery).then(
-                (products_featuresSnapshot) => {
-                  for (const featureValueDoc of products_featuresSnapshot.docs) {
-                    const featureValueData = featureValueDoc.data();
-                    product_features.push({
-                      name: featureData.name,
-                      unit_name: featureData.unit_name,
-                      feature: featureValueData.unit_value,
-                    });
-                  }
-
-                  return product_features;
-                }
-              );
-
-              featurePromises.push(featurePromise);
-            }
-
-            // Wait for all featurePromises to resolve
-            const allFeatures = await Promise.all(featurePromises);
-
-            // Flatten the array of arrays into a single array of features
-            const flattenedFeatures = allFeatures.flat();
-
-            // Assign the features to the productData
-            productData.features = flattenedFeatures;
-          } else {
-            console.log("features is empty");
-          }
+        if (productData) {
+          productData.images = images;
+          productData.features = features;
 
           this.product = productData;
+          console.log(productData);
+          localStorage.setItem(
+            "curent_overview_product_data",
+            JSON.stringify(productData)
+          );
         }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    // Helper functions
+    async getProductData(db, productId) {
+      const productRef = doc(db, "products", productId);
+      const productSnapshot = await getDoc(productRef);
+
+      return productSnapshot ? productSnapshot.data() : null;
+    },
+
+    async getProductImages(storage, imagesFolder) {
+      const imagesRef = ref(storage, `products_images/${imagesFolder}`);
+      const res = await listAll(imagesRef);
+
+      return Promise.all(
+        res.items.map(async (itemRef) => getDownloadURL(itemRef))
+      );
+    },
+
+    async getProductFeatures(db, productId, categoryId) {
+      try {
+        const productCategoryFeaturesRef = collection(
+          db,
+          "product_cetegory_features"
+        );
+        const productCategoryFeaturesQuery = query(
+          productCategoryFeaturesRef,
+          where("category_id", "==", categoryId)
+        );
+
+        const productCategoryFeaturesSnapshot = await getDocs(
+          productCategoryFeaturesQuery
+        );
+
+        if (productCategoryFeaturesSnapshot.empty) return [];
+
+        const featurePromises = productCategoryFeaturesSnapshot.docs.map(
+          async (featureDoc) => {
+            const featureData = featureDoc.data();
+            const productsFeaturesRef = collection(db, "products_features");
+            const productsFeaturesQuery = query(
+              productsFeaturesRef,
+              where("product_id", "==", productId),
+              where("product_category_feature_id", "==", featureData.id)
+            );
+
+            const productsFeaturesSnapshot = await getDocs(
+              productsFeaturesQuery
+            );
+
+            return productsFeaturesSnapshot.docs.map((featureValueDoc) => {
+              const featureValueData = featureValueDoc.data();
+              return {
+                name: featureData.name,
+                unit_name: featureData.unit_name,
+                feature: featureValueData.unit_value,
+              };
+            });
+          }
+        );
+
+        const features = (await Promise.all(featurePromises)).flat();
+        console.log("Features:", features); // Debug için eklendi
+        return features;
+      } catch (error) {
+        console.error("Error in getProductFeatures:", error); // Debug için eklendi
+        return [];
       }
     },
   },
 
   async mounted() {
-    await this.getOverviewProductData();
+    const storageProductModel = localStorage.getItem(
+      "curent_overview_product_data"
+    );
+    const storageProduct = JSON.parse(storageProductModel);
+
+    const cur_overview_product_id = localStorage.getItem(
+      "cur_overview_product_id"
+    );
+
+    if (storageProduct && storageProduct.id === cur_overview_product_id) {
+      this.product = storageProduct;
+      console.log("storage den geldi");
+    } else {
+      await this.getOverviewProductData();
+      console.log("veritabanindandan geldi");
+    }
     await this.getSimilarProducts();
   },
 
