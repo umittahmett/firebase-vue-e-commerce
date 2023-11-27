@@ -6,8 +6,8 @@
         <div
           class="sm:px-5 mx-auto w-full p-3 grid grid-cols-9 max-lg:flex justify-between items-center gap-4"
         >
+          <!-- Logo -->
           <div class="col-span-2">
-            <!-- Logo -->
             <a href="/">
               <img
                 class="max-sm:w-[140px] w-[200px] flex-shrink-0"
@@ -17,6 +17,7 @@
             </a>
           </div>
 
+          <!-- Search Product -->
           <div class="flex gap-2 col-span-4 mx-auto w-full">
             <form
               class="w-full"
@@ -42,6 +43,7 @@
             </form>
           </div>
 
+          <!-- Open Mobile Menu -->
           <button
             @click="mobileNavbarVisible = true"
             class="w-7 h-7 lg:hidden col-span-1 ml-auto flex-shrink-0"
@@ -71,6 +73,7 @@
           </div>
         </div>
 
+        <!-- Categories Dropdown Menu -->
         <div
           v-if="dropDownMenu"
           v-on:mouseleave="dropDownMenu = false"
@@ -119,6 +122,7 @@
           ><img class="w-[120px]" src="/public/Logos/sckn.png" alt=""
         /></a>
 
+        <!-- Close Mobile Menu -->
         <button
           @click="(mobileNavbarVisible = false), (dropDownMenu = false)"
           class="hover:opacity-80 transition-opacity"
@@ -173,11 +177,13 @@ export default {
   data() {
     return {
       menuToggle: false,
+
       pages: [
         { name: "Ürünler", dropDown: true },
         { name: "Hakımızda", href: "#about", dropDown: false },
         { name: "İletişim", href: "#contact", dropDown: false },
       ],
+
       searchedWord: "",
       dropDownMenu: false,
       wordEmptyAlert: false,
@@ -190,9 +196,11 @@ export default {
     ChevronDownIcon,
     XMarkIcon,
   },
+
   methods: {
+    // Search Products
     search() {
-      const now = Date.now(); // Şu anki tarih ve saat Unix timestamp formatında
+      const now = Date.now();
       const dataToStore = {
         word: this.searchedWord,
         addingDate: now,
@@ -215,10 +223,11 @@ export default {
   },
   async mounted() {
     this.store = createWizardStore();
-
     const db = getFirestore();
     const categories = collection(db, "categories");
     const categoriesSnapshot = await getDocs(categories);
+
+    // Get images for each category
     categoriesSnapshot.forEach((category) => {
       const categoryData = {
         id: category.id,
