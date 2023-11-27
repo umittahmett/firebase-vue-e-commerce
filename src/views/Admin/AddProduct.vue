@@ -281,7 +281,13 @@ export default {
 
           if (this.selectedBrand && typeof this.selectedBrand === "string") {
             const brandsCollection = collection(db, "brands");
-            await addDoc(brandsCollection, { name: this.selectedBrand });
+            const newBrand = await addDoc(brandsCollection, {
+              name: this.selectedBrand,
+            });
+
+            const updatedBrandDoc = doc(db, "brands", newBrand.id);
+
+            await updateDoc(updatedBrandDoc, { id: newBrand.id });
           }
 
           const productsCollection = collection(db, "products");
