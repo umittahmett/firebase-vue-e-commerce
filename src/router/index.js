@@ -5,7 +5,7 @@ import HomeView from "../views/HomeView.vue";
 import ProductOverview from "../views/ProductOverview.vue";
 import Search from "../views/Search.vue";
 import Page404 from "../views/Page404.vue";
-import Login from "../views/Login.vue";
+import Login from "../components/Auth/Login.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const router = createRouter({
@@ -22,11 +22,13 @@ const router = createRouter({
           name: "",
           component: HomeView,
         },
+
         {
           path: "/overview",
           name: "overview",
           component: ProductOverview,
         },
+
         {
           path: "/search",
           name: "search",
@@ -40,6 +42,7 @@ const router = createRouter({
       name: "login",
       component: Login,
     },
+
     {
       path: "/lorem-seckn_bil-admin",
       name: "Admin",
@@ -90,10 +93,12 @@ const router = createRouter({
           },
         },
       ],
+
       meta: {
         authRequired: true,
       },
     },
+
     {
       path: "/:catchAll(.*)",
       component: Page404,
@@ -101,6 +106,7 @@ const router = createRouter({
   ],
 });
 
+// Authentication Control
 router.beforeEach((to, from, next) => {
   const auth = getAuth();
 
