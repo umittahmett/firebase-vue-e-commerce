@@ -1,4 +1,5 @@
 <template>
+  <!-- Button Component -->
   <button
     :type="type"
     class="text-black bg-white py-3 px-6 text-md transition-all"
@@ -17,18 +18,22 @@ export default {
       type: String,
       default: null,
     },
+
     buttonType: {
       type: String,
       default: "",
     },
+
     roundSize: {
       type: Number,
       default: 0,
     },
+
     customClass: {
       type: String,
       default: null,
     },
+
     disabled: {
       type: Boolean,
       default: false,
