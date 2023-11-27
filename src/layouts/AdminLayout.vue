@@ -1,6 +1,8 @@
 <template>
+  <!-- Admin Layout -->
   <div class="w-full">
     <Navbar />
+
     <router-view class="w-full mt-10" />
   </div>
 </template>
