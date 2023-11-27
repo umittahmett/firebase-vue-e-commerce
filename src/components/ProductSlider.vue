@@ -1,4 +1,5 @@
 <template>
+  <!-- Products Slider -->
   <div class="w-full px-3">
     <div class="max-w-7xl w-full mx-auto py-10">
       <h2 class="text-xl text-start font-medium">{{ name }}</h2>
@@ -64,20 +65,25 @@ export default {
       type: Array,
       default: [],
     },
+
     pagination: {
       type: Boolean,
       default: true,
     },
+
     slidesPerView: {
       type: Number,
       default: 3,
     },
+
     name: {
       type: Text,
       default: "Lorem",
     },
   },
+
   components: { Sale, Swiper, SwiperSlide, ProgressSpinner, Product },
+
   data() {
     return {
       modules: [FreeMode, Pagination, Autoplay],
