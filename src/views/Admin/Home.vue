@@ -1,5 +1,27 @@
 <template>
   <div class="max-w-7xl w-full mx-auto px-3">
+    <form
+      class="w-full mb-6 max-w-3xl mx-auto"
+      v-if="store"
+      @submit.prevent="search()"
+      action=""
+    >
+      <div class="flex items-center w-full h-10 sm:h-12 lg:h-14">
+        <input
+          required
+          placeholder="Ürün Ara..."
+          type="text"
+          class="border rounded-l-md w-full h-full outline-0 ring-0 focus:ring-1 focus:ring-blue-500 px-3 bg-[#F4F8FD]"
+          v-model="searchedWord"
+        />
+
+        <button
+          class="px-6 max-lg:px-3 h-full rounded-r-md bg-blue-500 border border-l-0 transition-all hover:bg-blue-600"
+        >
+          <img class="w-7" src="/Logos/searchWhite.png" alt="" />
+        </button>
+      </div>
+    </form>
     <div class="flex justify-start items-start gap-4">
       <!-- Filters -->
       <div
@@ -245,7 +267,7 @@
         <div
           v-for="i in 8"
           :key="i"
-          class="w-full h-full min-h-[200px] lg:min-h-[300px] bg-slate-300 rounded-lg animate-pulse"
+          class="w-full h-full min-h-[200px] lg:min-h-[300px] bg-slate-50 rounded-lg animate-pulse"
         ></div>
       </div>
     </div>
@@ -522,6 +544,26 @@ export default {
 
       // En yüksek fiyat aralığı "ve üstü" olarak güncellenir
       this.priceRanges[this.priceRanges.length - 1].max = "ve üstü";
+    },
+
+    search() {
+      const now = Date.now(); // Şu anki tarih ve saat Unix timestamp formatında
+      const dataToStore = {
+        word: this.searchedWord,
+        addingDate: now,
+      };
+
+      localStorage.setItem("searchedWord", JSON.stringify(dataToStore));
+
+      if (this.searchedWord === "") {
+        this.wordEmptyAlert = true;
+      } else {
+        this.wordEmptyAlert = false;
+        this.store.products = [];
+        this.store.search();
+        this.$router.push("/search");
+        window.location.reload();
+      }
     },
   },
 
