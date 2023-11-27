@@ -1,4 +1,5 @@
 <template>
+  <!-- Product Component -->
   <a :href="url">
     <div
       @click="sendProductId(product.id, product.category_id)"
@@ -7,6 +8,7 @@
       }"
       class="text-center rounded-md overflow-hidden w-fit flex flex-col justify-center items-center h-[450px]"
     >
+      <!-- Image -->
       <div
         class="relative w-full mx-auto h-[250px] overflow-hidden flex justify-center items-center"
       >
@@ -15,9 +17,11 @@
         <Sale :bgColor="'blue'" v-if="product.discount" />
       </div>
 
+      <!-- Product Information -->
       <div
         class="p-2 flex flex-col justify-between w-full h-[200px] bg-[#F4F8FD]"
       >
+        <!-- Title & Description -->
         <div class="text-start mr-auto">
           <h4
             class="font-medium text-lg leading-[20px] line-clamp-3 mt-1 break-all"
@@ -30,6 +34,7 @@
           </p>
         </div>
 
+        <!-- Price -->
         <div
           class="mt-4 text-gray-700 font-light text-xl flex items-center gap-x-1"
         >
@@ -79,12 +84,15 @@ export default {
       default: "/overview",
     },
   },
+
   components: { Sale },
+
   data() {
     return {
       store: null,
     };
   },
+
   methods: {
     formatPrice(price) {
       if (typeof price !== "number") {
@@ -99,6 +107,7 @@ export default {
       localStorage.setItem("cur_overview_category_id", category_id);
     },
   },
+
   mounted() {
     this.store = createWizardStore();
   },
