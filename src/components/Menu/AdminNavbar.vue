@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Navbar -->
+    <!-- Admin Page Navbar -->
     <div class="bg-[#F4F8FD] z-50 shadow-sm pb-2 flex items-center">
       <div class="relative max-w-[1600px] mx-auto w-full">
         <div class="sm:px-5 mx-auto w-full p-3 flex start items-center gap-10">
@@ -144,43 +144,25 @@ export default {
       mobileNavbarVisible: false,
     };
   },
+
   components: {
     ChevronDownIcon,
     XMarkIcon,
   },
+
   methods: {
     changeselectedAdminMenu(pageName) {
       localStorage.setItem("selectedAdminMenu", pageName);
-    },
-    search() {
-      const now = Date.now(); // Şu anki tarih ve saat Unix timestamp formatında
-      const dataToStore = {
-        word: this.searchedWord,
-        addingDate: now,
-      };
-
-      localStorage.setItem("searchedWord", JSON.stringify(dataToStore));
-
-      if (this.searchedWord === "") {
-        this.wordEmptyAlert = true;
-      } else {
-        this.wordEmptyAlert = false;
-        this.store.products = [];
-        this.store.search();
-        this.$router.push("/search");
-      }
-      if (this.$route.path.includes("/search")) {
-        window.location.reload();
-      }
     },
   },
   async mounted() {
     this.selectedAdminMenu = localStorage.getItem("selectedAdminMenu");
     this.store = createWizardStore();
-
     const db = getFirestore();
     const categories = collection(db, "categories");
     const categoriesSnapshot = await getDocs(categories);
+
+    // Get images for each category
     categoriesSnapshot.forEach((category) => {
       const categoryData = {
         id: category.id,
@@ -191,7 +173,6 @@ export default {
       };
       this.categories.push(categoryData);
     });
-    //>
   },
 };
 </script>
