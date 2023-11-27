@@ -1,4 +1,5 @@
 <template>
+  <!-- Contact Form -->
   <div
     class="w-full bg-[url(/public/OurMissionBg.jpg)] bg-center bg-cover mt-20 relative top-16 h-[600px] py-10"
   >
@@ -44,12 +45,8 @@
 
 <script>
 import Button from "./Common/Button.vue";
-import { LockClosedIcon } from "@heroicons/vue/20/solid";
 
 export default {
-  data() {
-    return {};
-  },
-  components: { Button, LockClosedIcon },
+  components: { Button },
 };
 </script>
