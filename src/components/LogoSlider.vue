@@ -1,4 +1,5 @@
 <template>
+  <!-- Logo Slider -->
   <div class="max-w-7xl w-full mx-auto py-10">
     <h2 class="text-blue-500 text-center font-bold text-4xl mb-10">
       Referanslar
@@ -34,16 +35,10 @@
   </div>
 </template>
 <script>
-// Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
-
-// Import Swiper styles
 import "swiper/css";
-
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
-
-// import required modules
 import { FreeMode, Pagination, Autoplay } from "swiper/modules";
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 
@@ -52,11 +47,13 @@ export default {
     Swiper,
     SwiperSlide,
   },
+
   data() {
     return {
       references: [],
     };
   },
+
   setup() {
     return {
       modules: [FreeMode, Pagination, Autoplay],
