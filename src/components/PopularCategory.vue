@@ -1,7 +1,9 @@
 <template>
+  <!-- Popular Categories -->
   <div
     class="max-w-7xl w-full py-10 mx-auto px-3 flex justify-center flex-col md:flex-row items-center gap-10"
   >
+    <!-- Category 1 -->
     <div
       class="w-full relative max-w-md md:max-w-full rounded-md overflow-hidden"
     >
@@ -20,6 +22,7 @@
       </a>
     </div>
 
+    <!-- Category 2 -->
     <div
       class="w-full relative max-w-md md:max-w-full rounded-md overflow-hidden"
     >
@@ -39,6 +42,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Sale from "../components/Common/Sale.vue";
 import { createWizardStore } from "../stores/counter";
