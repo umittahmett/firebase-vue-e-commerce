@@ -376,6 +376,7 @@ export default {
   },
 
   computed: {
+    // Divide pages
     pageCount() {
       return Math.ceil(
         this.store && this.store.products.length / this.itemsPerPage
@@ -406,6 +407,7 @@ export default {
       }
     },
 
+    // Products
     displayedProducts() {
       return this.filteredProducts
         ? this.filteredProducts.slice(this.startIndex, this.endIndex + 1)
@@ -416,6 +418,7 @@ export default {
   },
 
   methods: {
+    // Delete Price Filter
     deleteFilter() {
       this.filteredProducts = null;
       this.maxPrice = null;
@@ -429,6 +432,7 @@ export default {
       this.priceFilterVisible = false;
     },
 
+    // Recomend Price Filters
     priceFilter() {
       const products = this.store.products;
       this.filteredProducts = this.store.products.filter((product) => {
@@ -446,6 +450,7 @@ export default {
       this.priceFilterVisible = false;
     },
 
+    // Pagination controls
     nextPage() {
       if (this.currentPage < this.pageCount - 1) {
         this.currentPage++;
@@ -462,6 +467,7 @@ export default {
       this.currentPage = page;
     },
 
+    // Change List Type
     changeSelectedListType(newVal) {
       switch (parseInt(newVal)) {
         case 1:
@@ -493,20 +499,20 @@ export default {
       }
     },
 
+    // Custom Price Filter
     selectFilter(min, max) {
       this.minPrice = min;
       this.maxPrice = max;
       this.priceFilter();
     },
 
+    // Calculate Price Ranges
     calculatePriceRanges() {
       const allPrices = this.displayedProducts.map((product) => product.price);
 
-      // Eğer ürünlerin fiyat bilgisi varsa devam et, yoksa varsayılan bir değer kullan
       const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : 0;
       const maxPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
 
-      // Ortak fiyat aralıkları oluştur
       this.priceRanges = [];
       for (let i = 0; i < 5; i++) {
         const rangeWidth = (maxPrice - minPrice) / 5;
