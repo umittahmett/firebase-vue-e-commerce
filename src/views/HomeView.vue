@@ -1,24 +1,20 @@
 <template>
+  <!-- Home Page -->
   <div>
     <Hero />
-
     <LogoSlider />
-
     <About class="mt-10" />
-
     <ProductSlider
       :name="'Yeni Gelenler'"
       :products="latestProducts"
       class="mt-10"
     />
     <PopularCategory class="mt-10" />
-
     <ProductSlider
       :name="'Popüler Ürünler '"
       :products="bestSellers"
       class="mt-10"
     />
-
     <OurMission id="mission" class="mt-10" />
   </div>
 </template>
@@ -35,7 +31,6 @@ import {
   getFirestore,
   collection,
   getDocs,
-  where,
   query,
   orderBy,
   limit,
