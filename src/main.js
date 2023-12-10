@@ -26,7 +26,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const fapp = initializeApp(firebaseConfig);
 const analytics = getAnalytics(fapp);
-
 const pinia = createPinia();
 const app = createApp(App);
 
