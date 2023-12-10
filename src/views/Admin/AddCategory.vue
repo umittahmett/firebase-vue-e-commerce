@@ -3,7 +3,7 @@
   <div
     class="w-full bg-gray-100"
     :class="{
-      'opacity-70': loading === true,
+      'opacity-50': loading === true,
     }"
   >
     <div class="w-full max-w-7xl mx-auto bg-gray-100 px-3 py-10">
@@ -14,12 +14,37 @@
         icon="pi pi-plus"
       />
 
-      <p class="font-light mt-4">Kategori Adı</p>
+      <!-- Global Category Type -->
+      <p class="font-light mt-4">Genel Kategori Türü*</p>
+      <Dropdown
+        editable
+        v-model="selectedGlobalCategory"
+        :options="globalCategories"
+        optionLabel="name"
+        placeholder="Genel Kategori Türü Seç"
+        class="w-full md:w-14rem max-w-[400px]"
+      >
+        <template #value="slotProps">
+          <div v-if="slotProps.value">
+            <div>{{ slotProps.value.name }}</div>
+          </div>
+          <span v-else>
+            {{ slotProps.placeholder }}
+          </span>
+        </template>
+        <template #option="slotProps">
+          <div>
+            <div>{{ slotProps.option.name }}</div>
+          </div>
+        </template>
+      </Dropdown>
+
+      <p class="font-light mt-4">Kategori Adı*</p>
       <InputText
         class="w-full max-w-[400px] p-2.5"
         type="text"
         v-model="categoryName"
-        placeholder="Kategori Adı"
+        placeholder="örn. Gaming Laptoplar"
       />
 
       <!-- Category Feature Names -->
@@ -89,16 +114,25 @@
 
       <!-- Feedback Messages -->
       <div class="fixed top-5 right-5 max-w-sm">
-        <Message :hidden="!succesMessage" severity="success">Başarılı </Message>
+        <Message :hidden="!succesMessage" severity="success"
+          >{{ alertText }}
+        </Message>
 
         <Message :hidden="!errorMessage" severity="error"
-          >Bir Şeyler Ters Gitti
+          >{{ alertText }}
         </Message>
 
         <Message :hidden="!warnMessage" severity="warn"
-          >Lütfen Kutuları Eksiksiz Doldurun
+          >{{ alertText }}
         </Message>
       </div>
+    </div>
+
+    <div
+      v-if="loading"
+      class="text-center fixed top-0 left-0 w-full h-full flex justify-center items-center"
+    >
+      <ProgressSpinner class="w-24 h-24" />
     </div>
   </div>
 </template>
@@ -114,6 +148,7 @@ import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
 import Dialog from "primevue/dialog";
 import Message from "primevue/message";
+import ProgressSpinner from "primevue/progressspinner";
 
 import {
   getFirestore,
@@ -122,6 +157,7 @@ import {
   addDoc,
   updateDoc,
   writeBatch,
+  getDocs,
 } from "firebase/firestore";
 
 export default {
@@ -136,6 +172,7 @@ export default {
     ConfirmPopup,
     Dialog,
     Message,
+    ProgressSpinner,
   },
   data() {
     return {
@@ -155,6 +192,10 @@ export default {
           unit_name: null,
         },
       ],
+      globalCategories: [],
+      selectedGlobalCategory: null,
+      newGlobalCategoryId: null,
+      alertText: "",
     };
   },
   methods: {
@@ -173,52 +214,106 @@ export default {
     // Save Category
     async saveCategory() {
       this.loading = true;
+      this.alertPopupVivible = false;
 
-      if (this.categoryName) {
-        this.alertPopupVivible = false;
-        this.succesMessage = true;
+      if (!this.categoryName) {
+        this.warnMessage = true;
+        this.loading = false;
+        return;
+      }
 
-        try {
-          const db = getFirestore();
-          const categoriesCollection = collection(db, "categories");
+      try {
+        const db = getFirestore();
 
-          const catCollRef = await addDoc(categoriesCollection, {
-            name: this.categoryName,
-          });
+        // Kategori Adı Kontrolü
+        const categoriesCollection = collection(db, "categories");
+        const categorySnapshot = await getDocs(categoriesCollection);
+        const existingCategory = categorySnapshot.docs.find(
+          (category) => category.data().name === this.categoryName
+        );
 
-          const updatedCategoryDoc = doc(db, "categories", catCollRef.id);
-          await updateDoc(updatedCategoryDoc, { id: catCollRef.id });
+        if (existingCategory) {
+          this.errorMessage = true;
+          this.alertText = `${this.categoryName} kategorisi zaten mevcut`;
+          this.loading = false;
+          return;
+        }
 
-          const prodCatFeaturesCollection = collection(
+        // Genel Kategori Kontrolü
+        if (
+          this.selectedGlobalCategory &&
+          typeof this.selectedGlobalCategory === "string"
+        ) {
+          const globalCategoriesCollection = collection(
             db,
-            "product_cetegory_features"
+            "global_categories"
+          );
+          const globalCategoriesSnapshot = await getDocs(
+            globalCategoriesCollection
+          );
+          const existingGlobalCategory = globalCategoriesSnapshot.docs.find(
+            (globalCategory) =>
+              globalCategory.data().name === this.selectedGlobalCategory
           );
 
-          const batch = writeBatch(db);
+          if (existingGlobalCategory) {
+            this.errorMessage = true;
+            this.alertText = `${this.selectedGlobalCategory} genel kategorisi zaten mevcut`;
+            this.loading = false;
+            return;
+          }
 
-          this.Inputs.forEach((featureType) => {
-            const newDocRef = doc(prodCatFeaturesCollection);
-            batch.set(newDocRef, {
-              id: newDocRef.id,
-              name: featureType.name,
-              unit_name: featureType.unit_name,
-              category_id: catCollRef.id,
-            });
+          const newGlobalCategory = await addDoc(globalCategoriesCollection, {
+            name: this.selectedGlobalCategory,
           });
 
-          await batch.commit();
+          const updatedBrandDoc = doc(
+            db,
+            "global_categories",
+            newGlobalCategory.id
+          );
+          this.newGlobalCategoryId = newGlobalCategory.id;
+          await updateDoc(updatedBrandDoc, { id: newGlobalCategory.id });
+        }
 
+        // Kategori Kaydetme İşlemi
+        const newcategoriesCollection = collection(db, "categories");
+        const catCollRef = await addDoc(newcategoriesCollection, {
+          name: this.categoryName,
+          global_category_id: this.newGlobalCategoryId
+            ? this.newGlobalCategoryId
+            : this.selectedGlobalCategory.id,
+        });
+
+        const updatedCategoryDoc = doc(db, "categories", catCollRef.id);
+        await updateDoc(updatedCategoryDoc, { id: catCollRef.id });
+
+        // Özelliklerin Kaydedilmesi
+        const prodCatFeaturesCollection = collection(
+          db,
+          "product_cetegory_features"
+        );
+        const batch = writeBatch(db);
+
+        this.Inputs.forEach((featureType) => {
+          const newDocRef = doc(prodCatFeaturesCollection);
+          batch.set(newDocRef, {
+            id: newDocRef.id,
+            name: featureType.name,
+            unit_name: featureType.unit_name,
+            category_id: catCollRef.id,
+          });
+        });
+
+        await batch.commit().then(() => {
           this.succesMessage = true;
           this.loading = false;
           window.location.reload();
-        } catch (error) {
-          console.log(error);
-          this.errorMessage = true;
-          this.loading = false;
-        }
-      } else {
-        console.log("kutulari eksiksiz doldurun");
-        this.warnMessage = true;
+        });
+      } catch (error) {
+        console.error(error);
+        this.errorMessage = true;
+        this.loading = false;
       }
     },
 
@@ -240,6 +335,21 @@ export default {
 
       console.log("Save Button Disabled: ", this.saveButtonDisabled);
     },
+  },
+  async mounted() {
+    const db = getFirestore();
+    // Get Global Categories
+    const categoriesRef = collection(db, "global_categories");
+    const categorySnapshot = await getDocs(categoriesRef);
+    if (!categorySnapshot.empty) {
+      const categories = categorySnapshot.docs;
+      categories.forEach((category) => {
+        this.globalCategories.push(category.data());
+        console.log(category.data());
+      });
+    } else {
+      console.log("categories is empty");
+    }
   },
 };
 </script>
