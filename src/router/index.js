@@ -85,6 +85,15 @@ const router = createRouter({
         },
 
         {
+          path: "update-category",
+          name: "update-category",
+          component: () => import("../views/Admin/UpdateCategory.vue"),
+          meta: {
+            authRequired: true,
+          },
+        },
+
+        {
           path: "add-product",
           name: "add-product",
           component: () => import("../views/Admin/AddProduct.vue"),
