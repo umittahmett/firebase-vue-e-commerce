@@ -4,8 +4,8 @@
     <Message
       v-if="store && store.feedBackMessageVisible"
       :severity="messageType"
-      >{{ text }}</Message
-    >
+      >{{ text }}
+    </Message>
   </div>
 </template>
 
@@ -43,3 +43,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media (max-width: 992px) {
+  .p-megamenu-grid {
+    display: none !important;
+  }
+
+  .p-megamenu-horizontal .p-menu-overlay {
+    display: block !important;
+  }
+}
+</style>
