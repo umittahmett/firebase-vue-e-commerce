@@ -129,6 +129,11 @@ export default {
           href: "/lorem-seckn_bil-admin/add-category",
           dropDown: false,
         },
+        {
+          name: "Kategori Güncelle",
+          href: "/lorem-seckn_bil-admin/update-category",
+          dropDown: false,
+        },
 
         {
           name: "Referans Ekle",
