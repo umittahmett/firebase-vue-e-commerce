@@ -59,3 +59,17 @@ html {
 .swiper-wrapper {
   align-items: center;
 }
+.p-menubar {
+  background: white !important;
+  justify-content: space-between;
+}
+
+.p-menubar .p-menuitem.p-highlight > .p-menuitem-content {
+  color: black !important;
+  background: white !important ;
+  cursor: pointer;
+}
+
+.p-menubar .p-menuitem.p-highlight > .p-menuitem-content:hover {
+  background: #f4f8fd !important ;
+}
