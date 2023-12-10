@@ -1,42 +1,46 @@
 <template>
   <!-- Product Component -->
-  <a :href="url">
+  <a :href="url" class="w-full">
     <div
       @click="sendProductId(product.id, product.category_id)"
       :class="{
         'text-start': text_align === 'start',
       }"
-      class="text-center rounded-md overflow-hidden w-fit flex flex-col justify-center items-center h-[450px]"
+      class="text-center rounded-md overflow-hidden w-full flex flex-col justify-center items-center h-[400px]"
     >
       <!-- Image -->
       <div
-        class="relative w-full mx-auto h-[250px] overflow-hidden flex justify-center items-center"
+        class="relative w-full mx-auto h-[230px] overflow-hidden flex justify-center items-center"
       >
-        <img class="w-full rounded-t-md" :src="product.cover_image" alt="" />
+        <img
+          class="w-full p-2 rounded-t-md"
+          :src="product.cover_image"
+          alt=""
+        />
 
         <Sale :bgColor="'blue'" v-if="product.discount" />
       </div>
 
       <!-- Product Information -->
       <div
-        class="p-2 flex flex-col justify-between w-full h-[200px] bg-[#F4F8FD]"
+        class="p-2 flex flex-col justify-between w-full h-[180px] bg-[#F4F8FD]"
       >
         <!-- Title & Description -->
-        <div class="text-start mr-auto">
+        <div class="text-start mr-auto w-full">
           <h4
-            class="font-medium text-lg leading-[20px] line-clamp-3 mt-1 break-all"
+            class="font-medium text-lg leading-[20px] line-clamp-2 mt-1 break-all w-full"
           >
             {{ product.title }}
           </h4>
 
-          <p class="mt-2 line-clamp-2 text-gray-500 leading-5 break-all">
+          <p class="mt-2 line-clamp-2 text-gray-500 leading-5 break-all w-full">
             {{ product.description }}
           </p>
         </div>
 
         <!-- Price -->
         <div
-          class="mt-4 text-gray-700 font-light text-xl flex items-center gap-x-1"
+          class="mt-4 text-gray-700 font-light text-xl flex items-center gap-x-1 w-full"
         >
           <div
             class="flex items-center flex-col justify-center w-full"
@@ -44,13 +48,13 @@
               '!justify-start': text_align === 'start',
             }"
           >
-            <div v-if="product.discount" class="">
-              <p class="text-gray-600 line-through text-sm mr-0.5 mb-0">
+            <div v-if="product.discount" class="w-full">
+              <p class="text-gray-600 line-through text-sm mr-0.5 mb-0 w-full">
                 {{ formatPrice(product.price) }}&#8378;
               </p>
             </div>
 
-            <p class="text-2xl font-bold">
+            <p class="text-2xl font-bold w-full">
               {{
                 formatPrice(
                   product.discount
