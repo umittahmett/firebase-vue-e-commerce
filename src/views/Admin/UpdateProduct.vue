@@ -149,10 +149,14 @@
             v-for="image in product.images"
             :key="image"
           >
-            <img class="w-full rounded-xl" :src="image.url" alt="" />
+            <img
+              class="h-[100px] w-[100px] p-1 object-contain rounded-xl"
+              :src="image.url"
+              alt=""
+            />
 
             <Button
-              @click="image.deleteImage = !image.deleteImage"
+              @click="selectDeleteImage(image.url)"
               :icon="image.deleteImage === true ? 'pi pi-times' : 'pi pi-check'"
               severity="danger"
               rounded
@@ -171,7 +175,27 @@
         <Button
           class="bg-[#10b981] text-white px-5 p-2.5"
           label="Kaydet"
-          @click="alertPopupVivible = true"
+          @click="
+            (popupData = {
+              text: 'Değişiklikleri Kaydetmek İstiyor Musunuz?',
+              buttonText: 'Kaydet',
+              action: saveProduct,
+            }),
+              (alertPopupVivible = true)
+          "
+        />
+
+        <Button
+          class="bg-[#f86060] text-white px-5 p-2.5 ml-2"
+          label="Ürünü Kaldır"
+          @click="
+            (popupData = {
+              text: 'Ürünü Kaldırmak İstediğinizden Emin Eisiniz?',
+              buttonText: 'Kaldir',
+              action: deleteProduct,
+            }),
+              (alertPopupVivible = true)
+          "
         />
 
         <!-- Alert Popup -->
@@ -182,12 +206,12 @@
           :style="{ width: '30vw' }"
           class="text-center"
         >
-          <p>Ürünü Kaydetmek İstiyor musunuz ?</p>
+          <p>{{ popupData.text }}</p>
           <div class="flex justify-center items-center mt-4 gap-4">
             <Button
               class="bg-[#10b981] text-white px-5 p-2.5"
-              label="Kaydet"
-              @click="saveProduct(product.id)"
+              :label="popupData.buttonText"
+              @click="popupData.action()"
             />
 
             <Button
@@ -210,6 +234,13 @@
         <Message :hidden="!warnMessage" severity="warn"
           >Lütfen Kutuları Eksiksiz Doldurun
         </Message>
+      </div>
+
+      <div
+        v-if="loading"
+        class="text-center fixed top-0 left-0 w-full h-full flex justify-center items-center"
+      >
+        <ProgressSpinner class="w-24 h-24" />
       </div>
     </div>
   </div>
@@ -238,6 +269,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 import {
@@ -281,6 +313,7 @@ export default {
           numVisible: 3,
         },
       ],
+      popupText: "",
       similarProductsEmpty: false,
       fullscreenView: false,
       brands: [],
@@ -289,10 +322,30 @@ export default {
       succesMessage: false,
       errorMessage: false,
       warnMessage: false,
+      popupData: {},
     };
   },
 
   methods: {
+    selectDeleteImage(url) {
+      let notDeletetImages = this.product.images.filter(
+        (image) => image.deleteImage === false
+      );
+
+      if (notDeletetImages.length > 1) {
+        this.product.images.map((image) => {
+          if (image.url === url) {
+            image.deleteImage = !image.deleteImage;
+          }
+        });
+      } else {
+        this.product.images.map((image) => {
+          if ((image.url === url, image.deleteImage === true)) {
+            image.deleteImage = !image.deleteImage;
+          }
+        });
+      }
+    },
     // Taking a copy of product
     deepCopy(obj) {
       return JSON.parse(JSON.stringify(obj));
@@ -301,16 +354,17 @@ export default {
     // Updating Product
     async saveProduct(product_id) {
       try {
+        this.alertPopupVivible = false;
         this.loading = true;
         await this.saveProductHead(product_id);
         await this.saveProductFeatures();
-        await this.saveProductImages(product_id);
-
-        this.loading = false;
-        this.succesMessage = true;
-        this.errorMessage = false;
-        this.warnMessage = false;
-        window.location.reload();
+        await this.saveProductImages(product_id).then(() => {
+          this.loading = false;
+          this.succesMessage = true;
+          this.errorMessage = false;
+          this.warnMessage = false;
+          window.location.reload();
+        });
       } catch (error) {
         this.errorMessage = true;
         this.succesMessage = false;
@@ -335,13 +389,37 @@ export default {
 
         fieldsToCheck.forEach((field) => {
           if (this.productCopy[field] !== this.product[field]) {
-            changedProductData[field] = this.product[field];
+            changedProductData[field] =
+              this.product[field].name && field === "brand"
+                ? this.product[field].name
+                : this.product[field];
           }
           console.log("2 :", this.productCopy[field]);
-          console.log("1 :", this.product[field]);
+          console.log(
+            "1 :",
+            this.product[field] && this.product[field].name && field === "brand"
+              ? this.product[field].name
+              : this.product[field]
+          );
         });
-        const productRef = doc(db, "products", product_id);
+
+        const productRef = doc(db, "products", this.product.id);
         await updateDoc(productRef, changedProductData);
+        this.product.images.map(async (image) => {
+          if (
+            image.deleteImage === true &&
+            image.url === this.product.cover_image
+          ) {
+            const existImage = this.product.images.find(
+              (image) => image.deleteImage === false
+            );
+
+            await updateDoc(productRef, {
+              cover_image: existImage.url,
+            });
+            console.log("kapak fotosu degistirildi");
+          }
+        });
       } catch (error) {
         console.log(error);
       }
@@ -395,11 +473,14 @@ export default {
           async (file) => {
             const storageRef = ref(
               storage,
-              `products_images/product_${product_id}/${Date.now()}_${file.name}`
+              `products_images/product_${this.product.id}/${Date.now()}_${
+                file.name
+              }`
             );
 
             try {
               await uploadBytes(storageRef, file);
+              const imageUrl = getDownloadURL(storageRef);
               console.log("Dosya başarıyla yüklendi:", file.name);
             } catch (error) {
               console.error("Dosya yükleme hatası: ", error);
@@ -530,6 +611,42 @@ export default {
         return [];
       }
     },
+
+    async deleteProduct() {
+      this.alertPopupVivible = false;
+      this.loading = true;
+      const db = getFirestore();
+      const productDocRef = doc(db, "products", this.product.id);
+
+      try {
+        // Delete the product document
+        await deleteDoc(productDocRef);
+
+        // Query and delete documents in products_features collection
+        const productDocRefQuery = query(
+          collection(db, "products_features"),
+          where("product_id", "==", this.product.id)
+        );
+
+        // Get documents
+        const querySnapshot = await getDocs(productDocRefQuery);
+
+        // Create an array of promises for deleting each document
+        const deletePromises = querySnapshot.docs.map(async (doc) => {
+          await deleteDoc(doc.ref);
+        });
+
+        // Wait for all delete operations to complete
+        await Promise.all(deletePromises).then(() => {
+          this.loading = false;
+          window.location.reload();
+        });
+
+        console.log("Product and related documents deleted successfully");
+      } catch (error) {
+        console.error("Error deleting product:", error);
+      }
+    },
   },
 
   async mounted() {
@@ -546,7 +663,10 @@ export default {
       console.log("categories is empty");
     }
 
-    await this.getOverviewProductData();
+    this.loading = true;
+    await this.getOverviewProductData().then(() => {
+      this.loading = false;
+    });
     this.productCopy = this.deepCopy(this.product);
   },
 };
