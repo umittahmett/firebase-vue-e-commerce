@@ -89,24 +89,19 @@ export default {
           title: "Alışveriş",
           selects: [
             {
-              name: "Laptop",
+              name: "Oyuncu Laptopları",
               url: "/search",
-              category_id: "JKZiGCzf7P5eywfL58z6",
+              category_id: "dvrEMOuzRWsf78ojeCiH",
             },
             {
-              name: "Bilgisayar",
+              name: "OEM Sistemler",
               url: "/search",
-              category_id: "wePgj231vYLejYG6D5Wt",
+              category_id: "YlY4E3NrQtZE08ehtWvG",
             },
             {
-              name: "Tablet",
+              name: "Monitörler",
               url: "/search",
-              category_id: "W3JKh6SICKwr3n6L7SC3",
-            },
-            {
-              name: "Monitör",
-              url: "/search",
-              category_id: "BvmX2uncsNWy0UyP2Zir",
+              category_id: "yLRX10wBsxTCpUnOuyIY",
             },
           ],
         },
@@ -115,7 +110,7 @@ export default {
           title: "Hakkımızda",
           selects: [
             { name: "Anasayfa", url: "/" },
-            { name: "İletişim", url: "/contact" },
+            { name: "İletişim", url: "#contact" },
           ],
         },
 
