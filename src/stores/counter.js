@@ -7,6 +7,7 @@ export const createWizardStore = defineStore("counter", {
     emptyResult: false,
     priceRanges: [],
     navbarAndFooterVisibility: true,
+    feedBackMessageVisible: false,
   }),
 
   actions: {
@@ -14,7 +15,6 @@ export const createWizardStore = defineStore("counter", {
     async search() {
       this.loading = true;
       this.emptyResult = false;
-
       const searchedWordMethod = localStorage.getItem("searchedWord");
       const searchedCategoryMethod = localStorage.getItem("searchedCategory");
 
@@ -140,27 +140,23 @@ export const createWizardStore = defineStore("counter", {
     },
 
     // Add Searched Category
-    addSearchedCategory(category_id) {
+    addSearchedCategory(category_id, category_name) {
       const now = Date.now();
       const data = {
         category_id: category_id,
-        category_name:
-          category_id == "wePgj231vYLejYG6D5Wt"
-            ? "Bilgisayar"
-            : category_id == "JKZiGCzf7P5eywfL58z6"
-            ? "Laptop"
-            : category_id == "BvmX2uncsNWy0UyP2Zir"
-            ? "Monitör"
-            : category_id == "yLxw5GTJBkv9ieiX4UmA"
-            ? "Güvenlik Kamerası"
-            : category_id == "W3JKh6SICKwr3n6L7SC3"
-            ? "Tablet"
-            : "kategori",
-
+        category_name: category_name,
         addingDate: now,
       };
 
       localStorage.setItem("searchedCategory", JSON.stringify(data));
+
+      if (this.$route.path.includes("/search")) {
+        window.location.reload();
+      } else {
+        this.$router.push("/search");
+      }
+
+      console.log(this.$router.path);
     },
   },
 });
