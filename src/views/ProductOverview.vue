@@ -179,7 +179,7 @@
     </div>
 
     <!-- Features -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 w-full gap-4 border-b pb-3">
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 border-b pb-3">
       <h2
         class="text-3xl border-b text-start mt-10 pb-2 mb-2 col-span-1 sm:col-span-2"
       >
@@ -188,17 +188,24 @@
 
       <div
         v-if="product.features"
-        class="flex items-center justify-between gap-2 py-3 mt-1 p-3 border-b bg-[#F4F8FD] rounded-lg"
         v-for="feature in product.features"
         :key="feature.name"
+        :class="{
+          hidden: feature.feature === '',
+        }"
       >
-        <p class="text-gray-400 font-light m-0 max-sm:text-sm text-start">
-          {{ feature.name }}
-        </p>
+        <div
+          v-if="feature && feature.feature"
+          class="flex items-center justify-between gap-2 py-3 mt-1 p-3 border-b bg-[#F4F8FD] rounded-lg col-span-1"
+        >
+          <p class="text-gray-400 font-light m-0 max-sm:text-sm text-start">
+            {{ feature.name }}
+          </p>
 
-        <p class="font-bold ml-3 m-0 max-sm:font-medium text-end">
-          {{ feature.feature || "Bilinmiyor" }} {{ feature.unit_name }}
-        </p>
+          <p class="font-bold ml-3 m-0 max-sm:font-medium text-end">
+            {{ feature.feature || "Bilinmiyor" }} {{ feature.unit_name }}
+          </p>
+        </div>
       </div>
 
       <!-- Features Loading Block -->
@@ -424,7 +431,9 @@ export default {
     const storageProductModel = localStorage.getItem(
       "curent_overview_product_data"
     );
-    const storageProduct = JSON.parse(storageProductModel);
+    const storageProduct = storageProductModel
+      ? JSON.parse(storageProductModel)
+      : "";
 
     const cur_overview_product_id = localStorage.getItem(
       "cur_overview_product_id"
