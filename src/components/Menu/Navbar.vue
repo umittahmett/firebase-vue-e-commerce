@@ -77,35 +77,87 @@
         <div
           v-if="dropDownMenu"
           v-on:mouseleave="dropDownMenu = false"
-          class="transition-all fixed left-0 mt-1 z-[100] w-full animate__animated animate__fadeInUp"
+          v-clickout="clickOutside"
+          class="transition-all fixed left-0 mt-1 z-[100] w-full animate__animated animate__fadeInUp bg-white"
         >
+          <!-- Desktop Categories View -->
           <div
-            class="max-w-7xl relative mx-auto bg-[#F4F8FD] px-3 sm:px-10 py-10 flex max-lg:grid max-lg:grid-cols-3 justify-center lg:justify-start items-start flex-wrap gap-2 sm:gap-6 rounded-b-md p-2 sm:p-5"
+            class="grid-cols-5 gap-4 mb-4 w-full p-4 max-w-7xl mx-auto max-[1300px]:grid-cols-4 max-lg:grid-cols-3 py-10 lg:grid hidden"
           >
-            <button
-              class="lg:hidden absolute top-2 right-2"
-              @click="dropDownMenu = false"
+            <div
+              v-if="categories"
+              v-for="category in categories[0].items"
+              :key="category.id"
             >
-              <XMarkIcon
-                class="w-6 h-6 text-white"
-                :class="{ '!text-blue-500': mobileNavbarVisible === true }"
-              />
-            </button>
+              <h1 class="text-lg font-semibold px-4">{{ category.name }}</h1>
+              <div class="flex flex-col justify-start items-start">
+                <a
+                  @click="
+                    store &&
+                      store.addSearchedCategory(
+                        sub_category.id,
+                        sub_category.name
+                      )
+                  "
+                  href="/search"
+                  class="text-gray-400 px-4 py-2 hover:bg-[#F4F8FD] transition-colors w-full cursor-pointer"
+                  v-for="sub_category in category.sub_categories"
+                  :key="sub_category.id"
+                >
+                  {{ sub_category.name }}
+                </a>
+              </div>
+            </div>
+          </div>
 
-            <a
-              @click="store && store.addSearchedCategory(category.id)"
-              href="/search"
-              v-for="category in categories"
-              :key="category.name"
-              class="p-2 sm:p-4 text-center rounded-md hover:bg-gray-100 lg:px-8 cursor-pointer"
+          <!-- Mobile Categories View -->
+          <div class="flex-col max-lg:flex hidden w-full">
+            <div
+              v-if="categories"
+              v-for="category in categories[0].items"
+              :key="category.id"
             >
-              <img
-                :src="category.image"
-                alt=""
-                class="max-w-[50px] max-sm:w-[30px] mx-auto"
-              />
-              <p class="mt-2">{{ category.name }}</p>
-            </a>
+              <button
+                @click="mobileCategoriesVisible(category.id)"
+                class="flex items-center justify-between gap-2 text-lg py-3 px-4 border-t border-t-gray-100 w-full"
+              >
+                <p class="">
+                  {{ category.name }}
+                </p>
+
+                <ChevronDownIcon
+                  :class="{
+                    '-rotate-90': category.sub_categories_visible === true,
+                  }"
+                  class="w-6 h-6 text-blue-500 transition-all"
+                />
+              </button>
+
+              <div
+                v-if="category.sub_categories_visible"
+                class="flex flex-col justify-start items-start border-t-gray-50 w-full animate__animated animate__fadeIn transition-all duration-[0.01s]"
+              >
+                <div
+                  class="w-full"
+                  v-for="sub_category in category.sub_categories"
+                  :key="sub_category.id"
+                >
+                  <a
+                    @click="
+                      store &&
+                        store.addSearchedCategory(
+                          sub_category.id,
+                          sub_category.name
+                        )
+                    "
+                    href="/search"
+                    class="text-gray-400 flex items-center justify-start px-4 py-3 hover:bg-[#F4F8FD] border-t-gray-50 border-t transition-colors w-full cursor-pointer ml-2"
+                  >
+                    {{ sub_category.name }}
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -136,26 +188,31 @@
 
       <!-- Nav -->
       <div
-        class="mt-20 flex flex-col gap-y-5 justify-center text-gray-400 font-semibold gap-5 mx-auto text-lg"
+        class="mt-20 w-full flex flex-col gap-y-1 justify-center text-gray-400 font-semibold gap-5 mx-auto text-lg"
       >
-        <div v-if="mobileNavbarVisible" v-for="page in pages" :key="page.name">
+        <div
+          class="w-full"
+          v-if="mobileNavbarVisible"
+          v-for="page in pages"
+          :key="page.name"
+        >
           <button
             v-on:click="
               page.name === 'Ürünler'
                 ? (dropDownMenu = true)
                 : (dropDownMenu = false)
             "
-            class="hover:text-blue-600 transition-colors"
+            class="hover:text-blue-600 transition-colors w-full"
           >
-            <div v-if="page.href">
-              <a :href="page.href" class="flex"
+            <div v-if="page.href" class="w-full py-3 px-4">
+              <a :href="page.href" class="flex items-center gap-1 w-full"
                 >{{ page.name }}
                 <ChevronDownIcon v-if="page.dropDown" class="w-5"
               /></a>
             </div>
 
-            <div v-else>
-              <button class="flex">
+            <div v-else class="w-full py-3 px-4">
+              <button class="flex items-center gap-1 w-full">
                 {{ page.name }}
                 <ChevronDownIcon v-if="page.dropDown" class="w-5" />
               </button>
@@ -171,7 +228,15 @@
 import "animate.css";
 import { createWizardStore } from "../../stores/counter";
 import { ChevronDownIcon, XMarkIcon } from "@heroicons/vue/20/solid";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import vClickout from "vue3-clickout";
+
+import {
+  getFirestore,
+  collection,
+  where,
+  getDocs,
+  query,
+} from "firebase/firestore";
 
 export default {
   data() {
@@ -184,13 +249,23 @@ export default {
         { name: "İletişim", href: "#contact", dropDown: false },
       ],
 
+      categories: [
+        {
+          label: "Ürünler",
+          icon: "pi pi-mobile",
+          items: [],
+        },
+      ],
+
       searchedWord: "",
       dropDownMenu: false,
       wordEmptyAlert: false,
-      categories: [],
       store: null,
       mobileNavbarVisible: false,
     };
+  },
+  directives: {
+    clickout: vClickout,
   },
   components: {
     ChevronDownIcon,
@@ -198,6 +273,26 @@ export default {
   },
 
   methods: {
+    mobileCategoriesVisible(category_id) {
+      this.categories[0].items.map((category) => {
+        if (
+          category.id === category_id &&
+          category.sub_categories_visible === true
+        ) {
+          category.sub_categories_visible = false;
+        } else if (category.id === category_id) {
+          category.sub_categories_visible = true;
+        } else {
+          category.sub_categories_visible = false;
+        }
+      });
+    },
+
+    clickOutside(event) {
+      this.dropDownMenu === true ? (this.dropDownMenu = false) : "";
+      console.log("clicked out");
+    },
+
     // Search Products
     search() {
       const now = Date.now();
@@ -224,21 +319,38 @@ export default {
   async mounted() {
     this.store = createWizardStore();
     const db = getFirestore();
-    const categories = collection(db, "categories");
-    const categoriesSnapshot = await getDocs(categories);
+    // Get Global Categories
+    const GlovbalCategoriesRef = collection(db, "global_categories");
+    const GlobalCategorySnapshot = await getDocs(GlovbalCategoriesRef);
+    if (!GlobalCategorySnapshot.empty) {
+      const globalCategories = GlobalCategorySnapshot.docs;
 
-    // Get images for each category
-    categoriesSnapshot.forEach((category) => {
-      const categoryData = {
-        id: category.id,
-        name: category.data().name,
-        image: category.data().image
-          ? category.data().image
-          : "/navbar/unknown.png",
-      };
-      this.categories.push(categoryData);
-    });
-    //>
+      globalCategories.forEach(async (category) => {
+        const category_data = {
+          id: category.id,
+          name: category.data().name,
+          sub_categories_visible: false,
+          sub_categories: [],
+        };
+
+        const SubCategoriesRef = collection(db, "categories");
+        const SubCategoriesQuery = query(
+          SubCategoriesRef,
+          where("global_category_id", "==", category.id)
+        );
+        const SubCategoriesSnapshot = await getDocs(SubCategoriesQuery);
+        SubCategoriesSnapshot.forEach((sub_category) => {
+          category_data.sub_categories.push({
+            id: sub_category.id,
+            name: sub_category.data().name,
+          });
+        });
+
+        this.categories[0].items.push(category_data);
+      });
+    } else {
+      console.log("global categories is empty");
+    }
   },
 };
 </script>
