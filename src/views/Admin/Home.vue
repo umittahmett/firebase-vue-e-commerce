@@ -364,6 +364,15 @@
 </template>
 
 <script>
+import {
+  getFirestore,
+  updateDoc,
+  collection,
+  query,
+  orderBy,
+  getDocs,
+  doc,
+} from "firebase/firestore";
 import BreadCrumb from "../../components/Common/BreadCrumb.vue";
 import Button from "../../components/Common/Button.vue";
 import Product from "../../components/Common/Product.vue";
@@ -569,7 +578,7 @@ export default {
     Button,
     ChevronDownIcon,
   },
-  mounted() {
+  async mounted() {
     // Get last searched word or category name from localstorage
     const searchedWordMethod = localStorage.getItem("searchedWord");
     const searchedCategoryMethod = localStorage.getItem("searchedCategory");
