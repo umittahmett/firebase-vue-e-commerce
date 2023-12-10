@@ -2,7 +2,7 @@
   <div
     class="w-full bg-gray-100"
     :class="{
-      'opacity-70': loading === true,
+      'opacity-50': loading === true,
     }"
   >
     <div
@@ -197,6 +197,13 @@
             >Lütfen Kutuları Eksiksiz Doldurun
           </Message>
         </div>
+
+        <div
+          v-if="loading"
+          class="text-center fixed top-0 left-0 w-full h-full flex justify-center items-center"
+        >
+          <ProgressSpinner class="w-24 h-24" />
+        </div>
       </div>
     </div>
   </div>
@@ -213,6 +220,7 @@ import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
 import Dialog from "primevue/dialog";
 import Message from "primevue/message";
+import ProgressSpinner from "primevue/progressspinner";
 
 import { getStorage, uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import {
@@ -238,6 +246,7 @@ export default {
     ConfirmPopup,
     Dialog,
     Message,
+    ProgressSpinner,
   },
   data() {
     return {
@@ -406,11 +415,11 @@ export default {
             images_folder: "product_" + docRef.id,
             cover_image: this.imageUrls[0],
           };
-          await updateDoc(updatedProductDoc, additionalData);
-
-          this.succesMessage = true;
-          this.loading = false;
-          window.location.reload();
+          await updateDoc(updatedProductDoc, additionalData).then(() => {
+            this.succesMessage = true;
+            this.loading = false;
+            window.location.reload();
+          });
         } catch (error) {
           console.log(error);
           this.errorMessage = true;
