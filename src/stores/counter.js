@@ -34,8 +34,14 @@ export const createWizardStore = defineStore("counter", {
         this.products = productSnapshot.docs
           .map((doc) => doc.data())
           .filter((product) => {
-            const { title, description, model, category_name, category_id } =
-              product;
+            const {
+              title,
+              description,
+              model,
+              category_name,
+              category_id,
+              global_category_name,
+            } = product;
             if (searchedWord && searchedCategory) {
               if (searchedWord.addingDate > searchedCategory.addingDate) {
                 return (
@@ -51,7 +57,13 @@ export const createWizardStore = defineStore("counter", {
                     model
                       .toLowerCase()
                       .includes(searchedWord.word.toLowerCase())) ||
-                  (category_name &&
+                  (global_category_name !== undefined &&
+                    global_category_name !== null &&
+                    global_category_name
+                      .toLowerCase()
+                      .includes(searchedWord.word.toLowerCase())) ||
+                  (category_name !== undefined &&
+                    category_name !== null &&
                     category_name
                       .toLowerCase()
                       .includes(searchedWord.word.toLowerCase()))
