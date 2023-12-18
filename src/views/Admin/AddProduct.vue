@@ -232,7 +232,6 @@ import {
   doc,
   addDoc,
   updateDoc,
-  getDoc,
 } from "firebase/firestore";
 
 export default {
@@ -308,28 +307,10 @@ export default {
             nanoseconds: now.getMilliseconds() * 1000000,
           };
 
-          // Get Global Category Name
-          let globalCategoryName = "";
-          const globalCategoryDocRef = doc(
-            db,
-            "global_categories",
-            this.selectedCategory.global_category_id
-          );
-
-          const globalCategoryDoc = await getDoc(globalCategoryDocRef);
-
-          if (globalCategoryDoc.exists()) {
-            globalCategoryName = globalCategoryDoc.data().name;
-            console.log(globalCategoryName);
-          } else {
-            console.log("Belirtilen belge bulunamadı.");
-          }
-
           // New Product Data
           const newProductData = {
             category_id: this.selectedCategory.id,
             category_name: this.selectedCategory.name,
-            global_category_name: globalCategoryName,
             brand:
               typeof this.selectedBrand === "string"
                 ? this.selectedBrand
