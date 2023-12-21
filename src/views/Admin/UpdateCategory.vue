@@ -302,7 +302,43 @@ export default {
               "product_cetegory_features",
               newFeature.id
             );
+
             await updateDoc(updatedFeature, { id: newFeature.id });
+
+            // Get Products has the same category_id
+            const productsRef = collection(db, "products");
+
+            const productsQuery = query(
+              productsRef,
+              where("category_id", "==", this.selectedCategory.id)
+            );
+
+            const productsSnapshot = await getDocs(productsQuery);
+            //>
+
+            // Products Features ref
+            const productsFeaturesRef = collection(db, "products_features");
+
+            if (productsSnapshot.docs.length > 0) {
+              productsSnapshot.docs.forEach(async (product) => {
+                const newProductFeature = await addDoc(productsFeaturesRef, {
+                  product_id: product.data().id,
+                  product_category_feature_id: newFeature.id,
+                  unit_value: "",
+                });
+
+                const updatednewProductFeature = doc(
+                  db,
+                  "products_features",
+                  newProductFeature.id
+                );
+
+                await updateDoc(updatednewProductFeature, {
+                  id: newProductFeature.id,
+                });
+              });
+            }
+
             return `${feature.name} başarıyla eklendi.`;
           });
 
@@ -448,13 +484,21 @@ export default {
           deletePromises3
         ).then(() => {
           this.loading = false;
-          window.location.reload();
+          // window.location.reload();
         });
 
         console.log("Category and related documents deleted successfully");
       } catch (error) {
         console.error("Error deleting category:", error);
       }
+    },
+
+    async updataProductsFeatures() {
+      const db = getFirestore();
+
+      // Add New Category Feature
+      const categoryFeaturesRef = collection(db, "product_cetegory_features");
+      const categoryFeaturesSnapshot = await getDocs(categoryFeaturesRef);
     },
 
     async updateCategory() {
@@ -466,6 +510,7 @@ export default {
         console.log(error);
       }
     },
+
     // Get Features For Category
     async getFeaturesForCategory(id) {
       this.deletedFeatures = [];
@@ -546,6 +591,7 @@ export default {
       console.log("Save Button Disabled: ", this.saveButtonDisabled);
     },
   },
+
   async mounted() {
     this.store = createWizardStore();
     const db = getFirestore();
